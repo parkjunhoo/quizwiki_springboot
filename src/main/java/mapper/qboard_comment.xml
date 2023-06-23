@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.multi.quizwiki.qboard_comment">
+<mapper namespace="com.multi.quizwiki.qboard.dao.CommentMapper">
 	<sql id= "commentColumns">
 		comment_id
 		, qboard_id
@@ -12,15 +12,15 @@
 	</sql>
 	
 	<!-- 댓글저장 -->
-	<insert id="save" parameterType="comment_req" useGeneratedKeys="true"
+	<insert id="save" parameterType="comment_req" 
 	keyProperty="comment_Id">
 	  		INSERT INTO qboard_comment (
             <include refid="commentColumns" />
         ) VALUES (
-              #{commentId}
-            , #{qboardId}
+              #{comment_id}
+            , #{qboard_id}
             , #{content}
-            , #{memberId}
+            , #{member_id}
             , 0
             , NOW()
             , NULL

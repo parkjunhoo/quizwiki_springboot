@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.multi.quizwiki.qboard.dao.FileMapper">
+	<sql id="fileColumns">
+		id
+		,qboard_id
+		, original_name
+        , save_name
+        , size
+        , delete_yn
+        , regdate
+        , delete_date
+	
+	
+	</sql>
+
+
+
+</mapper>

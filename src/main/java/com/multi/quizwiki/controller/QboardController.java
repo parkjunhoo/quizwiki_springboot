@@ -1,6 +1,7 @@
 package com.multi.quizwiki.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,19 +9,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.multi.quizwiki.qboard.dto.FileRequest;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
-import com.multi.quizwiki.qboard.entity.QboardReplyEntity;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
+import com.multi.quizwiki.qboard.service.FileService;
 import com.multi.quizwiki.qboard.service.QboardService;
 import com.multi.quizwiki.qboard.service.QboardServiceJPA;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import util.FileUtils;
 @Controller
 @Slf4j
 @RequestMapping("quizwiki")
@@ -28,6 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 public class QboardController {
 	@Autowired
 	QboardService qboardservice;
+	@Autowired  
+	FileService fileService;
+	  
+	FileUtils fileUtils;
 
 	@Autowired
 	QboardServiceJPA qboardservicejpa;
@@ -90,7 +96,7 @@ public class QboardController {
 	  }
 	  @GetMapping("/qboard/read.do")
 		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, Model model ) {
-				/*
+				/*	
 				 * if (qboard_id == null) { return "redirect:/qboard/list"; }
 				 */
 			 QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
@@ -99,16 +105,6 @@ public class QboardController {
 			return "thymeleaf/qboard/qboard_read";
 		 }
 		 	
-	 
-		
-		  @PostMapping(value="qboard/reply/write") public String
-		  qboard_reply_write(QboardReplyEntity qboardReply) {
-		  qboardservice.reply_insert(qboardReply);
-		  
-		  return "redirect:/qboard/read?no="+qboardReply.getQboardId(); 
-		  }
-
-		  
 	@GetMapping("/qboard/delete")
 	public String deleteBoard(@RequestParam Long qboard_id) {
 		qboardservice.deleteQboard(qboard_id);
@@ -116,12 +112,6 @@ public class QboardController {
 		return "redirect:/quizwiki/qboard/list.do";
 	}
 	
-	@PostMapping("qboard/update.do")
-	public String updateQboard(QboardDTO qboard) {
-			qboardservice.update(qboard);
-			return "redirect:/quizwiki/qboard/list.do";
-		
-	}
 	
  	
 }

@@ -75,7 +75,9 @@ audio, canvas, embed, iframe, img, object, svg, video {
 
 element.style {
     background-image: url(https://okky.kr/pattern.svg);
+    
 }
+.cm_none {text-align:center; color:#999; padding:25px 0; margin:50px 0; position:relative;}
 
 
 
@@ -164,6 +166,7 @@ button, select {
     font-weight: 400;
     line-height: normal;
     color: #fff;
+    max-width: 750px; 
 }
 
 .question {
@@ -765,4 +768,31 @@ img {
     display: flex;
     align-items: center;
     margin-left: auto;
+}
+
+.fa-ellipsis-h:before, .fa-ellipsis:before {
+    content: "\f141";
+}
+
+.post_features .flex-row:not(.feature__status) {
+    min-width: 75px;
+}
+
+.dropdown {
+    display: inline-flex;
+    position: relative;
+    vertical-align: top;
+}
+
+.flex-right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+
+.btns {
+	   display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }

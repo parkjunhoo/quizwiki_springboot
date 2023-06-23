@@ -7,6 +7,7 @@ layout:fragment="content"><head>
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/qboard/qna.css" />
 
+<script src="/libs/se2/js/service/HuskyEZCreator.js"></script>
 
 <script th:src="@{/js/qboard/function.js}"></script>
 <script th:src="@{/js/qboard/jquery-3.6.0.min.js}"></script>
@@ -24,7 +25,7 @@ layout:fragment="content"><head>
 			</div>
 		</div>
 		<div class="header_sub-title flex-row">
-			<img class="comment_user-profile" alt="" src="" />
+			<img class="comment_user-profile" alt="" src="/images/qboard/default_profile.png"  />
 			<div class="flex-column">
 			<h6 class="user-name" th:text="${qboard.member_id}">
 				<a></a>
@@ -32,13 +33,32 @@ layout:fragment="content"><head>
 			<div class="header__sub-title__content">
 					<div class="content-date">
 					<span class="sub-title sub-title__created-at"> <span
-						class="sub-title__title">작성일</span> <span class="sub-title__value" th:text="${qboard.regDate}">23.05.29</span>
+						class="sub-title__title">작성일</span> <span class="sub-title__value" th:text="${qboard.regDate}"></span>
 					</span> <span class="sub-title sub-title__view-count"> <span
-						class="sub-title__title">조회수</span> <span class="sub-title__value" th:text="${qboard.view_Count}">42</span>
+						class="sub-title__title">조회수</span> <span class="sub-title__value" th:text="${qboard.view_Count}"></span>
 					</span>
 					</div>
+					<!-- <div class="flex-right">
+			<div class="dropdown sub-title__edit-button-group">
+      <button class="btn btn-light btn-sm dropdown-toggle btn-icon-sm is-icon-btn" type="button" id="" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+        <i class="fa-regular fa-ellipsis"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="" style="margin: 0px;">
+        <li>
+      <button type="button" class="dropdown-item  post__edit-btn e-edit" false="">
+        <span><i class="fa-regular fa-pen-to-square"></i>수정</span>
+      </button>
+    </li><li>
+      <button type="button" class="dropdown-item  post__remove-btn e-remove" false="">
+        <span><i class="fa-regular fa-trash-can"></i>삭제</span>
+      </button>
+    </li>
+      </ul>
+    </div>
+    	</div> -->
 			</div>
-			<div	>
+			
+			<div>
 			<a th:href="@{/quizwiki/qboard/write.do( qboard_id=${qboard.qboard_id} )}" class="btns btn_bdr4 btn_mid">수정</a>
 				<button onclick="deleteBoard();">삭제</button>
 			
@@ -48,10 +68,18 @@ layout:fragment="content"><head>
 		</div>
 		<div class="post-content">
 			<div class="content_body" th:text="${qboard.content}">
-				<p>질문: "다음 문장 중에서 문법적으로 옳지 않은 것은 무엇인가요?" a) She is studying for
-					her exams at the library. b) I have saw that movie three times
-					already. c) They are going to the beach tomorrow. d) The dog was
-					chased by the cat in the backyard. 푸는 방법좀 알려주세요</p>
+				<p>
+					</p>
+			</div>
+			<div class="post_features">
+				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
+					<button>
+						<img src="/images/qboard/thumbsup.svg" width="16px"; height="16px" >
+						<div class="text freatures_text">0</div>
+						
+					</button>
+					
+				</div>
 			</div>
 
 		</div>
@@ -72,12 +100,12 @@ layout:fragment="content"><head>
 		<div class="question-post-info_content">
 			<div class="answer-comment">
 				<div class="bootstrap-components comment__input">
-					<input type="text"  id="textInput" placeholder="shj님, 댓글을 작성해보세요."
+					<input type="text"  id="content" placeholder="댓글을 작성해 주세요"
 						class="form-control form-control-lg " required="">
-					<textarea class="form-control form-control-lg " name="content" id="content" rows="5" cols="30" ></textarea>
-					 <span><button type="button" class="btns" onclick="saveComment();">등 록</button> <i id="counter">0/300자</i></span>	
-					 
-				</div>
+					<div  >
+					<span ><button  type="button" class="btns" onclick="saveComment();">등 록</button></span>					                   	 
+					</div>
+			</div>
 				
 			</div>
 		</div>
@@ -152,6 +180,8 @@ layout:fragment="content"><head>
                 findAllComment();
             }
         
+        	 
+        	 
             // 게시글 삭제
             function deleteBoard() {
                 const qboard_id = /*[[ ${qboard.qboard_id} ]]*/"";
@@ -159,7 +189,7 @@ layout:fragment="content"><head>
                 if ( !confirm( '해당글을 삭제할까요?') ) {
                     return false;
                 }
-
+                document.getElementById("content").placeholder = `${qboard.member_id}님, 댓글을 작성해보세요.`;
                 const formHtml = `
                     <form id="deleteForm" action="/quizwiki/qboard/delete" method="get">
                         <input type="hidden" id="qboard_id" name="qboard_id" value="${qboard_id}" />
@@ -175,18 +205,18 @@ layout:fragment="content"><head>
             // 댓글 저장
             function saveComment() {
 
-                const content = document.getElementById('content');
+                const content = document.getElementById("content");
                 isValid(content, '댓글');
 
-                const qboardId = /*[[ ${qboard.qboard_id} ]]*/'';
+                const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
                 const params = {
-                    qboardId : qboardId,
+                    qboard_id : qboard_id,
                     content : content.value,
-                    memberId : '홍길동'
+                    member_id : "홍길동"
                 }
 
                 $.ajax({
-                    url : `/qboard/${qboardId}/comments`,
+                    url : `/qboard/${qboard_id}/comments`,
                     type : 'post',	
                     contentType : 'application/json; charset=utf-8',
                     dataType : 'json',
@@ -204,10 +234,10 @@ layout:fragment="content"><head>
             //전체 댓글 조회
               function findAllComment() {
 
-                const qboardId = /*[[ ${qboard.qboard_id} ]]*/'';
+                const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
 
                 $.ajax({
-                    url : `/qboard/${qboardId}/comments`,
+                    url : `/qboard/${qboard_id}/comments`,
                     type : 'get',
                     dataType : 'json',
                     async : false,
@@ -228,11 +258,11 @@ layout:fragment="content"><head>
                             	<li >
         						<div class="comment-card">
         							<div class="comment_header flex-row">
-        								<img class="comment_user-profile" alt="" src="" />
+        								<img class="comment_user-profile" alt="유저프로필" src="/images/qboard/default_profile.png" />
 
         								<div class="comment_sub-header">
         									<div class="comment_user-name-container">
-        										<a href="" class="comment_user-name" >${row.memberId}</a>
+        										<a href="" class="comment_user-name" >${row.member_id}</a>
         									</div>
         									<span class="comment_update" >${row.regDate}</span>
         								</div>
@@ -247,15 +277,15 @@ layout:fragment="content"><head>
                             `;
                         })
 
-                        // 4. class가 "comment_list"인 요소를 찾아 HTML을 렌더링
-                        document.querySelector('.comment_list').innerHTML = commentHtml;
+                        // 4. class가 "comment-list"인 요소를 찾아 HTML을 렌더링
+                        document.querySelector('.comment-list').innerHTML = commentHtml;
                     },
                     error : function (request, status, error) {
                         console.log(error)
                     }
                 })
             }
-
+			
         /*]]>*/
 
         </script>

@@ -26,18 +26,18 @@ public class CommentService {
 	public Long saveComment(CommentRequest params) {
 		log.info("댓글 서비스 실행");
 		commentmapper.save(params);
-		log.info("댓글 서비스"+params.getCommentId());
-		return params.getCommentId();
+		log.info("댓글 서비스"+params.getComment_id());
+		return params.getComment_id();
 	}
 	
-	 public CommentResponse findCommentById(final Long commentId) {
-	        return commentmapper.findById(commentId);
+	 public CommentResponse findCommentById(final Long comment_id) {
+	        return commentmapper.findById(comment_id);
 	    }
 	
-	@Transactional
+	 	@Transactional
 	    public Long updateComment(final CommentRequest params) {
 	        commentmapper.update(params);
-	        return params.getCommentId();
+	        return params.getComment_id();
 	    }
 
 	    /**
@@ -46,9 +46,9 @@ public class CommentService {
 	     * @return PK
 	     */
 	    @Transactional
-	    public Long deleteComment(final Long commentId) {
-	        commentmapper.deleteById(commentId);
-	        return commentId;
+	    public Long deleteComment(final Long comment_id) {
+	        commentmapper.deleteById(comment_id);
+	        return comment_id;
 	    }
 
 	    /**
@@ -56,7 +56,7 @@ public class CommentService {
 	     * @param postId - 게시글 번호 (FK)
 	     * @return 특정 게시글에 등록된 댓글 리스트
 	     */
-	    public List<CommentResponse> findAllComment(final Long qboardId) {
-	        return commentmapper.findAll(qboardId);
+	    public List<CommentResponse> findAllComment(final Long qboard_id) {
+	        return commentmapper.findAll(qboard_id);
 	    }
 }
