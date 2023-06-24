@@ -38,29 +38,29 @@ layout:fragment="content"><head>
 						class="sub-title__title">조회수</span> <span class="sub-title__value" th:text="${qboard.view_Count}"></span>
 					</span>
 					</div>
+					<ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="" style="margin: 0px;">
+        <li>
+      <a type="button" th:href="@{/quizwiki/qboard/write.do( qboard_id=${qboard.qboard_id} )}" class="dropdown-item  post__edit-btn e-edit" false="">
+        <span><i class="fa-regular fa-pen-to-square"></i>수정</span>
+      </a>
+    </li><li>
+      <button type="button" onclick="deleteBoard();" class="dropdown-item  post__remove-btn e-remove" false="">
+        <span><i class="fa-regular fa-trash-can" ></i>삭제</span>
+      </button>
+    </li>
+      </ul>
 					<!-- <div class="flex-right">
 			<div class="dropdown sub-title__edit-button-group">
       <button class="btn btn-light btn-sm dropdown-toggle btn-icon-sm is-icon-btn" type="button" id="" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
         <i class="fa-regular fa-ellipsis"></i>
       </button>
-      <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="" style="margin: 0px;">
-        <li>
-      <button type="button" class="dropdown-item  post__edit-btn e-edit" false="">
-        <span><i class="fa-regular fa-pen-to-square"></i>수정</span>
-      </button>
-    </li><li>
-      <button type="button" class="dropdown-item  post__remove-btn e-remove" false="">
-        <span><i class="fa-regular fa-trash-can"></i>삭제</span>
-      </button>
-    </li>
-      </ul>
+      
     </div>
     	</div> -->
 			</div>
 			
 			<div>
-			<a th:href="@{/quizwiki/qboard/write.do( qboard_id=${qboard.qboard_id} )}" class="btns btn_bdr4 btn_mid">수정</a>
-				<button onclick="deleteBoard();">삭제</button>
+		
 			
 			</div>
 		</div>		
@@ -102,8 +102,8 @@ layout:fragment="content"><head>
 				<div class="bootstrap-components comment__input">
 					<input type="text"  id="content" placeholder="댓글을 작성해 주세요"
 						class="form-control form-control-lg " required="">
-					<div  >
-					<span ><button  type="button" class="btns" onclick="saveComment();">등 록</button></span>					                   	 
+					<div class="btns" style="max-width: 1200px";>
+					<button  type="button" class="btns" onclick="saveComment();" style= "font-size: 16px;">등 록</button >					                   	 
 					</div>
 			</div>
 				
