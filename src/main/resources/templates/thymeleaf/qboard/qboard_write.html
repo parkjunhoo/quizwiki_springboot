@@ -82,10 +82,12 @@ layout:fragment="content">
 					<option   th:value="korean" 	class="">국어</option>
 					<option   th:value="english" class="">영어</option>
 					<option   th:value="math" class="">수학</option></select> 
-					
+					<br/>
+					<br/>
 					<input type="text"   id="title" name="title"    class="form-control" placeholder="제목" required />
 <!-- 				<textarea name="content" th:value="content" id="se2" placeholder="질문 내용을 입력하세요." required></textarea>
- -->				
+ -->				<br/>
+ 	
 				  <div class="file_list">
                 <div>
                     <div class="file_input">
@@ -98,7 +100,9 @@ layout:fragment="content">
                     <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
                 </div>
             </div>
-				<textarea class="form-control" id="Content" name="content"
+            <br/>
+            <br/>
+				<textarea class="form-control" id="Content" name="content" style="height: 300px;"
 					placeholder="질문 내용을 입력하세요." required></textarea>
 				
 				<span style='float: right;'> <input type="button"

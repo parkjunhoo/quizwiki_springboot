@@ -811,3 +811,11 @@ a {
     text-decoration-line: none;
   
 }
+
+
+button {
+	border: none;
+	border-color: transparent;
+	 outline: none;
+}
+

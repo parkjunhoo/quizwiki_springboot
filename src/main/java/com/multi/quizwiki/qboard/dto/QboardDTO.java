@@ -1,6 +1,7 @@
 package com.multi.quizwiki.qboard.dto;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class QboardDTO {
 	private String category;
 	private String title; // //게시물 제목
 	private String content; //게시물내용 text
-	private Timestamp regDate; // 게시물등록시간 datetime
-	private Timestamp editDate;
+	private LocalDateTime regDate; // 게시물등록시간 datetime
+	private LocalDateTime editDate;
 	int comment_Count;
 	int like_Count;
 	int view_Count;
