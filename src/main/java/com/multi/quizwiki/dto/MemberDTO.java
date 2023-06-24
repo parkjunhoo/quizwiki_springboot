@@ -36,6 +36,7 @@ public class MemberDTO {
 	private String member_major; // 전공
 	private String universityName; // 대학교명
 	
+	// a : 모두, s : sms, e : email
 
 	// 로그인 파라미터 매핑용 생성자
 	public MemberDTO(@NonNull String member_id, String member_pass) {

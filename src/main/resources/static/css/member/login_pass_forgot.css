@@ -98,7 +98,7 @@ hr{
   margin-top: 1rem;
   border-radius: 0.5rem;
 }
-.login_name, .login_tel, .login_id{
+.login_name, .login_tel, .login_id, .login_num{
 	padding-bottom: 5%;
 	padding-top: 7%;
 }
