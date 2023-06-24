@@ -11,9 +11,7 @@
 		select sum(point_amount) from mypage_point where member_id=#{member_id}
 	</select>
 	<select id="pointsearch" resultType="point" parameterType="String">
-	<bind name="startday" value="@com.multi.quizwiki.controller.MypageSerch@startday(String startday)"/>
-	<bind name="endday" value="@com.multi.quizwiki.controller.MypageSerch@startday(String endday)"/>
-    SELECT * FROM mypage_point WHERE point_date &gt;= ${startday} AND point_date &lt;= ${endday} AND member_id = #{member_id}
+    SELECT * FROM mypage_point WHERE point_date &gt;= #{startday} AND point_date &lt;= #{endday} AND member_id = #{member_id}
 	</select>
 	<!--문의사항(inqury)  -->
 	<select id="inqury" resultType="inqury" parameterType="Map">
@@ -45,6 +43,9 @@
 	<select id="pboardread" resultType="pboard" parameterType="String" >
 		select * from pboard where member_id=#{member_id} 
 	</select>
+	<select id="pboardsearch" resultType="pboard" parameterType="String">
+    	SELECT * FROM pboard WHERE pboard_reg_date &gt;= #{startday} AND pboard_reg_date &lt;= #{endday} AND member_id = #{member_id}
+	</select>
 	<select id="pboardcount" resultType="String" parameterType="String" >
 		select count(pboard_id) from pboard where member_id=#{member_id} 
 	</select>
@@ -59,5 +60,7 @@
 	<select id="notecount" resultType="String" parameterType="String" >
 		select count(note_id) from note where member_id=#{member_id} 
 	</select>
-
+	<select id="noteserch" resultType="note" parameterType="String">
+    SELECT * FROM note WHERE solv_reg_date &gt;= #{startday} AND solv_reg_date &lt;= #{endday} AND member_id = #{member_id}
+	</select>
 </mapper>

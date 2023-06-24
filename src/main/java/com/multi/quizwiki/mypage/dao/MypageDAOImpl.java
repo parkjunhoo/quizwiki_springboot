@@ -1,4 +1,4 @@
-package com.multi.quizwiki.dao;
+package com.multi.quizwiki.mypage.dao;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,11 +8,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.multi.quizwiki.dto.InquryDTO;
-import com.multi.quizwiki.dto.InquryReplyDTO;
-import com.multi.quizwiki.dto.NoteDTO;
 import com.multi.quizwiki.dto.PboardDTO;
-import com.multi.quizwiki.dto.PointDTO;
+import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
+import com.multi.quizwiki.mypage.dto.NoteDTO;
+import com.multi.quizwiki.mypage.dto.PointDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 
 @Repository
@@ -84,6 +84,15 @@ public class MypageDAOImpl implements MypageDAO{
 	public String pboardcount(String member_id) {
 		return sqlSessionTemplate.selectOne("com.multi.quizwiki.mypage.pboardcount",member_id);
 	}
+	@Override//내문제 날짜로 검색 
+	public List<PboardDTO> pboardsearch(String startday, String endday, String member_id) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("member_id", member_id);
+	    params.put("startday", startday);
+	    params.put("endday",endday );
+		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.pboardsearch",params);
+	}
+	
 	@Override//내질문 리스트 
 	public List<QboardDTO> qboardread(String member_id) {
 		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.qboardread", member_id);
@@ -95,6 +104,14 @@ public class MypageDAOImpl implements MypageDAO{
 	@Override//오답노트 갯수 
 	public String notecount(String member_id) {
 		return sqlSessionTemplate.selectOne("com.multi.quizwiki.mypage.notecount", member_id);
+	}
+	@Override//날짜로 오답노트 조회하기 
+	public List<NoteDTO> notesearch(String startday, String endday, String member_id) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("member_id", member_id);
+	    params.put("startday", startday);
+	    params.put("endday",endday );
+		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.noteserch",params);
 	}
 	
 

@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.multi.quizwiki.dto.InquryDTO;
-import com.multi.quizwiki.dto.InquryReplyDTO;
-import com.multi.quizwiki.dto.NoteDTO;
 import com.multi.quizwiki.dto.PboardDTO;
-import com.multi.quizwiki.dto.PointDTO;
+import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
+import com.multi.quizwiki.mypage.dto.NoteDTO;
+import com.multi.quizwiki.mypage.dto.PointDTO;
+import com.multi.quizwiki.mypage.service.MypageService;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.service.MypageFileService;
-import com.multi.quizwiki.service.MypageService;
 
 @Controller
 public class MypageController {
@@ -40,11 +40,17 @@ public class MypageController {
 	}
 	//내문제리스트, 갯수
 	@RequestMapping("/mypage/myproblem")
-	public String cash(String member_id, Model model) {
-		List<PboardDTO> pboardlist = service.pboardread(member_id);
+	public String cash(String member_id,Model model,@RequestParam(value="state",required = false,defaultValue = "d") String state,String startday,String endday) {
 		String pboardcount = service.pboardcount(member_id);
-		model.addAttribute("pboardlist", pboardlist);
 		model.addAttribute("pboardcount", pboardcount);
+		if(state.equals("all")) {
+			List<PboardDTO> pboardlist = service.pboardread(member_id);
+			model.addAttribute("pboardlist", pboardlist);
+		}else {
+			List<PboardDTO> pboardlist = service.pboardsearch(startday, endday, member_id);
+			model.addAttribute("pboardlist", pboardlist);
+		}
+		System.out.println(startday+endday+member_id);
 		return "thymeleaf/mypage/myproblem";
 	}
 	@RequestMapping("/mypage/modify")
@@ -61,11 +67,18 @@ public class MypageController {
 	}
 	//내오답노트 
 	@RequestMapping("/mypage/note")
-	public String payment(String member_id,Model model) {
-		List<NoteDTO> notelist = service.noteread(member_id);
+	public String payment(String member_id,Model model,@RequestParam(value="state",required = false,defaultValue = "d") String state,String startday,String endday) {
+		
 		String notecount = service.notecount(member_id);
-		model.addAttribute("notelist", notelist);
 		model.addAttribute("notecount", notecount);
+		List<NoteDTO> notelist=null;
+		if(state.equals("all")) {
+			notelist = service.noteread(member_id);
+			model.addAttribute("notelist", notelist);	
+		}else {
+			notelist = service.notesearch(startday, endday, member_id);
+			model.addAttribute("notelist", notelist);
+		}
 		return "thymeleaf/mypage/note";
 	}
 	//포인트 내역보기
@@ -119,7 +132,7 @@ public class MypageController {
 	@RequestMapping("/mypage/oto/insert")//1:1문의사항 insert
 	public String otoinsert(InquryDTO inqurydto,RedirectAttributes redirect) {
 		service.inquryinsert(inqurydto);
-		redirect.addAttribute("member_id","aaa212188");
+		redirect.addAttribute("member_id","test");
 		redirect.addAttribute("inqury_category","1:1문의");
 		return "redirect:/mypage/ask";
 	}
@@ -131,7 +144,7 @@ public class MypageController {
 	@RequestMapping("/mypage/oto/delete")//1:1문의사항 삭제  
 	public String otodelte(String inqury_id,RedirectAttributes redirect) {
 		service.inqurydelete(inqury_id);
-		redirect.addAttribute("member_id","aaa212188");
+		redirect.addAttribute("member_id","test");
 		redirect.addAttribute("inqury_category","1:1문의");
 		return "redirect:/mypage/ask";
 	}
@@ -145,7 +158,7 @@ public class MypageController {
 		System.out.println("수정본"+inqurydto);
 		service.inquryupdate(inqurydto);
 		System.out.println("컨트롤러 수정본"+service.inquryupdate(inqurydto));
-		redirect.addAttribute("member_id","aaa212188");
+		redirect.addAttribute("member_id","test");
 		redirect.addAttribute("inqury_category","1:1문의");
 		return "redirect:/mypage/ask";
 	}
