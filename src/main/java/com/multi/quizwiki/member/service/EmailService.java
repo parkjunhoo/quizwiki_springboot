@@ -1,4 +1,4 @@
-package com.multi.quizwiki.service;
+package com.multi.quizwiki.member.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

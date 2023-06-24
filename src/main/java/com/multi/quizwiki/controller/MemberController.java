@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.multi.quizwiki.dto.MemberDTO;
-import com.multi.quizwiki.service.MemberService;
+import com.multi.quizwiki.member.service.MemberService;
 import com.univcert.api.UnivCert;
 
 @Controller

@@ -1,4 +1,4 @@
-package com.multi.quizwiki.service;
+package com.multi.quizwiki.member.service;
 
 import java.util.HashMap;
 
@@ -6,8 +6,8 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.multi.quizwiki.dao.MemberDAO;
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.member.dao.MemberDAO;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;

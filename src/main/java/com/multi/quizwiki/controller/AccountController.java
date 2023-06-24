@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.multi.quizwiki.service.RegisterMail;
+import com.multi.quizwiki.member.service.RegisterMail;
 
 @Controller
 public class AccountController {

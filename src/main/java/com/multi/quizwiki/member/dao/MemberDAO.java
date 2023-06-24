@@ -1,4 +1,4 @@
-package com.multi.quizwiki.dao;
+package com.multi.quizwiki.member.dao;
 
 import com.multi.quizwiki.dto.MemberDTO;
 
