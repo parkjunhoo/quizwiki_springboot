@@ -63,11 +63,11 @@ public class PboardServiceImpl implements PboardService {
 	}
 
 	@Override
-	public void pboard_insert(PboardEntity pboard, List<ProblemEntity> problemList,
+	public PboardEntity pboard_insert(PboardEntity pboard, List<ProblemEntity> problemList,
 			List<List<String>> problemChoiseList, List<MultipartFile> printfileList, List<Integer> printfileArr) {
-		pboardDAO.insert(pboard);
+		PboardEntity pi = pboardDAO.insert(pboard);
 		pboard_write_logic(pboard, problemList, problemChoiseList, printfileList, printfileArr);
-
+		return pi;
 	}
 
 	private void pboard_write_logic(PboardEntity pboard, List<ProblemEntity> problemList,

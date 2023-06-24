@@ -12,7 +12,7 @@ import com.multi.quizwiki.pboard.entity.PboardLikeEntity;
 import com.multi.quizwiki.pboard.entity.PboardReplyEntity;
 
 public interface PboardDAO {
-	public void insert(PboardEntity pboard);
+	public PboardEntity insert(PboardEntity pboard);
 	public void pboard_edit(PboardEntity pboard);
 	public void reply_insert(PboardReplyEntity pboardReply);
 	

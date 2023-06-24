@@ -39,6 +39,14 @@ public class MypageDAOImpl implements MypageDAO{
 		
 		return sqlSessionTemplate.selectOne("com.multi.quizwiki.mypage.pointtotal",member_id);
 	}
+	@Override//포인트 날짜로 조회 
+	public List<PointDTO> pointsearch(String startday, String endday,String member_id) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("member_id", member_id);
+	    params.put("startday", startday);
+	    params.put("endday",endday );
+		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.pointsearch",params);
+	}
 	@Override//문의사항 리스트
 	public List<InquryDTO> inquryread(String member_id, String inqury_category) {
 		 Map<String, Object> params = new HashMap<>();
@@ -51,6 +59,18 @@ public class MypageDAOImpl implements MypageDAO{
 	public InquryDTO inqurydetail(String inqury_id) {
 		
 		return sqlSessionTemplate.selectOne("com.multi.quizwiki.mypage.inqurydetail",inqury_id);
+	}
+	@Override//문의사항 insert
+	public int inquryinsert(InquryDTO inqurydto) {
+		return sqlSessionTemplate.insert("com.multi.quizwiki.mypage.inquryinsert", inqurydto);
+	}
+	@Override//문의사항 update
+	public int inquryupdate(InquryDTO inqurydto) {
+		return sqlSessionTemplate.update("com.multi.quizwiki.mypage.inquryupdate", inqurydto);
+	}
+	@Override//문의사항 delete
+	public int inqurydelete(String inqury_id) {
+		return sqlSessionTemplate.delete("com.multi.quizwiki.mypage.inqurydelete", inqury_id);
 	}
 	@Override//문의사항 답변
 	public InquryReplyDTO inquryreply(String inqury_id) {
@@ -76,6 +96,8 @@ public class MypageDAOImpl implements MypageDAO{
 	public String notecount(String member_id) {
 		return sqlSessionTemplate.selectOne("com.multi.quizwiki.mypage.notecount", member_id);
 	}
+	
+
 	
 	
 

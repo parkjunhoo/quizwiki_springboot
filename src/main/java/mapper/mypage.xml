@@ -10,6 +10,11 @@
 	<select id="pointtotal" resultType="String" parameterType="String" >
 		select sum(point_amount) from mypage_point where member_id=#{member_id}
 	</select>
+	<select id="pointsearch" resultType="point" parameterType="String">
+	<bind name="startday" value="@com.multi.quizwiki.controller.MypageSerch@startday(String startday)"/>
+	<bind name="endday" value="@com.multi.quizwiki.controller.MypageSerch@startday(String endday)"/>
+    SELECT * FROM mypage_point WHERE point_date &gt;= ${startday} AND point_date &lt;= ${endday} AND member_id = #{member_id}
+	</select>
 	<!--문의사항(inqury)  -->
 	<select id="inqury" resultType="inqury" parameterType="Map">
 		select * from inqury where member_id=#{member_id} and inqury_category=#{inqury_category}
@@ -17,6 +22,21 @@
 	<select id="inqurydetail" resultType="inqury" parameterType="String">
 		select * from inqury where inqury_id=#{inqury_id}
 	</select>
+	<insert id="inquryinsert" parameterType="inqury" >
+		insert into inqury values (null,#{member_id},#{inqury_category},#{inqury_comment},#{inqury_title},#{inqury_content},sysdate())
+	</insert>
+	<delete id="inqurydelete" parameterType="String">
+		delete from inqury where inqury_id=#{inqury_id}
+	</delete>
+	<update id="inquryupdate" parameterType="inqury">
+		update inqury
+  		set inqury_title=#{inqury_title},inqury_content=#{inqury_content}, inqury_date=sysdate()
+  		where inqury_id=#{inqury_id}
+	</update>
+	<insert id="inquryfileinsert" parameterType="inquryFile">
+		insert into board_file values
+  		(null,#{inqury_id},#{inqury_origin},#{inqury_store})
+	</insert>
 	<!--문의사항 답변(inqury)  -->
 	<select id="inquryreply" resultType="inquryReply" parameterType="String">
 		select * from inqury_reply where inqury_id=#{inqury_id}
@@ -39,4 +59,5 @@
 	<select id="notecount" resultType="String" parameterType="String" >
 		select count(note_id) from note where member_id=#{member_id} 
 	</select>
+
 </mapper>

@@ -299,7 +299,7 @@ xmlns:th="http://www.thymeleaf.org"
 			
 			//지문파일
 			if(problem.problemFileList.length>0){
-				let imgpath = "/printfile/find/"
+				let imgpath = "/pboard/printfile/find/"
 				
 				let printImg = document.createElement("img");
 				printImg.src = imgpath+problem.problemId;
@@ -414,7 +414,7 @@ xmlns:th="http://www.thymeleaf.org"
 			
 			
 			$.ajax({
-				url:"/post/solv",
+				url:"/pboard/post/solv",
 				type:"POST",
 				data:JSON.stringify(solvList),
 				contentType: 'application/json',
@@ -600,7 +600,7 @@ xmlns:th="http://www.thymeleaf.org"
 		//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■AJAX■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 		function post_problem_inquiry(){
 			$.ajax({
-				url: "/post/probleminquiry",
+				url: "/pboard/post/probleminquiry",
 				type:"POST",
 				async: false,
 				dataType:'json',
@@ -620,7 +620,7 @@ xmlns:th="http://www.thymeleaf.org"
 		function get_problem_like(){
 			let val = {};
 			$.ajax({
-				url: "/get/problemlike",
+				url: "/pboard/get/problemlike",
 				type:"GET",
 				async: false,
 				dataType:'json',
@@ -636,7 +636,7 @@ xmlns:th="http://www.thymeleaf.org"
 		function post_problem_like(){
 			let val = {};
 			$.ajax({
-				url: "/post/problemlike",
+				url: "/pboard/post/problemlike",
 				type:"POST",
 				async: false,
 				dataType:'json',

@@ -28,7 +28,7 @@ import com.multi.quizwiki.solv.entity.SolvEntity;
 import com.multi.quizwiki.solv.repository.SolvRepository;
 
 import lombok.NoArgsConstructor;
-import util.CalcUtil;
+import util.Utils;
 
 @NoArgsConstructor
 @Repository
@@ -80,7 +80,7 @@ public class ProblemDAOImpl implements ProblemDAO {
 
 	@Override
 	public void printfile_insert(MultipartFile file, int problemId) throws IllegalStateException, IOException {
-		String store = fileUpload.uploadFile(file);
+		String store = fileUpload.uploadFile(file,"printfile");
 		PrintFileEntity pf = new PrintFileEntity(problemId, file.getOriginalFilename(), store);
 		printFileRepo.save(pf);
 	}
@@ -147,7 +147,7 @@ public class ProblemDAOImpl implements ProblemDAO {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		
 		paramMap.put("memberId", memberId);
-		CalcUtil.addPageParam(paramMap, size, page);
+		Utils.addPageParam(paramMap, size, page);
 		return ss.selectList("com.multi.quizwiki.problem.selectLikedProblemByMemberId",paramMap);
 	}
 

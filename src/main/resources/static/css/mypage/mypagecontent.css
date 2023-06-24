@@ -285,7 +285,7 @@ ul.faq_list li.acc_active .acc_head::after {background-image: url(/quizwiki/imag
 /*파일업로드*/
 .filebox input[type="file"] { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
 .filebox label {display: inline-block; cursor: pointer; vertical-align: middle; width:75px; height: 28px; background: #e1e1e1; color: #000; text-align: center; line-height: 28px; border-radius: 30px;}
-.filebox .upload-name {padding:10px;  font-size: 14px; vertical-align: middle; background-color: #fff; border:0; -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 280px; box-sizing: border-box; color: #606060; display: inline-block;}
+.filebox .upload-name {padding:10px;  font-size: 14px; vertical-align: middle; background-color: #fff; border:0; -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 900px; box-sizing: border-box; color: #606060; display: inline-block;}
 
 
 /*글쓰기*/

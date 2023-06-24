@@ -14,11 +14,20 @@ public interface MypageService {
 	List<PointDTO> pointread(String member_id);
 	//내포인트 토탈
 	String pointtotal(String member_id);
+	//포인트 날짜로 조회하기 
+	List<PointDTO> pointsearch(String startday,String endday,String memeber_id);
 	
 	//문의사항 내역 보기
 	List<InquryDTO> inquryread(String member_id,String inqury_category);
 	//문의사항 자세히보기
 	InquryDTO inqurydetail(String inqury_id);
+	//문의사항 입력 
+	int inquryinsert(InquryDTO inqurydto);
+	//문의사항 수정 
+	int inquryupdate(InquryDTO inqurydto);
+	//문의사항 삭제 
+	int inqurydelete(String member_id);
+	
 	//문의사항 답변
 	InquryReplyDTO inquryreply(String inqury_id);
 		

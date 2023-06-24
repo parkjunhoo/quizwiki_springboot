@@ -19,7 +19,7 @@ import com.multi.quizwiki.solv.entity.SolvEntity;
 
 public interface PboardService {
 	
-	public void pboard_insert(
+	public PboardEntity pboard_insert(
 			PboardEntity pboard,
 			List<ProblemEntity> problemList,
 			List<List<String>> problemChoiseList,

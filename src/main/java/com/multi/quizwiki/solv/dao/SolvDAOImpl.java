@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.multi.quizwiki.dto.SolvDTO;
 
 import lombok.NoArgsConstructor;
-import util.CalcUtil;
+import util.Utils;
 
 @Repository
 @NoArgsConstructor
@@ -31,7 +31,7 @@ public class SolvDAOImpl implements SolvDAO{
 	public int findCountByFilter(String memberId, Integer problemCateId, Boolean solvRight, Date minDate,
 			Date maxDate) {
 		
-		Map<String,Object> paramMap = CalcUtil.makeParamMap(memberId,problemCateId,solvRight,minDate,maxDate);
+		Map<String,Object> paramMap = makeParamMap(memberId,problemCateId,solvRight,minDate,maxDate);
 		
 		
 		return ss.selectOne("com.multi.quizwiki.solv.selectSolvCountByFilter",paramMap);
@@ -46,10 +46,29 @@ public class SolvDAOImpl implements SolvDAO{
 	@Override
 	public List<SolvDTO> findByFilter(String memberId, Integer problemCateId, Boolean solvRight, Date minDate , Date maxDate, int size , int page) {
 		
-		Map<String,Object> paramMap = CalcUtil.makeParamMap(memberId,problemCateId,solvRight,minDate,maxDate);
+		Map<String,Object> paramMap = makeParamMap(memberId,problemCateId,solvRight,minDate,maxDate);
 		
-		CalcUtil.addPageParam(paramMap, size , page);
+		Utils.addPageParam(paramMap, size , page);
 		
 		return ss.selectList("com.multi.quizwiki.solv.selectSolvByFilter",paramMap);
+	}
+	
+	
+	
+	/***
+	 * sql맵퍼에 넘길 파라미터를 만드는 작업 (중복되어 코드가 들어가서 따로 빼놨어용 한곳에서만 수정하면 적용되게)
+	 * @param 파라미터 정보들
+	 * @return 파라미터 정보를 담은 Map을 리턴
+	 */
+	private Map<String,Object> makeParamMap(String memberId, Integer problemCateId, Boolean solvRight, Date minDate,
+			Date maxDate){
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+		paramMap.put("memberId",memberId);
+		paramMap.put("categoryId", problemCateId);
+		paramMap.put("solvRight", solvRight);
+		paramMap.put("minDate", minDate);
+		paramMap.put("maxDate", maxDate);
+		
+		return paramMap;
 	}
 }

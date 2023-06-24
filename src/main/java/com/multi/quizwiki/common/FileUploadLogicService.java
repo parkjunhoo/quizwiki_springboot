@@ -16,17 +16,21 @@ public class FileUploadLogicService {
 	public String getUploadpath(String filename) {
 		return uploadpath + filename;
 	}
+	public String getUploadpath(String path,String filename) {
+		return uploadpath + path + File.separator + filename;
+	}
 	
 	//파일 한 개를 업로드하고 저장된 파일명을 리턴하는 메소드
-		public String uploadFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
-			String storeFilename ="";
-			if(!multipartFile.isEmpty()) {
-				String originalFilename = multipartFile.getOriginalFilename();
-				storeFilename = createStoreFilename(originalFilename);
-				multipartFile.transferTo(new File(getUploadpath(storeFilename)));
-			}
-			return storeFilename;
+	public String uploadFile(MultipartFile multipartFile, String path) throws IllegalStateException, IOException {
+		String storeFilename ="";
+		if(!multipartFile.isEmpty()) {
+			String originalFilename = multipartFile.getOriginalFilename();
+			storeFilename = createStoreFilename(originalFilename);
+			multipartFile.transferTo(new File(uploadpath+File.separator+path+File.separator+storeFilename));
 		}
+		return storeFilename;
+	}
+	
 	
 	//UUID를 이용해서 파일명을 변경해서 리턴하는 메소드
 	private String createStoreFilename(String originalFilename) {

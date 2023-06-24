@@ -62,7 +62,7 @@ layout:fragment="content"
 						<td class="text-left"><a 
 						th:href="@{/pboard/read(cate=${param.cate},no=${pboard.pboardId})}"
 						th:text = ${pboard.pboardTitle}
-						></a></td>
+						></a> <span th:if="${pboard.pboardReplyCount} > 0"> [['['+${pboard.pboardReplyCount}+']']]</span> </td>
 						<td>
 							<h5 th:text ="${pboard.memberId}"></h5>
 						</td>

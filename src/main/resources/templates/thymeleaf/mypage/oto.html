@@ -50,9 +50,14 @@
 						</p>
 						<div class="write_form">
 							<dl></dl>
-							<dl>
+							<dl th:if="${inquryreply==null}">
 								<dd>
-								<span th:text="${inquryreply.inqury_reply_content}"></span>
+								<span>답변이 없습니다.</span>
+								<dd>
+							</dl>
+							<dl th:unless="${inquryreply==null}">
+								<dd>
+								<span th:text="${inquryreply.inqury_reply_content}" ></span>
 								<dd>
 							</dl>
 						</div>
@@ -60,9 +65,9 @@
 					</div>
 						
 						<div class="flex_wrap btn_wraps">
-							<button type="button" class="comm_buttons" style="margin: 0 10px" onClick="location.href='#'">삭제하기</button>
+							<button type="button" class="comm_buttons" style="margin: 0 10px" th:onclick="|location.href='@{/mypage/oto/delete(inqury_id=${oto.inqury_id})}'|">삭제하기</button>
 							
-							<button class="comm_buttons fill" style="margin: 0 10px;">수정하기</button>
+							<button class="comm_buttons fill" style="margin: 0 10px;" th:onclick="|location.href='@{/mypage/update(inqury_id=${oto.inqury_id})}'|">수정하기</button>
 						</div>
 						
 					</div>

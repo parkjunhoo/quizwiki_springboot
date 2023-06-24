@@ -383,7 +383,7 @@ $("#writebtn").on("click",()=>{
       		window.onbeforeunload = (e) =>{
       			e.preventDefault();
       		}
-      		window.location.replace("/pboard/read/?cate="+cate+"&no="+res);
+      		window.location.replace("/pboard/read/?cate="+cate+"&no="+res.data);
       	},
 		
 	});//ajax end
@@ -568,7 +568,7 @@ async function convertURLtoFile(url,filename){
 async function onStateEdit() {
 	$.ajax({
 	    type: "post",
-	    url: '/get/pboard',
+	    url: '/pboard/get/pboard',
 	    data: { no: new URLSearchParams(window.location.search).get('no') },
 	    success: async (res) => {
 	    editList = res;

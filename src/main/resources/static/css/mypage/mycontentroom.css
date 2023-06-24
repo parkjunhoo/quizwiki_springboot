@@ -437,3 +437,8 @@ a{
 	color: black;
 	text-decoration: none;
 }
+/* 달력 사이즈 맞추기  */
+.ui-widget.ui-widget-content {
+    border: 1px solid #c5c5c5;
+    width: fit-content;
+}

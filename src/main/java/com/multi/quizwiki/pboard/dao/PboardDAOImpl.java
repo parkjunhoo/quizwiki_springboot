@@ -48,8 +48,8 @@ public class PboardDAOImpl implements PboardDAO{
 	
 
 	@Override
-	public void insert(PboardEntity pboard) {
-		pboardRepo.save(pboard);
+	public PboardEntity insert(PboardEntity pboard) {
+		return pboardRepo.save(pboard);
 	}
 	
 	@Override

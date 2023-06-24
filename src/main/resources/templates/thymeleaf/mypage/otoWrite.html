@@ -1,55 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http//www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layout/mypagelayout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mypagelayout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/common.css" />
-<link rel="stylesheet" type="text/css" href="/css/mypage/mycontentroom.css" />
-<link rel="stylesheet" type="text/css" href="/css/mypage/mypagecontent.css" />
+<link rel="stylesheet" type="text/css"
+	href="/css/mypage/mycontentroom.css" />
+<link rel="stylesheet" type="text/css"
+	href="/css/mypage/mypagecontent.css" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+	integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-</script>
 </head>
 <body>
-	
+
 	<section layout:fragment="content">
 		<div id="myPage_contents">
+			<form action="/mypage/oto/insert" method="post">
 				<div class="inner_cont">
-						<div class="myPage_title flex_wrap">
-							<h6 style="font-size: 35px">1 : 1 문의</h6>
-							<p>문의사항을 알려주세요 빠르게 답변해드리겠습니다.</p>
-						</div>
-						
-						<div class="write_form">
-							<dl>
-								<dt>제목</dt>
-								<dd><input type="text" name="re_subject" id="re_subject" value="" maxlength="255"  required></dd>
-							</dl>
-							<dl>
-								<dt>내용</dt>
-								<dd><textarea name="re_content" id="re_content" required></textarea></dd>
-							</dl>
-							<dl>
-								<dt>파일첨부</dt>
-								<dd>
-									<div class="filebox">
-										<label for="ex_filename">업로드</label>
-										<input class="upload-name" value="파일선택" disabled="disabled" >
-										<input type="file" name="re_file" id="ex_filename" class="upload-hidden">
-																			</div>
-								</dd>
-							</dl>
-													</div>
-						
-						<div class="flex_wrap btn_wraps">
-							<button type="button" class="comm_buttons" style="margin: 0 10px" onClick="location.href='#'">취소</button>
-							
-							<button class="comm_buttons fill" style="margin: 0 10px;">글쓰기</button>
-						</div>
+					<div class="myPage_title flex_wrap">
+						<h6 style="font-size: 35px">1 : 1 문의</h6>
+						<p>문의사항을 알려주세요 빠르게 답변해드리겠습니다.</p>
 					</div>
-			</div>
+
+					<div class="write_form">
+						<input type="hidden" name="inqury_id" value="null"> <input
+							type="hidden" name="member_id" value="aaa212188"> <input
+							type="hidden" name="inqury_category" value="1:1문의"> <input
+							type="hidden" name="inqury_comment" value="n">
+						<dl>
+							<dt>제목</dt>
+							<dd>
+								<input type="text" name="inqury_title" id="re_subject" value=""
+									maxlength="255" required>
+							</dd>
+						</dl>
+						<dl>
+							<dt>내용</dt>
+							<dd>
+								<textarea name="inqury_content" id="re_content" required></textarea>
+							</dd>
+						</dl>
+						<dl>
+							<dt>파일첨부</dt>
+							<dd>
+								<div class="filebox">
+									<label for="ex_filename">업로드</label> <input class="upload-name"
+										value="파일선택" disabled="disabled"> <input type="file"
+										name="re_file" id="ex_filename" class="upload-hidden">
+
+								</div>
+							</dd>
+						</dl>
+					</div>
+
+					<div class="flex_wrap btn_wraps">
+						<button type="button" class="comm_buttons" style="margin: 0 10px"
+							onClick="location.href='/mypage/ask?member_id=aaa212188&inqury_category=1:1문의'">취소</button>
+
+						<button class="comm_buttons fill" type="submit"
+							style="margin: 0 10px;">글쓰기</button>
+					</div>
+				</div>
+
+			</form>
 		</div>
+		</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#ex_filename").on("change", function() {
+					let name = $(this).val();
+					let name2 = name.substr(12)
+					$(".upload-name").val(name2);
+				});
+			});
+		</script>
 	</section>
 </body>
 </html>

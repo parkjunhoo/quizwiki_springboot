@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.multi.quizwiki.dto.SolvDTO;
 import com.multi.quizwiki.solv.dao.SolvDAO;
 
-import util.CalcUtil;
+import util.Utils;
 
 @SpringBootTest
 public class SolvTest {
@@ -33,9 +33,9 @@ public class SolvTest {
 		int count = dao.findCountByFilter(memberId, 0, null, null , null);
 		int size = 5;
 		int page = 1;
-		int totalPage = CalcUtil.getTotalPage(count, size);
+		int totalPage = Utils.getTotalPage(count, size);
 		
-		List<Integer> pages = CalcUtil.makePagingSeq(page, size, totalPage);
+		List<Integer> pages = Utils.makePagingSeq(page, size, totalPage);
 		
 		List<SolvDTO> result = dao.findByFilter(memberId, 0, null, null, null,size,page);
 		
