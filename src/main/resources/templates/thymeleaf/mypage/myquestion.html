@@ -48,7 +48,7 @@
 						<tr th:each="qboard:${qboardlist}" th:unless="${qboardlist.size==0}">
 							<td><span th:text="${qboard.qboard_id}"></span></td>
 							<td><span th:text="${qboard.title}"></span></td>
-							<td><span th:text="${qboard.regdate}"></span></td>
+							<td><span th:text="${qboard.regDate}"></span></td>
 							<td><span th:text="${qboard.view_Count}"></span></td>
 							<td><span th:text="${qboard.like_Count}"></span></td>
 							<td><span th:text="${qboard.comment_Count}"></span></td>

@@ -1,4 +1,4 @@
-package com.multi.quizwiki.dto;
+package com.multi.quizwiki.mypage.dto;
 
 
 
@@ -13,12 +13,14 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Alias("point")
-public class PointDTO {
-	private String mypage_point_id;
+@Alias("note")
+public class NoteDTO {
+	private String note_id;
+	private String solv_id;
 	private String member_id;
-	private String point_amount;
-	private Date point_date;
-	private String point_content;
+	private String solv_title;
+	private String solv_content;
+	private Date solv_reg_date;
+	private String solv_open;
 }
 
