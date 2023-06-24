@@ -23,7 +23,6 @@ import com.multi.quizwiki.service.MemberService;
 import com.univcert.api.UnivCert;
 
 @Controller
-@SessionAttributes("user")
 public class MemberController {
 
 	

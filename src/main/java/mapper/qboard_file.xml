@@ -9,12 +9,30 @@
         , save_name
         , size
         , delete_yn
-        , regdate
+        , regDate
         , delete_date
 	
 	
 	</sql>
-
+	
+	<!-- 파일 정보 저장 -->
+    <insert id="saveAll" parameterType="list">
+        INSERT INTO qboard_file (
+            <include refid="fileColumns" />
+        ) VALUES
+        <foreach item="file" collection="list" separator=",">
+        (
+              #{file.id}
+            , #{file.qboard_Id}
+            , #{file.original_Name}
+            , #{file.save_Name}
+            , #{file.size}
+            , 0
+            , NOW()
+            , NULL
+        )
+        </foreach>
+    </insert>
 
 
 </mapper>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,9 +17,8 @@ import com.multi.quizwiki.qboard.dto.FileRequest;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
-import com.multi.quizwiki.qboard.service.FileService;
+import com.multi.quizwiki.qboard.service.FileServiceImpl;
 import com.multi.quizwiki.qboard.service.QboardService;
-import com.multi.quizwiki.qboard.service.QboardServiceJPA;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,31 +31,26 @@ public class QboardController {
 	@Autowired
 	QboardService qboardservice;
 	@Autowired  
-	FileService fileService;
-	  
-	FileUtils fileUtils;
-
-	@Autowired
-	QboardServiceJPA qboardservicejpa;
+	private final FileServiceImpl fileService;
+	
+	 private final FileUtils fileUtils;
+	
+	
 	
 	
 	@RequestMapping("/qboard/list")
 	public String show_qboard_list() {
 		return "thymeleaf/qboard/qboard_list";
 	}
-	
-	@GetMapping("/qboard/write")
-	public String show_qboard_write() {
-		return "thymeleaf/qboard/qboard_write";
-	}
-	@GetMapping("/freeboard/list")
-	public String show_freeboard_list() {
-		return "thymeleaf/qboard/freeboard_list	";
-	}
-	
-	@GetMapping("/qboard/read")
-	public String show_qboard_read() {
-		return "thymeleaf/qboard/qboard_read";
+	@PostMapping("/qboard/save.do")
+	public String save(QboardDTO qboard, Model model) {
+			Long qboard_id = qboardservice.save(qboard); //게시글 삽입 게시글은 db에 저장되는데 
+			// 파일이 null 이 뜨는 듯
+			List<FileRequest> files = fileUtils.uploadFiles(qboard.getFiles()); //디스크에 파일 업로드
+			log.info("파일 컨트롤러 실행" +qboard.getFiles());
+	        fileService.saveFiles(qboard_id, files); // 업로드 된 정보를 db에 저장
+		 return "thymeleaf/qboard/qboard_list";
+
 	}
 	
 	 // 쿼리 스트링 파라미터를 Map에 담아 반환
@@ -71,15 +66,14 @@ public class QboardController {
 
 	
 	@RequestMapping("/qboard/write.do")
-	public String QboardWrite(@RequestParam(value="qboard_id", required = false) Long qboard_id, Model model,QboardDTO dto) {
+	public String QboardWrite(@RequestParam(value="qboard_id", required = false) Long qboard_id, Model model) {
 	
-			 if (qboard_id !=null) {
+		if(qboard_id != null) {
+			
+		
 				 QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 				 model.addAttribute("qboard",qboard);
-			 } else {
-				
-				 qboardservice.insert(dto);
-			 }
+		}  
 			 
 		return "thymeleaf/qboard/qboard_write";
 	}
@@ -112,6 +106,12 @@ public class QboardController {
 		return "redirect:/quizwiki/qboard/list.do";
 	}
 	
+	@PostMapping("qboard/update.do")
+	public String updateQboard(QboardDTO qboard) {
+			qboardservice.update(qboard);
+			return "redirect:/quizwiki/qboard/list.do";
+		
+	}
 	
  	
 }

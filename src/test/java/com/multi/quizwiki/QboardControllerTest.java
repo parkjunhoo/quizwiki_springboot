@@ -27,7 +27,7 @@ public class QboardControllerTest {
 	            qboard.setTitle(i + "번 게시글 제목");
 	            qboard.setContent(i + "번 게시글 내용");
 	            qboard.setMember_id("member"+i);
-	            qboardservice.insert(qboard);
+	            qboardservice.save(qboard);
 	        }
 	  }
 

@@ -1,16 +1,17 @@
 package com.multi.quizwiki.qboard.dto;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
-
-import com.multi.quizwiki.qboard.entity.QboardEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Data
 @Alias("qboard")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class QboardDTO {
@@ -24,9 +25,9 @@ public class QboardDTO {
 	int comment_Count;
 	int like_Count;
 	int view_Count;
-	private Boolean noticeYn;              // 공지글 여부
-	private Boolean deleteYn;              // 삭제 여부
-	
+	private Boolean delete_Yn;              // 삭제 여부
+    private List<MultipartFile> files = new ArrayList<>();    // 첨부파일 List
+
 	
 }
 	

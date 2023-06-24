@@ -10,13 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.multi.quizwiki.qboard.dao.QboardDAO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
-import com.multi.quizwiki.qboard.dto.QboardRequestDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
-import com.multi.quizwiki.qboard.entity.QboardEntity;
-import com.multi.quizwiki.qboard.entity.QboardReplyEntity;
 import com.multi.quizwiki.qboard.paging.Pagination;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
-import com.multi.quizwiki.qboard.repository.QboardRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +24,12 @@ public class QboardServiceImpl implements QboardService {
 	@Autowired
 	QboardDAO qboarddao;
 	
-	private final QboardRepository qboardrepo;
-
+	//게시글 저장
 	@Override
-	public int insert(QboardDTO qboard) {
+	public Long save(QboardDTO qboard) {
 		log.info("insert service 실행" +qboard.getQboard_id());
-		return qboarddao.insert(qboard);
-
+		 qboarddao.save(qboard);
+		 return qboard.getQboard_id();
 	}
 
 	@Override	
@@ -59,10 +54,6 @@ public class QboardServiceImpl implements QboardService {
 
 	}
 
-	@Override
-	public void reply_insert(QboardReplyEntity qboardReply) {
-		qboarddao.reply_insert(qboardReply);
-	}
 
 	@Override
 	public int update(QboardDTO qboard) {
@@ -81,7 +72,8 @@ public class QboardServiceImpl implements QboardService {
 		return 0;
 	}
 	
-	
+
+		
 	
 	
 	/*

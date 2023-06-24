@@ -1,125 +1,76 @@
-/**
- * 	 질문/답변 게시판 동적 생성
- */
 $(document).ready(function(){
-		
-		console.log(Json.length);
-		
-		if ( Json.length > 0 ) {
-			for ( var i = 0; i < Json.length; i++ ) {
-				
-				var tag = "";
-				
-				if( Json[i].secret == 'y' && Json[i].writer != userSeq) {
-					
-					tag += "<tr class='secret' onclick='QNAClose()'>";
-				
-				} else {
-					
-					tag += "<tr class='line line"+ Json[i].seq + "' onclick='QNAView(" + Json[i].seq +")'>";
-				}			
-				
-				
-				tag += "<td class='QNA_seq'>" + Json[i].seq + "</td>";
-				tag += "<td class='QNA_subject'>";
-				
-				if( Json[i].answer ) {
-					tag += "<img src='/exam/resources/images/icons/re_icon.png' />&nbsp;&nbsp;";
-				} else {
-					tag += "<img src='/exam/resources/images/icons/re_ready.png' />&nbsp;&nbsp;";
-				}
-				
-				tag += Json[i].subject; 
-				
-				if( Json[i].secret == 'y') {
-					tag += "&nbsp;&nbsp;<img src='/exam/resources/images/icons/1424897400_lock.png' style='width: 13px;' />";
-				}
-				
-				tag += "</td>";
-				tag += "<td class='QNA_writer'>" + Json[i].name + "</td>";
-				tag += "<td class='QNA_regDate'>" + Json[i].regDate + "</td>";
-				tag += "</tr>";
-				
-				//console.log(tag);
-				
-				$("#QNA").append(tag);
-			}
-		
-		} else if ( Json.length == 0 ){
-			
-			$("#QNA").append("<tr><td style='padding: 150px 0px; text-align: center;' colspan='4' >게시물이 존재하지 않습니다.</td></tr>");
+	// gnb
+	$("nav > ul > li.has_sub > a").click(function(e){
+		if($(this).parent().has("> ul")) {
+			e.preventDefault();
 		}
-		
+
+		if(!$(this).hasClass("on")) {
+			$(this).next("ul").stop().slideDown(200);
+			$(this).addClass("on");
+			$(this).parent().siblings().find(" > a").removeClass("on").end().find(" > ul").stop().slideUp(200);
+		}else if($(this).hasClass("on")) {
+			$(this).removeClass("on");
+			$(this).next("ul").stop().slideUp(200);
+		}
 	});
 
-	var flag = false;
-	var active = 0;
-	
-	function QNAView(seq) {
-		
-		var seq = seq;
-		//alert(seq);
-		
-		
-		if ( !flag ) {
-			
-			$.ajax({
-				type: "GET",
-				url: "/exam/community/qna/view.action",
-				data: "seq=" + seq,
-				success: function(view){
-					
-					console.log(view);
-				
-					var obj = $.parseJSON(view);
-					
-					console.log(obj);
-					
-					if(obj.answer == 'null' || obj.answer == null) {
-						obj.answer = "아직 답변이 등록되지 않았습니다.<br />" +
-									"빠른 시간 내에 답변할 수 있도록 노력하겠습니다.";
-					}
-					
-					var tag = "";
-					tag += "<tr class='view'>";
-					tag += "<td id='view_Q'>Q.</td>";
-					tag += "<td colspan='3'>" + obj.content + "</td>";
-					tag += "</tr>";
-					tag += "<tr class='view'>";
-					tag += "<td id='view_A'>A.</td>";
-					tag += "<td colspan='3'>" + obj.answer + "</td>";
-					tag += "</tr>";
-					$(".line" + seq).css("backgroundColor","#6897f7");
-					$(".line" + seq + " td").css("color","#FFFFFF");
-					$(".line" + seq).after(tag);
-					
-					flag = true;
-					active = seq;
-				}
-			});
-			
-		} else if ( flag ) {
-			
-			$(".view").remove();
-			$(".line" + active).css("backgroundColor","inherit");
-			$(".line" + active + " td").css("color","inherit");
-			flag = false;
-			active = 0;
+	// menu_toggle
+	$(".menu_toggle").click(function(){
+		$('#container .menu_toggle').toggleClass('active');
+		$('body').toggleClass('snb_none');
+		$(window).trigger('resize');
+	});
+	// cm_list
+	$(".cm_list > div > a").click(function(){
+		var submenu = $(this).next("div.hide_view");
+		if( submenu.is(":visible") ){
+			submenu.removeClass("open");
+		}else{
+			submenu.addClass("open");
 		}
+	});
 
-	}
+	// 댓글
+	$(".cm_re_info > button").click(function(){
+		var submenu = $(this).parent().next("div.hide_view");
+		if( submenu.is(":visible") ){
+			submenu.removeClass("open");
+		}else{
+			submenu.addClass("open");
+		}
+	});
 
-	function QNAClose() {
-		
-		$(".view").remove();
-		$(".line" + active).css("backgroundColor","inherit");
-		$(".line" + active + " td").css("color","inherit");
-		flag = false;
-		active = 0;
-	}
-	
+	// 첨부파일
+	$(".file_input input[type='file']").on('change',function(){
+		var fileName = $(this).val().split('/').pop().split('\\').pop();
+		$(this).parent().siblings("input[type='text']").val(fileName);
+	});
+	// 파일업로드 미리보기
+	$('.file_upload input[type=file]').change(function(event) {
+		var tmppath = URL.createObjectURL(event.target.files[0]);
+		$(this).parent('label').parent('.file_upload').parent('.file_preview').find("img").attr('src',tmppath);
+	});
+});
 
-	
-	
-	
-	
+// 레이어 팝업(기본)
+function layerPop(popName){
+	var $layer = $("#"+ popName);
+	$layer.fadeIn(500).css('display', 'inline-block').wrap( '<div class="overlay_t"></div>');
+	$('body').css('overflow','hidden');
+}
+function layerPopClose(){
+	$(".popLayer").hide().unwrap( '');
+	$('body').css('overflow','auto');
+	$(".popLayer video").each(function() { this.pause(); this.load(); });
+}
+function layerPopClose2(popName){
+	$("#"+ popName).hide().unwrap( '');
+	$('body').css('overflow','auto');
+}
+
+// 클릭시 새창 팝업 띄우기
+function popup_win(str,id,w,h,scrollchk){
+	var pop = window.open(str,id,"width="+w+",height="+h+",scrollbars="+scrollchk+",resize=no,location=no ");
+	pop.focus();
+}

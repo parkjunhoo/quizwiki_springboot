@@ -1,5 +1,6 @@
 package com.multi.quizwiki.qboard.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.apache.ibatis.type.Alias;
@@ -15,8 +16,8 @@ public class CommentResponse {
 		    private Long qboard_id;                   // 게시글 번호 (FK)
 		    private String content;                // 내용
 		    private String member_id;                 // 작성자
-		    private Boolean deleteYn;              // 삭제 여부
-		    private LocalDateTime regDate;     // 생성일시
-		    private LocalDateTime editDate;    // 최종 수정일시
+		    private Boolean delete_Yn;              // 삭제 여부
+		    private Timestamp regDate;     // 생성일시
+		    private Timestamp editDate;    // 최종 수정일시
 
 }

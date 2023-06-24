@@ -3,11 +3,13 @@ package com.multi.quizwiki.qboard.dto;
 import org.apache.ibatis.type.Alias;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 @Alias("comment_req")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 public class CommentRequest {
 
     private Long comment_id;           // 댓글 번호 (PK)

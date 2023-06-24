@@ -189,7 +189,6 @@ layout:fragment="content"><head>
                 if ( !confirm( '해당글을 삭제할까요?') ) {
                     return false;
                 }
-                document.getElementById("content").placeholder = `${qboard.member_id}님, 댓글을 작성해보세요.`;
                 const formHtml = `
                     <form id="deleteForm" action="/quizwiki/qboard/delete" method="get">
                         <input type="hidden" id="qboard_id" name="qboard_id" value="${qboard_id}" />

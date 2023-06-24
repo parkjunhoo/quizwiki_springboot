@@ -22,7 +22,7 @@ layout:fragment="content">
 <script th:src="@{/js/qboard/function.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 
-<script type="text/javascript" src="/js/qboard/sidebar.js"></script>
+<script type="text/javascript" src="/js/qboard/qna.js"></script>
 <script type="text/javascript" src="/js/qboard/jquery-1.11.2.js"></script>
 <script type="text/javascript" src="/js/qboard/bootstrap.js"></script>
  <script src="/libs/se2/js/service/HuskyEZCreator.js"></script>
@@ -71,12 +71,12 @@ layout:fragment="content">
 
 		<div id="content_body">
 
-			<form method="post" id="saveForm"  th:action="@{/quizwiki/qboard/write.do}">
+			<form method="post" id="saveForm"  enctype="multipart/form-data">
 				<!-- 게시글 수정인 경우 서버로 전달할 게시글 번호 -->
 				
-				<input type="hidden" id="id" name="qboard_id" th:if="${qboard != null}" th:value="${qboard.qboard_id}" />
-				<input type="hidden" id="regDate" name="regDate" />
-				<select id="inSubject" autocomplete="categoryCode"
+				<input type="hidden" id="qboard_id" name="qboard_id" th:if="${qboard != null}" th:value="${qboard.qboard_id}" />
+<!-- 				<input type="hidden" id="regDate" name="regDate" />
+ -->				<select id="inSubject" autocomplete="categoryCode"
 					class="form-control" name="categoryCode">
 					<option value="" class="">과목을 선택해주세요.</option>
 					<option   th:value="korean" 	class="">국어</option>
@@ -86,9 +86,18 @@ layout:fragment="content">
 					<input type="text"   id="title" name="title"    class="form-control" placeholder="제목" required />
 <!-- 				<textarea name="content" th:value="content" id="se2" placeholder="질문 내용을 입력하세요." required></textarea>
  -->				
-				<div class="form-group">
-			      <input type="file" class="form-control-file border" name="file" >
-			    </div>
+				  <div class="file_list">
+                <div>
+                    <div class="file_input">
+                        <input type="text" readonly />
+                        <label> 첨부파일
+                            <input type="file" name="files" onchange="selectFile(this);" />
+                        </label>
+                    </div>
+                    <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
+                    <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
+                </div>
+            </div>
 				<textarea class="form-control" id="Content" name="content"
 					placeholder="질문 내용을 입력하세요." required></textarea>
 				
@@ -161,12 +170,78 @@ layout:fragment="content">
                 const form = document.getElementById('saveForm');
                 const fields = [form.title, form.content];
                 const fieldNames = ['제목', '내용'];
-
+				const qboard = /*[[ ${qboard == null} ]]*/''; 
+				console.log(qboard)
                 for (let i = 0, len = fields.length; i < len; i++) {
                     isValid(fields[i], fieldNames[i]);
                 }
-                form.action = '/quizwiki/qboard/update.do';
+                
+              
+                document.getElementById('saveBtn').disabled = true;
+
+                form.action = qboard ? '/quizwiki/qboard/save.do' : '/quizwiki/qboard/update.do';
                 form.submit();
+            }
+            
+            
+
+            // 게시글 리스트 페이지로 이동
+            function goListPage() {
+                const queryString = new URLSearchParams(location.search);
+                queryString.delete('id');
+                location.href = '/post/list.do' + '?' + queryString.toString();
+            }
+            
+            // 파일 선택
+            function selectFile(element) {
+
+                const file = element.files[0];
+                const filename = element.closest('.file_input').firstElementChild;
+
+                // 1. 파일 선택 창에서 취소 버튼이 클릭된 경우
+                if ( !file ) {
+                    filename.value = '';
+                    return false;
+                }
+
+                // 2. 파일 크기가 10MB를 초과하는 경우
+                const fileSize = Math.floor(file.size / 1024 / 1024);
+                if (fileSize > 10) {
+                    alert('10MB 이하의 파일로 업로드해 주세요.');
+                    filename.value = '';
+                    element.value = '';
+                    return false;
+                }
+
+                // 3. 파일명 지정
+                filename.value = file.name;
+            }
+
+
+            // 파일 추가
+            function addFile() {
+                const fileDiv = document.createElement('div');
+                fileDiv.innerHTML =`
+                    <div class="file_input">
+                        <input type="text" readonly />
+                        <label> 첨부파일
+                            <input type="file" name="files" onchange="selectFile(this);" />
+                        </label>
+                    </div>
+                    <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
+                `;
+                document.querySelector('.file_list').appendChild(fileDiv);
+            }
+            
+            // 파일 삭제
+            function removeFile(element) {
+                const fileAddBtn = element.nextElementSibling;
+                if (fileAddBtn) {
+                    const inputs = element.previousElementSibling.querySelectorAll('input');
+                    inputs.forEach(input => input.value = '')
+                    return false;
+                }
+                element.parentElement.remove();
             }
 
         /*]]>*/

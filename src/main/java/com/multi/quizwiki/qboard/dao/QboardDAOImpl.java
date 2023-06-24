@@ -8,9 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
-import com.multi.quizwiki.qboard.entity.QboardReplyEntity;
-import com.multi.quizwiki.qboard.repository.QboardReplyRepository;
-import com.multi.quizwiki.qboard.repository.QboardRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 public class QboardDAOImpl implements QboardDAO {
 	@Autowired
 	SqlSession template;
-	@Autowired
-	QboardRepository qboardrepo;
-	@Autowired
-	QboardReplyRepository qboardreplyrepo;
 	
-	@Override
-
-	public int insert(QboardDTO qboard) {
-		log.info("write.do dao 실행");
-		System.out.println("dao 실행");
-		return template.insert("com.multi.quizwiki.qboard.insert",qboard);
-	}
+	
 
 	@Override
 	public List<QboardDTO> getBoardList(SearchDto params) {
@@ -49,10 +36,7 @@ public class QboardDAOImpl implements QboardDAO {
 			return template.update("com.multi.quizwiki.qboard.update",qboard);
 	}
 
-	@Override
-	public void reply_insert(QboardReplyEntity qboardReply) {
-			qboardreplyrepo.save(qboardReply);
-	}
+	
 
 	@Override
 	public int deleteQboard(Long qboard_id) {
@@ -67,6 +51,14 @@ public class QboardDAOImpl implements QboardDAO {
 			
 		return template.selectOne("com.multi.quizwiki.qboard.count",params);
 	}
+
+	@Override
+	public Long save(QboardDTO qboard) {
+			template.insert("com.multi.quizwiki.qboard.insert",qboard);
+		return qboard.getQboard_id();	
+	}
+
+	
 
 	
 
