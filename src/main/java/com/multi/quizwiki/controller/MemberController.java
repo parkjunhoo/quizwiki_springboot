@@ -1,23 +1,36 @@
+
 package com.multi.quizwiki.controller;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 
+import javax.mail.Authenticator;
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.multi.quizwiki.dto.EmailRequestDTO;
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.member.service.MemberService;
 import com.univcert.api.UnivCert;
@@ -25,22 +38,19 @@ import com.univcert.api.UnivCert;
 @Controller
 public class MemberController {
 
-	
 	MemberService service;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	public MemberController() {
 
 	}
-	
+
 	@Autowired
 	public MemberController(MemberService service) {
 		super();
 		this.service = service;
 	}
-
-	
 
 	// 로그인
 	@GetMapping("/login.do")
@@ -101,6 +111,12 @@ public class MemberController {
 	public String show_signup2() {
 		return "thymeleaf/member/signup2";
 	}
+	
+	// 회원탈퇴
+	@RequestMapping("/delete/user")
+	public String show_delete_view() {
+		return "thymeleaf/member/delete";
+	}
 
 	// 로그인
 	@PostMapping("/login.do")
@@ -111,11 +127,14 @@ public class MemberController {
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
+			System.out.println(session.getId());
 			view = "redirect:/main";
+			
 		} else {
 			// System.out.println("등록되지 않은 사용자");
 			view = "redirect:/login.do";
 		}
+		
 		mav.setViewName(view);
 		return mav;
 	}
@@ -123,9 +142,13 @@ public class MemberController {
 	// 로그아웃
 	@RequestMapping("/logout.do")
 	public String logout(HttpSession session) {
+		//System.out.println("로그아웃??");
 		if (session != null) {
+			System.out.println(session.getId());
+		//	System.out.println("로그아웃!!!");
 			session.invalidate();
 		}
+		//System.out.println("로그아웃");
 		return "redirect:/main";
 	}
 
@@ -151,26 +174,105 @@ public class MemberController {
 		return "redirect:/login.do";
 	}
 
-	
 	// 아이디 찾기 실행
-		@RequestMapping(value = "/find_id.do", method = RequestMethod.POST)
-		public String findIdAction(MemberDTO dto, Model model) {
-			MemberDTO member_id = service.find_id(dto);
-			System.out.println(dto);
-			if(member_id == null) {
-				System.out.println("null일 경우");
-				model.addAttribute("check", 1);
-				
-			} else {
-				System.out.println("null 아닐 경우");
-				model.addAttribute("check", 0);
-				model.addAttribute("member_id", member_id.getMember_id());
-			}
-			System.out.println(member_id);
-			return "thymeleaf/member/login_id_forgot_find";
+	@RequestMapping(value = "/find_id.do", method = RequestMethod.POST)
+	public String findIdAction(MemberDTO dto, Model model) {
+		MemberDTO user = service.find_id(dto);
+		System.out.println(dto);
+		if(user == null) {
+			System.out.println("null일 경우");
+			model.addAttribute("check", 1);
+			
+		} else {
+			System.out.println("null 아닐 경우");
+			model.addAttribute("check", 0);
+			model.addAttribute("member_id", user.getMember_id());
+		}
+		System.out.println(user);
+		return "thymeleaf/member/login_id_forgot_find";
+	}
+	
+	// 비밀번호 찾기 실행
+	@RequestMapping(value = "/find_pass.do", method = RequestMethod.POST)
+	public String findPassAction(MemberDTO dto, Model model) {
+		MemberDTO user = service.find_pass(dto);
+		System.out.println(dto);
+		if(user == null) {
+			System.out.println("null");
+			model.addAttribute("check", 1);
+		}else {
+			System.out.println("null 아님");
+			model.addAttribute("check", 0);
+			model.addAttribute("update_id",user.getMember_id());
+			model.addAttribute("member_pass", user.getMember_pass());
+		}
+		return "thymeleaf/member/login_pass_forgot_find";
+		
+	}
+	
+	// 비밀번호 변경
+	@RequestMapping(value = "/update/pass", method = RequestMethod.POST)
+	public String updatePass(MemberDTO dto, HttpSession session) throws Exception{
+		//MemberDTO user = (MemberDTO) session.getAttribute("user");
+		//System.out.println("-----------------------------------");
+		System.out.println("비번 변경 dto 출력 : "+dto);
+		//System.out.println("-----------------------------------");
+		//System.out.println(member_pass);
+		//dto.setMember_pass(member_pass);
+		//user.setMember_pass(member_pass);
+		service.update_pass(dto);
+		session.setAttribute("user", dto);
+		return "redirect:/mypage/modify";
+	}
+	
+	// 회원정보 수정
+	@RequestMapping(value = "/update/member", method = RequestMethod.POST)
+	public String updateMember(MemberDTO dto, HttpSession session) throws Exception {
+		System.out.println("회원 정보 수정 dto 출력 : "+dto);
+		service.update_member(dto);
+		session.setAttribute("user", dto);
+		return "redirect:/mypage/modify";
+	}
+	
+	// 회원탈퇴
+	@RequestMapping(value = "/delete/user.do", method = RequestMethod.POST)
+	public String deleteMember(MemberDTO dto, HttpSession session, RedirectAttributes rttr) throws Exception{
+		
+		MemberDTO member = (MemberDTO) session.getAttribute("user");
+		String session_pass = member.getMember_pass();
+		String input_pass = dto.getMember_pass();
+		
+		if(!(session_pass.equals(input_pass))) {
+			rttr.addFlashAttribute("msg", false);
+			return "redirect:/delete/user";
 		}
 		
+		service.delete_member(dto);
+		session.invalidate();
+		return "redirect:/main";
 		
+	}
+	
+	// 회원탈퇴 - 회원 특정
+	@ResponseBody
+	@RequestMapping(value = "/delete/check", method = RequestMethod.POST)
+	public int deleteMemberCheck(MemberDTO dto) throws Exception{
+		int result = service.delete_check(dto);
+		return result;
+	}
+	
+//	@RequestMapping(value = "/update_pass.do", method = RequestMethod.POST)
+//	public String updatePasswordAction(@RequestParam(value="update_id", defaultValue="", required=false) String member_id, MemberDTO dto) {
+//		dto.setMember_id(member_id);
+//		System.out.println(dto);
+//		service.update_pass(dto);
+//		return "마이페이지 회원정보 수정 경로";
+//	}
+//	
+
+
+	
+
 	// 대학교 메일 인증
 	/*
 	 * @RequestMapping(value = "https://univcert.com/api/v1/certify", produces =

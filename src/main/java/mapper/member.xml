@@ -43,5 +43,44 @@
 	    from member2
 	    where member_name = #{member_name} and email = #{email}
  	</select>
+ 	
+ 	<!-- pass 찾기 -->
+ 	<select id="findpass" resultType="member">
+ 		select *
+	    from member2
+	    where member_id = #{member_id} and member_name = #{member_name} and email = #{email}
+ 	</select>
+ 	
+ 	<!-- pass update -->
+ 	<update id="passUpdate" parameterType="member">
+ 		update member2
+ 		set member_pass = #{member_pass}
+ 		where member_id = #{member_id}
+ 	</update>
+ 	
+ 	<!-- 회원 정보 update -->
+ 	<update id="memberUpdate" parameterType="member">
+ 		update member2
+ 		set member_name=#{member_name} and member_gender=#{member_gender}
+ 			and member_zipcode=#{member_zipcode} and member_road_addr=#{member_road_addr}
+ 			and member_jibun_addr=#{member_jibun_addr} and member_detail_addr=#{member_detail_addr}
+ 			and member_extra_addr=#{member_extra_addr} and member_photo=#{member_photo}
+ 			and member_major=#{member_major}
+ 		where member_id=#{member_id}
+ 	</update>
+ 	
+ 	<!-- 회원탈퇴 -->
+	<select id="delete">
+		delete from member2
+		where member_id=#{member_id} and member_pass=#{member_pass}
+	</select>
+	
+	<!-- 회원 탈퇴에 쓰일 유저 특정하기 -->
+	<select id="deleteUser" resultType="int">
+		select count(*)
+		from member2
+		where member_id=#{member_id} and member_pass=#{member_pass}
+	</select>
+	
  </mapper>
 
