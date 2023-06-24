@@ -1,16 +1,16 @@
-package com.multi.quizwiki.service;
+package com.multi.quizwiki.mypage.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.multi.quizwiki.dao.MypageDAO;
-import com.multi.quizwiki.dto.InquryDTO;
-import com.multi.quizwiki.dto.InquryReplyDTO;
-import com.multi.quizwiki.dto.NoteDTO;
 import com.multi.quizwiki.dto.PboardDTO;
-import com.multi.quizwiki.dto.PointDTO;
+import com.multi.quizwiki.mypage.dao.MypageDAO;
+import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
+import com.multi.quizwiki.mypage.dto.NoteDTO;
+import com.multi.quizwiki.mypage.dto.PointDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 
 @Service
@@ -75,6 +75,10 @@ public class MypageServiceImpl implements MypageService {
 	public String pboardcount(String member_id) {
 		return dao.pboardcount(member_id);
 	}
+	@Override//내문제 날짜로 조회
+	public List<PboardDTO> pboardsearch(String startday, String endday, String member_id) {
+		return dao.pboardsearch(startday, endday, member_id);
+	}
 	@Override//내질문 리스트 
 	public List<QboardDTO> qboardread(String member_id) {
 		return dao.qboardread(member_id);
@@ -87,6 +91,11 @@ public class MypageServiceImpl implements MypageService {
 	public String notecount(String member_id) {
 		return dao.notecount(member_id);
 	}
+	@Override//오답노트  날짜로 조회 
+	public List<NoteDTO> notesearch(String startday, String endday, String member_id) {
+		return dao.notesearch(startday, endday, member_id);
+	}
+	
 	
 	
 

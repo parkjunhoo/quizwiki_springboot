@@ -1,4 +1,4 @@
-package com.multi.quizwiki.dto;
+package com.multi.quizwiki.mypage.dto;
 
 
 
