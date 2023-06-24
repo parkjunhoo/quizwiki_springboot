@@ -125,7 +125,7 @@ hr{
 .login__box__under{
 	display: block;
     margin-top: 1.5rem;
-    padding-right: 10rem;
+    padding-right: 9rem;
 }
 .login_tel{
 	width: 66.5%;
@@ -247,8 +247,8 @@ hr{
     justify-self: center;
   }
    .login__register {
-    bottom: -17rem;
-    justify-content: center;
+    bottom: -13rem!important;
+    justify-content: center!important;
   }
   
 }
@@ -276,10 +276,10 @@ hr{
     margin-top: 0;
   }
   .login__register, .login__create {
-    left: -11rem;
+    left: -11rem!important;
   }
   .login__register {
-    bottom: -2rem;
+    bottom: -2rem!important;
   }
   .login__create {
     bottom: -5.5rem;

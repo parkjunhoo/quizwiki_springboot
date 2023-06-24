@@ -1,4 +1,4 @@
-package com.multi.quizwiki.service;
+package com.multi.quizwiki.member.service;
 
 import javax.mail.internet.MimeMessage;
 

@@ -1,4 +1,7 @@
 @charset "UTF-8";
+body{
+	font-family: "Esamanru";
+}
 .modify_wrapper {
     width: 100%;
 }
@@ -54,6 +57,9 @@
     top: 50%;
     margin-top: -10px;
     left: 0;
+}
+.list_title{
+	width: 180px!important;
 }
 .modify_wrapper ul.modify_list li input[type='password'] {
     height: 70px;
@@ -113,7 +119,7 @@ input[type=text], input[type=password], textarea {
     background-repeat: no-repeat;
     content: '';
     background-size: 60%;
-    background-image: url(../images/check.png);
+    background-image: url(/images/check.png);
     background-color: #fff;
     border: 1px solid #e4e4e4;
     border-radius: 2px;
@@ -128,6 +134,10 @@ input[type=text], input[type=password], textarea {
 #addr{
 	display: flex;	
 }
-#addrbtn{
+/* #addrbtn{
 	margin-top: 10px;
-}
+} */
+/* #msg{
+	padding-left: 5rem;
+	padding-bottom: 5rem;
+} */

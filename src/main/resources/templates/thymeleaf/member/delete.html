@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Wiki 회원탈퇴</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+<!-- js -->
+<script type="text/javascript" src="/js/member/zipcode.js"></script>
+<script type="text/javascript" src="/js/member/signup.js"></script>
+<script type="text/javascript" src="/js/member/check.js"></script>
+
+<!-- cdn -->
+<script src="https://kit.fontawesome.com/e92cf22849.js" crossorigin="anonymous"></script>
+
+<!-- 글꼴 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/common.css" />
+<link rel="stylesheet" href="/css/member/signup.css">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+
+
+<script type="text/javascript">
+
+// 비밀번호 일치 불일치
+function passChk(){
+	
+	// document : 현재 문서를 의미함. 작성되고 있는 문서를 뜻함. 
+	// getElementByID('아이디') : 아이디에 적힌 값을 가진 id의 value를 get을 해서 password 변수 넣기
+
+	var pass = document.getElementById('pass');				//비밀번호 
+	var pass_check = document.getElementById('pass_check');	//비밀번호 확인
+	var msg = document.getElementById('msg');				//확인 메세지
+	var correctColor = "#5a49e4";	//일치했을 때 출력되는 색깔
+	var wrongColor ="#ff0000";		//틀렸을 때 출력되는 색깔
+
+	if(pass.value == pass_check.value){
+		msg.style.color = correctColor;
+		msg.innerHTML ="비밀번호 일치";
+	}else{
+		msg.style.color = wrongColor;
+		msg.innerHTML ="비밀번호 불일치";
+	}
+
+}
+
+
+
+$(document).ready(function() {
+	
+	 $("#delete_btn").on("click",function(){
+	      
+	     
+	      
+	      if($("#member_pass").val()==""){
+	         //alert("비밀번호를 입력해주세요.");
+	         $("#member_pass").focus();
+	         return false;
+	      }
+	      
+	      
+	      $.ajax({
+	         url : "/delete/check",
+	         type : "POST",
+	         dataType : "json",
+	         data : $("#delForm").serializeArray(),
+	         success: function(data){
+	            
+	            if(data==0){
+	               alert("올바르지 않은 회원 정보입니다.");
+	               return;
+	            }else{
+	               if(confirm("회원 탈퇴 하시겠습니까?")){
+	                  $("#delForm").submit();
+	               }
+	               
+	            }
+	         }
+	      })
+	      
+	   })
+
+		
+}); 
+
+</script>
+
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="logo_wrap">
+			<a href="/main"> 
+				<img src="/images/QuizWiki_logo1_trans.png" id="login_title_img" width="100%" height="100%">
+			</a>
+		</div>
+		<div class="input-form-backgroud row">
+
+			<div class="input-form col-md-12 mx-auto">
+				<h4 class="mb-3">회원탈퇴</h4>
+				<form name="join" class="validation-form" id="delForm" method="post" action="/delete/user.do" autocomplete="off"
+					encType="utf-8" novalidate>
+					
+
+						<div class="col-md-11 mb-3">
+							<label for="member_id">아이디</label>  <input type="text"
+								name="member_id" class="form-control" id="member_id"
+								placeholder="4자 이상 입력" minlength="4" maxlength="15" th:value="${session.user.member_id}" 
+								readonly="readonly" required>
+							<div class="invalid-feedback">4자 이상의 아이디를 입력해주세요.</div>
+						</div>
+						
+
+						<div class="col-md-11 mb-3">
+							<label for="pass">비밀번호</label> <input type="password" name="member_pass"
+								class="form-control" id="pass" minlength="4" maxlength="15" placeholder="4자 이상 입력" value="" required>
+							<div class="invalid-feedback">4자 이상의 비밀번호를 입력해주세요.</div>
+						</div>
+						<div class="col-md-11 mb-3">
+							<label for="pass_check">비밀번호 확인</label> <input type="password"
+								name="pass_check" class="form-control" id="pass_check"
+								onkeyup="passChk()" minlength="4" maxlength="15" placeholder="" value="" required>
+							<span id="msg"></span>
+							<div class="invalid-feedback">비밀번호를 확인해주세요.</div>
+						</div>
+
+
+				
+					<div class="mb-4"></div>
+					<input class="btn btn-primary btn-lg btn-block" type="submit" id="delete_btn"
+						onclick="passcheck_signup()" value="회원탈퇴">
+				</form>
+			</div>
+		</div>
+		<footer class="my-3 text-center text-small">
+			<p class="mb-1">&copy; Quiz Wiki</p>
+		</footer>
+	</div>
+
+</body>
+
+</html>
+
