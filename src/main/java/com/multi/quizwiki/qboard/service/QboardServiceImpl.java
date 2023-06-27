@@ -71,6 +71,17 @@ public class QboardServiceImpl implements QboardService {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void increaseViewCount(Long qboard_id) {
+		 qboarddao.increaseViewCount(qboard_id);
+	}
+
+	@Override
+	public List<QboardDTO> findByCategory(String category) {
+		return qboarddao.findByCategory(category);
+		
+	}
 	
 
 		

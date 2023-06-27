@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.multi.quizwiki.qboard.dto.FileRequest;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
-import com.multi.quizwiki.qboard.service.FileServiceImpl;
+import com.multi.quizwiki.qboard.service.FileService;
 import com.multi.quizwiki.qboard.service.QboardService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,10 +29,12 @@ import util.FileUtils;
 @RequestMapping("quizwiki")
 @RequiredArgsConstructor
 public class QboardController {
+	private final String DEFAULT_CATEGORY = "전체보기";
+	
 	@Autowired
 	QboardService qboardservice;
 	@Autowired  
-	private final FileServiceImpl fileService;
+	private final FileService fileService;
 	
 	 private final FileUtils fileUtils;
 	
@@ -40,7 +43,7 @@ public class QboardController {
 	
 	@RequestMapping("/qboard/list")
 	public String show_qboard_list() {
-		return "thymeleaf/qboard/qboard_list";
+		return "thymeleaf/qboard/editorTest";
 	}
 	@PostMapping("/qboard/save.do")
 	public String save(QboardDTO qboard, Model model) {
@@ -49,7 +52,7 @@ public class QboardController {
 			List<FileRequest> files = fileUtils.uploadFiles(qboard.getFiles()); //디스크에 파일 업로드
 			log.info("파일 컨트롤러 실행" +qboard.getFiles());
 	        fileService.saveFiles(qboard_id, files); // 업로드 된 정보를 db에 저장
-		 return "thymeleaf/qboard/qboard_list";
+		 return  "redirect:/quizwiki/qboard/list.do";
 
 	}
 	
@@ -80,9 +83,12 @@ public class QboardController {
 	
 	
 	  @GetMapping("/qboard/list.do") 
-	  public String QboardList(@ModelAttribute("params") SearchDto params, Model model) {
+	  public String QboardList(@ModelAttribute("params") SearchDto params,@RequestParam("category") String category, Model model ) {
 		  log.info("list.do 실행");
 		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
+		  List<QboardDTO> qboard = qboardservice.findByCategory(category);
+		  model.addAttribute("category",category);
+		  model.addAttribute("qboard",qboard);
 		  model.addAttribute("qboardlist",qboardlist); 
 	  		
 	  	return "thymeleaf/qboard/qboard_list"; 
@@ -94,6 +100,7 @@ public class QboardController {
 				 * if (qboard_id == null) { return "redirect:/qboard/list"; }
 				 */
 			 QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
+			  qboardservice.increaseViewCount(qboard_id);
 			 model.addAttribute("qboard", qboard);
 			
 			return "thymeleaf/qboard/qboard_read";
@@ -113,5 +120,14 @@ public class QboardController {
 		
 	}
 	
+	
+	
+		@RequestMapping(value = "/board/ajax/list.do",produces = "application/json;charset=utf-8")
+		@ResponseBody
+		public List<QboardDTO> ajaxlist(String category){
+			 List<QboardDTO> data = qboardservice.findByCategory(category);
+			 System.out.println(data+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+			return data;
+		}
  	
 }

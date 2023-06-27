@@ -68,9 +68,12 @@ public class FileUtils {
 	     * 저장 파일명 생성
 	     * @param filename 원본 파일명
 	     * @return 디스크에 저장할 파일명
+	     * uuid를 사용하는 이유는 유저가 업로드한 파일명을 그대로 올리게 되면 다른 유저와 파일명이 같을경우 
+	     * 충돌이 날 수도 있기 때문
 	     */
 	    private String generateSaveFilename(final String filename) {
 	        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+	        //확장자 명
 	        String extension = StringUtils.getFilenameExtension(filename);
 	        return uuid + "." + extension;
 	    }
@@ -103,7 +106,7 @@ public class FileUtils {
 	            dir.mkdirs();
 	        }
 	        return dir.getPath();
-	    }
+	    }	
 
 	}
 

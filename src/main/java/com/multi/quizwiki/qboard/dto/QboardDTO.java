@@ -28,7 +28,7 @@ public class QboardDTO {
 	int view_Count;
 	private Boolean delete_Yn;              // 삭제 여부
     private List<MultipartFile> files = new ArrayList<>();    // 첨부파일 List
-
+    
 	
 }
 	

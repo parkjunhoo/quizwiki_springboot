@@ -1,23 +1,22 @@
 package com.multi.quizwiki.qboard.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.apache.ibatis.type.Alias;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
 import lombok.Setter;
 @Getter
 @Setter
-
+@Alias("File")
 public class FileResponse {
 	
-	 private Long id;                                          // PK
-	    private String title;                                     // 제목
-	    private String content;                                   // 내용
-	    private String member_id;                                    // 작성자
-	    private Boolean notice_Yn;                                 // 공지글 여부
-	    private List<MultipartFile> files = new ArrayList<>();    // 첨부파일 List
-
+		private Long id;                      // 파일 번호 (PK)
+	    private Long qboard_Id;                  // 게시글 번호 (FK)
+	    private String original_Name;          // 원본 파일명
+	    private String save_Name;              // 저장 파일명
+	    private long size;                    // 파일 크기
+	    private Boolean delete_Yn;             // 삭제 여부
+	    private LocalDateTime regDate;    // 생성일시
+	    private LocalDateTime deleted_Date;    // 삭제일시
 }

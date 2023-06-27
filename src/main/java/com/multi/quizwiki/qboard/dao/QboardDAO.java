@@ -20,5 +20,9 @@ public interface QboardDAO {
 	 
 	 int count (SearchDto params);
 	 
+	 void increaseViewCount(Long qboard_id);
+	 
+	 List<QboardDTO> findByCategory(String category);
+	 	
 	 
 }

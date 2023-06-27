@@ -34,5 +34,61 @@
         </foreach>
     </insert>
 
+	<!-- 파일 리스트 조회 -->
+	<select id="findAllQboardId" parameterType="long" resultType="File">
+		SELECT
+			<include refid="fileColumns"/>
+		From
+			qboard_file
+		WHERE
+			delete_yn=0
+			AND qboard_id = #{value}
+		ORDER BY 
+			id	
+		
+	</select>
+	
+	
+	<!-- 파일 리스트 조회 -->
+	<select id="findAllByIds" parameterType="Long" resultType="File">
+		SELECT
+			<include refid="fileColumns"/>
+		From
+			qboard_file
+		WHERE
+			delete_yn=0
+			AND id IN
+			<foreach  item="id" collection="list" open="(" separator="," close=")">
+			#{id}
+			</foreach>
+			
+		ORDER BY 
+			id	
+	</select>	
 
+	
+	<!-- 파일 삭제 -->
+	<delete id="deleteAllByIds" parameterType="list"  >
+		UPDATE qboard_file
+		SET
+			delete_yn=1
+			delete_date= now()
+		WHERE
+			id in
+			<foreach  item="id" collection="list" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	
+	</delete>
+	<!--  파일 상세정보 조회 -->
+	<select id="findById" parameterType="long" resultType="File">
+		SELECT
+			<include refid ="fileColumns"/>
+		FROM
+			qboard_file
+		WHERE
+			delete_yn=0
+			AND id =#{value}	
+			
+	</select>
 </mapper>

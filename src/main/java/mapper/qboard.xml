@@ -82,6 +82,7 @@
 	</delete>
   
   
+  
   <!-- 게시글 수 카운트 -->
   <select id="count" parameterType="Search" resultType="int">
   	select 
@@ -94,5 +95,12 @@
   		
   </select>
   
+  <update id="increaseViewCount">
+  		update qboard set view_count = view_count + 1 where qboard_id =#{qboard_id}
+  </update>
+  
+  <select id="findByCategory" parameterType="String" resultType="qboard">
+  	select * from qboard where category =#{category}
+  </select>
   
   </mapper>

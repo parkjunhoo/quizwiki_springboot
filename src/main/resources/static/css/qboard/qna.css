@@ -817,4 +817,13 @@ button {
 	border: none;
 	 outline: none;
 }
+.fa-ellipsis-h:before, .fa-ellipsis:before {
+    content: "\f141";
+}
 
+.header_sub-title {
+    display: flex;
+    justify-content: space-between;
+    min-width: 0;
+    margin-bottom: 1rem;
+}

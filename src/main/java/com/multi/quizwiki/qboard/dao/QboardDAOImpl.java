@@ -58,6 +58,16 @@ public class QboardDAOImpl implements QboardDAO {
 		return qboard.getQboard_id();	
 	}
 
+	@Override
+	public void increaseViewCount(Long qboard_id) {
+			template.update("com.multi.quizwiki.qboard.increaseViewCount",qboard_id);
+	}
+
+	@Override
+	public List<QboardDTO> findByCategory(String category) {
+		return template.selectOne("com.multi.quizwiki.qboard.findByCategoty",category);
+	}
+
 	
 
 	

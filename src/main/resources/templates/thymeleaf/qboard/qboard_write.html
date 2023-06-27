@@ -7,6 +7,8 @@ layout:fragment="content">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- cdn -->
+  <script src="https://cdn.tiny.cloud/1/m9c7gqyopx0jsirhd6c5ayonoesqeg1dxxs3swtoi22qmkvy/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
 <script src="https://kit.fontawesome.com/e92cf22849.js"
 	crossorigin="anonymous"></script>
 <!-- <script src="https://kit.fontawesome.com/e92cf22849.js"
@@ -25,7 +27,6 @@ layout:fragment="content">
 <script type="text/javascript" src="/js/qboard/qna.js"></script>
 <script type="text/javascript" src="/js/qboard/jquery-1.11.2.js"></script>
 <script type="text/javascript" src="/js/qboard/bootstrap.js"></script>
- <script src="/libs/se2/js/service/HuskyEZCreator.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#inSubject").focus();
@@ -117,25 +118,89 @@ layout:fragment="content">
   	
 	</div>
 <!-- se2 -->
-    <script>
-    var oEditors = [];
-	nhn.husky.EZCreator.createInIFrame({
-		oAppRef : oEditors,
-		elPlaceHolder : "se2",
-		sSkinURI : "/libs/se2/SmartEditor2Skin.html",
-		fCreator : "createSEditor2",
-		htParams : {
-			// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-			bUseToolbar : true,
-
-			// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-			bUseVerticalResizer : false,
-
-			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-			bUseModeChanger : false
-		}
-	});
-	</script>
+   <script>
+	    tinymce.init({
+	      selector: 'textarea',
+	      language: 'ko',
+	      menubar: false,	
+	      mode : "textareas",
+	      plugins: 'link lists media image ',
+	      toolbar: 'alignleft aligncenter alignright alignjustify | bold italic |formatselect | bullist numlist | outdent indent | link image ',
+	      toolbar_mode: 'floating',
+	      tinycomments_mode: 'embedded',
+	      tinycomments_author: 'Author name',
+	      mergetags_list: [
+	        { value: 'First.Name', title: 'First Name' },
+	        { value: 'Email', title: 'Email' },
+	      ],
+	      images_upload_handler: function (blobInfo, success, failure) {
+	          var xhr, formData;
+	      
+	          xhr = new XMLHttpRequest();
+	          xhr.withCredentials = false;
+	          xhr.open('POST', 'http://localhost:8080/upload/image');
+	
+	          xhr.onload = function () {
+	              var json;
+	
+	              if (xhr.status != 200) {
+	                  failure('HTTP Error: ' + xhr.status);
+	                  return;
+	              }
+	
+	              json = xhr.responseText;
+	              success(json);
+	          };
+	
+	          formData = new FormData();
+	          formData.append('file', blobInfo.blob(), blobInfo.filename());
+	
+	          xhr.send(formData);
+	      },
+	      
+	      /* enable title field in the Image dialog*/
+	      image_title: true,
+	    
+	      /* enable automatic uploads of images represented by blob or data URIs*/
+	      automatic_uploads: true,
+	                            
+	      /*Here we add custom filepicker only to Image dialog*/
+	      file_picker_types: 'image',
+	    
+	      /* and here's our custom image picker*/
+	      file_picker_callback: function (cb, value, meta) {
+	          var input = document.createElement('input');
+	          input.setAttribute('type', 'file');
+	          input.setAttribute('accept', 'image/*');
+	  
+	          input.onchange = function () {
+	              var file = this.files[0];                    
+	              var reader = new FileReader();
+	              
+	              reader.onload = function () {
+	                  /*
+	                  Note: Now we need to register the blob in TinyMCEs image blob
+	                  registry. In the next release this part hopefully won't be
+	                  necessary, as we are looking to handle it internally.
+	                  */
+	                  var id = 'blobid' + (new Date()).getTime();
+	                  var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+	                  var base64 = reader.result.split(',')[1];
+	                  
+	                  var blobInfo = blobCache.create(id, file, base64);                                    
+	                  blobCache.add(blobInfo);
+	  
+	                  /* call the callback and populate the Title field with the file name */
+	                  cb(blobInfo.blobUri(), { title: file.name });
+	              };
+	        
+	              reader.readAsDataURL(file);
+	          };
+	  
+	          input.click();
+	      }     
+	    });
+  </script>
 	
 <th:block layout:fragment="script">
    <script th:inline="javascript">
