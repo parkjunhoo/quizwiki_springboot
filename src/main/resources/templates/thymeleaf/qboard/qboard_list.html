@@ -91,6 +91,7 @@ layout:fragment="content"><head>
 							<li class="active" th:value="수학"><a href="/quizwiki/qboard/list.do?category=수학">수학</a></li>
 							<li class="active" th:value="영어"><a href="/quizwiki/qboard/list.do?category=영어">영어</a></li>
 							<li><a href="#">전체</a> </li>
+							<li><a href="/quizwiki/qboard/list.do">전체</a></li>
 						</ul> 
 					
 			<form class="navbar-form navbar-left" action="/" id="searchForm" onsubmit="return false;" >
@@ -310,12 +311,16 @@ layout:fragment="content"><head>
 				
                 const categoryParam = new URLSearchParams(window.location.search).get('category');
 
+                
                 // 2. drawPage( )의 각 버튼에 선언된 onclick 이벤트를 통해 전달받는 page(페이지 번호)를 기준으로 객체 생성
                 const queryParams = {
                     page: (page) ? page : 1,
                     recordSize: 10,
                     pageSize: 10,
-                    keyword: form.keyword.value
+                    keyword: form.keyword.value,
+                }
+                if(categoryParam!=null){
+                	queryParams.category= categoryParam;
                 }
                 if(categoryParam!=null){
                     queryParams.category= categoryParam;
