@@ -87,9 +87,9 @@ layout:fragment="content"><head>
 
 						
 						<ul class="nav navbar-nav" style='float:left;' id="searchType" name="searchType">
-							<li class="active" th:value="국어"><a href="/qboard/list.do?category=국어">국어</a></li>
-							<li class="active" th:value="수학"><a href="#">수학</a></li>
-							<li class="active" th:value="영어"><a href="#">영어</a></li>
+							<li class="active" th:value="국어"><a href="/quizwiki/qboard/list.do?category=국어">국어</a></li>
+							<li class="active" th:value="수학"><a href="/quizwiki/qboard/list.do?category=수학">수학</a></li>
+							<li class="active" th:value="영어"><a href="/quizwiki/qboard/list.do?category=영어">영어</a></li>
 							<li><a href="#">전체</a> </li>
 						</ul> 
 					
@@ -307,6 +307,8 @@ layout:fragment="content"><head>
 
                 // 1. 검색 폼
                 const form = document.getElementById('searchForm');
+				
+                const categoryParam = new URLSearchParams(window.location.search).get('category');
 
                 // 2. drawPage( )의 각 버튼에 선언된 onclick 이벤트를 통해 전달받는 page(페이지 번호)를 기준으로 객체 생성
                 const queryParams = {
@@ -315,6 +317,10 @@ layout:fragment="content"><head>
                     pageSize: 10,
                     keyword: form.keyword.value
                 }
+                if(categoryParam!=null){
+                    queryParams.category= categoryParam;
+                 }
+
 
                 /*
                  * 3. location.pathname : 리스트 페이지의 URI("/qboard/list.do")를 의미

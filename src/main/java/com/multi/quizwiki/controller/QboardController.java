@@ -82,18 +82,15 @@ public class QboardController {
 	}
 	
 	
-	  @GetMapping("/qboard/list.do") 
-	  public String QboardList(@ModelAttribute("params") SearchDto params,@RequestParam("category") String category, Model model ) {
-		  log.info("list.do 실행");
-		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
-		  List<QboardDTO> qboard = qboardservice.findByCategory(category);
-		  model.addAttribute("category",category);
-		  model.addAttribute("qboard",qboard);
-		  model.addAttribute("qboardlist",qboardlist); 
-	  		
-	  	return "thymeleaf/qboard/qboard_list"; 
-	  
-	  }
+	@GetMapping("/qboard/list.do") 
+    public String QboardList(@ModelAttribute("params") SearchDto params, Model model ) {
+       log.info("list.do 실행");
+       PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
+       model.addAttribute("category",params.getCategory());
+       model.addAttribute("qboardlist",qboardlist); 
+       return "thymeleaf/qboard/qboard_list"; 
+    }
+	
 	  @GetMapping("/qboard/read.do")
 		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, Model model ) {
 				/*	
@@ -122,12 +119,6 @@ public class QboardController {
 	
 	
 	
-		@RequestMapping(value = "/board/ajax/list.do",produces = "application/json;charset=utf-8")
-		@ResponseBody
-		public List<QboardDTO> ajaxlist(String category){
-			 List<QboardDTO> data = qboardservice.findByCategory(category);
-			 System.out.println(data+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-			return data;
-		}
+	
  	
 }

@@ -21,7 +21,7 @@
                         <when test="''.equals( searchType )">
                             AND member_id LIKE CONCAT('%', #{keyword}, '%')
                         </when>
-                    </choose>
+                    </choose>	
                 </when>
 
                 <!-- 전체 검색일 때 -->
@@ -33,6 +33,9 @@
                     )
                 </otherwise>
             </choose>
+        </if>
+         <if test="category != null">
+            and	category =#{category}
         </if>
     </sql>
   

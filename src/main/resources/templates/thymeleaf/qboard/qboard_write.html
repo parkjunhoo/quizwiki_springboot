@@ -138,7 +138,7 @@ layout:fragment="content">
 	      
 	          xhr = new XMLHttpRequest();
 	          xhr.withCredentials = false;
-	          xhr.open('POST', 'http://localhost:8080/upload/image');
+	          xhr.open('POST', 'http://localhost:8087');
 	
 	          xhr.onload = function () {
 	              var json;
@@ -158,16 +158,12 @@ layout:fragment="content">
 	          xhr.send(formData);
 	      },
 	      
-	      /* enable title field in the Image dialog*/
 	      image_title: true,
 	    
-	      /* enable automatic uploads of images represented by blob or data URIs*/
 	      automatic_uploads: true,
 	                            
-	      /*Here we add custom filepicker only to Image dialog*/
 	      file_picker_types: 'image',
 	    
-	      /* and here's our custom image picker*/
 	      file_picker_callback: function (cb, value, meta) {
 	          var input = document.createElement('input');
 	          input.setAttribute('type', 'file');
@@ -179,9 +175,7 @@ layout:fragment="content">
 	              
 	              reader.onload = function () {
 	                  /*
-	                  Note: Now we need to register the blob in TinyMCEs image blob
-	                  registry. In the next release this part hopefully won't be
-	                  necessary, as we are looking to handle it internally.
+	                 
 	                  */
 	                  var id = 'blobid' + (new Date()).getTime();
 	                  var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
@@ -190,7 +184,6 @@ layout:fragment="content">
 	                  var blobInfo = blobCache.create(id, file, base64);                                    
 	                  blobCache.add(blobInfo);
 	  
-	                  /* call the callback and populate the Title field with the file name */
 	                  cb(blobInfo.blobUri(), { title: file.name });
 	              };
 	        
