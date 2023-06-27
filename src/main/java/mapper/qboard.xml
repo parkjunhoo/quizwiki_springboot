@@ -23,6 +23,7 @@
                         </when>
                     </choose>
                 </when>
+                
 
                 <!-- 전체 검색일 때 -->
                 <otherwise>
@@ -33,6 +34,9 @@
                     )
                 </otherwise>
             </choose>
+        </if>
+        <if test="category != null">
+            and	category =#{category}
         </if>
     </sql>
   
@@ -102,5 +106,6 @@
   <select id="findByCategory" parameterType="String" resultType="qboard">
   	select * from qboard where category =#{category}
   </select>
+  
   
   </mapper>

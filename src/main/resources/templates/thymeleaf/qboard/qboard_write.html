@@ -80,9 +80,9 @@ layout:fragment="content">
  -->				<select id="inSubject" autocomplete="categoryCode"
 					class="form-control" name="categoryCode">
 					<option value="" class="">과목을 선택해주세요.</option>
-					<option   th:value="korean" 	class="">국어</option>
-					<option   th:value="english" class="">영어</option>
-					<option   th:value="math" class="">수학</option></select> 
+					<option   th:value="국어" 	class="">국어</option>
+					<option   th:value="영어" class="">영어</option>
+					<option   th:value="수학" class="">수학</option></select> 
 					<br/>
 					<br/>
 					<input type="text"   id="title" name="title"    class="form-control" placeholder="제목" required />
@@ -108,7 +108,7 @@ layout:fragment="content">
 				
 				<span style='float: right;'> <input type="button"
 					class="btn btn-default" value="취소" onclick="history.back();" /> 
-					<input type="submit" id="saveBtn" onclick="saveQboard();" class="btn btn-success" value="질문등록"  />	
+					<button type="button" id="saveBtn" onclick="saveQboardd();" class="btn btn-success" value="질문등록"  ></button>	
 				</span>
 
 			</form>
@@ -133,29 +133,8 @@ layout:fragment="content">
 	        { value: 'First.Name', title: 'First Name' },
 	        { value: 'Email', title: 'Email' },
 	      ],
-	      images_upload_handler: function (blobInfo, success, failure) {
-	          var xhr, formData;
-	      
-	          xhr = new XMLHttpRequest();
-	          xhr.withCredentials = false;
-	          xhr.open('POST', 'http://localhost:8080/upload/image');
-	
-	          xhr.onload = function () {
-	              var json;
-	
-	              if (xhr.status != 200) {
-	                  failure('HTTP Error: ' + xhr.status);
-	                  return;
-	              }
-	
-	              json = xhr.responseText;
-	              success(json);
-	          };
-	
-	          formData = new FormData();
-	          formData.append('file', blobInfo.blob(), blobInfo.filename());
-	
-	          xhr.send(formData);
+	      images_upload_handler: function (blobInfo) {
+	    	  imageList.push(blobInfo.blob());
 	      },
 	      
 	      /* enable title field in the Image dialog*/
@@ -205,7 +184,8 @@ layout:fragment="content">
 <th:block layout:fragment="script">
    <script th:inline="javascript">
         /*<![CDATA[*/
-
+			
+        	let imageList = [];
           
             window.onload = () => {
                 renderQboard();
@@ -252,6 +232,46 @@ layout:fragment="content">
                 form.submit();
             }
             
+            function saveQboardd(){
+            	 const form = document.getElementById('saveForm');
+            	 const qboard = /*[[ ${qboard == null} ]]*/''; 
+            	 const formData = new FormData();
+            	 
+            	 
+            	 sendData = {
+            			 qboard:{
+		            		title:form.title.value,
+		            		content:tinymce.activeEditor.getContent(),
+		            		category:inSubject.value,
+            			 }
+            	 };
+            	 
+            	 formData.append("sendData", new Blob([JSON.stringify(sendData),{type:"application/json"}]));
+            	 
+            	 imageList.forEach((e)=>{
+           		 	formData.append("imageList", e);
+            	 });
+            	 
+            	 $.ajax({
+            		url:qboard ? '/quizwiki/qboard/save.do' : '/quizwiki/qboard/update.do',
+            		type:"POST",
+            		data:formData,
+            		contentType: false,
+                  	processData: false,
+            		enctype: 'multipart/form-data',
+            		success:(res)=>{
+            			const msg = res
+            			if(msg == "success"){
+            				window.location.href = "/quizwiki/qboard/list.do";
+            			}else if(msg == "notlogin"){
+            				window.location.href = "/login.do";
+            			}
+            			
+            		},
+            		
+            	 })
+                 
+            }
             
 
             // 게시글 리스트 페이지로 이동

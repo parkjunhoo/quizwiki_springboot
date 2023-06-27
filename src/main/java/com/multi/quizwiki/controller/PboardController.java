@@ -143,9 +143,9 @@ public class PboardController {
 		
 		//user에 로그인된 유저 객체를 받는다.
 		MemberDTO user = Utils.getSessionUser(req);
-		
 		//로그인 되어있고, 게시물 작성자가 로그인 유저인지 판단한다.
-		if(user != null && user.getMember_id() == pboard.getMemberId()) {//로그인되있고, 게시물작성자가 맞다면
+		if(user != null && user.getMember_id().equals(pboard.getMemberId())) {//로그인되있고, 게시물작성자가 맞다면
+			
 			model.addAttribute("problemCateList",pboardService.problemCate_findAll());
 			model.addAttribute("pboard",pboard);
 			model.addAttribute("state","e");
@@ -228,22 +228,27 @@ public class PboardController {
 	
 	@PostMapping(value="/edit")
 	@ResponseBody
-	public int pboard_edit(
+	public JsonNode pboard_edit(
+		HttpServletRequest req,
 		@RequestPart(name= "sendData") String sendData, 
 		@RequestPart(name = "printfile", required = false) List<MultipartFile> printfileList) throws JsonMappingException, JsonProcessingException{
 		
-		//todo write처럼 jsonnode를 반환하게 바꿀예정
 		//todo 로그인된 유저와 작성자를 대조해서 예외처리 할 예정 (get에서 막고잇어서 정상적인 루트로는 여기로 들어올일은 없겠지만 여기서도 막아야된다)
 		
+		String msg = "false";
+		
+		if(!Utils.loginCheck(req)) {//로그인 체크 
+			//로그인 안되있으면 객체에는 null , 메시지는 notloggedin
+			msg = "notlogin";
+			return util.Utils.getJsonStringAsResForm(null, msg);
+		}
 		
 		PboardParseStructure pps = new PboardParseStructure(sendData);
 		
 		pboardService.pboard_edit(pps.getPboard(), pps.getProblemList(), 
 				pps.getProblemChoiseList() ,printfileList, pps.getPrintfileArr());
 		
-		return pps.getPboard().getPboardId();
-		
-		
+		return util.Utils.getJsonStringAsResForm(pps.getPboard().getPboardId(), msg);
 	}
 	
 	
