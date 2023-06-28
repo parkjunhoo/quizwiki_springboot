@@ -55,6 +55,8 @@ public class MemberServiceImpl implements MemberService {
 		//System.out.println(user);
 		user.setMember_point(2000); // 회원가입 시 2000 포인트를 제공
 		
+		user.setMember_state(1); // 회원가입 시 state는 1, 탈퇴 시 0
+		
 		if (user.getMember_extra_addr() == "") { // 주소 참고항목란
 			user.setMember_extra_addr("참고항목 없음");
 		}
@@ -112,7 +114,7 @@ public class MemberServiceImpl implements MemberService {
 		int result = dao.delete_check(dto);
 		return result;
 	}
-
+	
 	
 	@Override
 	 public void certifiedPhoneNumber(String telnum, String numStr) {
