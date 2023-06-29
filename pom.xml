@@ -24,7 +24,7 @@
 		</repository>
 	</repositories>
 
-	
+
 	<dependencies>
 
 		<!-- 타임리프 -->
@@ -167,6 +167,11 @@
 			<version>1.5</version>
 		</dependency>
 
+		<!-- 카카오 로그인을 위한 추가 -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 
 	</dependencies>
 

@@ -2,6 +2,9 @@
 package com.multi.quizwiki.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
@@ -32,6 +35,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.multi.quizwiki.dto.EmailRequestDTO;
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.member.entity.MemberEntity;
+import com.multi.quizwiki.member.service.KakaoService;
 import com.multi.quizwiki.member.service.MemberService;
 import com.univcert.api.UnivCert;
 
@@ -39,7 +44,8 @@ import com.univcert.api.UnivCert;
 public class MemberController {
 
 	MemberService service;
-
+	private KakaoService ms;
+	
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	public MemberController() {
@@ -47,9 +53,10 @@ public class MemberController {
 	}
 
 	@Autowired
-	public MemberController(MemberService service) {
+	public MemberController(MemberService service, KakaoService ms) {
 		super();
 		this.service = service;
+		this.ms = ms;
 	}
 
 	// 로그인
@@ -111,7 +118,7 @@ public class MemberController {
 	public String show_signup2() {
 		return "thymeleaf/member/signup2";
 	}
-	
+
 	// 회원탈퇴
 	@RequestMapping("/delete/user")
 	public String show_delete_view() {
@@ -129,26 +136,60 @@ public class MemberController {
 			session.setAttribute("user", user);
 			System.out.println(session.getId());
 			view = "redirect:/main";
-			
+
 		} else {
 			// System.out.println("등록되지 않은 사용자");
 			view = "redirect:/login.do";
 		}
-		
+
 		mav.setViewName(view);
 		return mav;
 	}
 
+	// 카카오 로그인
+		@RequestMapping(value = "/kakao/login", method = RequestMethod.GET)
+		public String kakaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
+				HttpSession session) throws Exception {
+			String view = "";
+			String access_Token = ms.getAccessToken(code);
+			HashMap<String, Object> userInfo = ms.getUserInfo(access_Token);
+			
+			System.out.println("userInfo : " + userInfo); 
+			// userInfo : {nickname=혜원, id=2877651179, email=vh1116@kakao.com}
+			
+			String loginname = (String) userInfo.get("id");
+			System.out.println("loginname : "+loginname);
+			// loginname : 2877651179 -> id값
+			
+			MemberEntity loginUser = service.loginKakao(loginname);
+			System.out.println("loginUser : "+loginUser); 
+			// loginUser : null
+			
+			if (loginUser != null && loginUser.getKakaoID().equals(loginname)) {
+				session.setAttribute("user", MemberDTO.toDTO(loginUser));
+				view = "redirect:/main";
+			} else {
+				//model.addAttribute("nickname", userInfo.get("nickname"));
+				//model.addAttribute("email", userInfo.get("email"));
+				//model.addAttribute("id", userInfo.get("id"));
+				session.setAttribute("kakaoid", loginname);
+				view = "redirect:/signupType";
+			}
+				
+			return view;
+
+		}
+
 	// 로그아웃
 	@RequestMapping("/logout.do")
 	public String logout(HttpSession session) {
-		//System.out.println("로그아웃??");
+		// System.out.println("로그아웃??");
 		if (session != null) {
 			System.out.println(session.getId());
-		//	System.out.println("로그아웃!!!");
+			// System.out.println("로그아웃!!!");
 			session.invalidate();
 		}
-		//System.out.println("로그아웃");
+		// System.out.println("로그아웃");
 		return "redirect:/main";
 	}
 
@@ -179,10 +220,10 @@ public class MemberController {
 	public String findIdAction(MemberDTO dto, Model model) {
 		MemberDTO user = service.find_id(dto);
 		System.out.println(dto);
-		if(user == null) {
+		if (user == null) {
 			System.out.println("null일 경우");
 			model.addAttribute("check", 1);
-			
+
 		} else {
 			System.out.println("null 아닐 경우");
 			model.addAttribute("check", 0);
@@ -191,76 +232,76 @@ public class MemberController {
 		System.out.println(user);
 		return "thymeleaf/member/login_id_forgot_find";
 	}
-	
+
 	// 비밀번호 찾기 실행
 	@RequestMapping(value = "/find_pass.do", method = RequestMethod.POST)
 	public String findPassAction(MemberDTO dto, Model model) {
 		MemberDTO user = service.find_pass(dto);
 		System.out.println(dto);
-		if(user == null) {
+		if (user == null) {
 			System.out.println("null");
 			model.addAttribute("check", 1);
-		}else {
+		} else {
 			System.out.println("null 아님");
 			model.addAttribute("check", 0);
-			model.addAttribute("update_id",user.getMember_id());
+			model.addAttribute("update_id", user.getMember_id());
 			model.addAttribute("member_pass", user.getMember_pass());
 		}
 		return "thymeleaf/member/login_pass_forgot_find";
-		
+
 	}
-	
+
 	// 비밀번호 변경
 	@RequestMapping(value = "/update/pass", method = RequestMethod.POST)
-	public String updatePass(MemberDTO dto, HttpSession session) throws Exception{
-		//MemberDTO user = (MemberDTO) session.getAttribute("user");
-		//System.out.println("-----------------------------------");
-		System.out.println("비번 변경 dto 출력 : "+dto);
-		//System.out.println("-----------------------------------");
-		//System.out.println(member_pass);
-		//dto.setMember_pass(member_pass);
-		//user.setMember_pass(member_pass);
+	public String updatePass(MemberDTO dto, HttpSession session) throws Exception {
+		// MemberDTO user = (MemberDTO) session.getAttribute("user");
+		// System.out.println("-----------------------------------");
+		System.out.println("비번 변경 dto 출력 : " + dto);
+		// System.out.println("-----------------------------------");
+		// System.out.println(member_pass);
+		// dto.setMember_pass(member_pass);
+		// user.setMember_pass(member_pass);
 		service.update_pass(dto);
 		session.setAttribute("user", dto);
 		return "redirect:/mypage/modify";
 	}
-	
+
 	// 회원정보 수정
 	@RequestMapping(value = "/update/member", method = RequestMethod.POST)
 	public String updateMember(MemberDTO dto, HttpSession session) throws Exception {
-		System.out.println("회원 정보 수정 dto 출력 : "+dto);
+		System.out.println("회원 정보 수정 dto 출력 : " + dto);
 		service.update_member(dto);
 		session.setAttribute("user", dto);
 		return "redirect:/mypage/modify";
 	}
-	
+
 	// 회원탈퇴
 	@RequestMapping(value = "/delete/user.do", method = RequestMethod.POST)
-	public String deleteMember(MemberDTO dto, HttpSession session, RedirectAttributes rttr) throws Exception{
-		
+	public String deleteMember(MemberDTO dto, HttpSession session, RedirectAttributes rttr) throws Exception {
+
 		MemberDTO member = (MemberDTO) session.getAttribute("user");
 		String session_pass = member.getMember_pass();
 		String input_pass = dto.getMember_pass();
-		
-		if(!(session_pass.equals(input_pass))) {
+
+		if (!(session_pass.equals(input_pass))) {
 			rttr.addFlashAttribute("msg", false);
 			return "redirect:/delete/user";
 		}
-		
+
 		service.delete_member(dto);
 		session.invalidate();
 		return "redirect:/main";
-		
+
 	}
-	
+
 	// 회원탈퇴 - 회원 특정
 	@ResponseBody
 	@RequestMapping(value = "/delete/check", method = RequestMethod.POST)
-	public int deleteMemberCheck(MemberDTO dto) throws Exception{
+	public int deleteMemberCheck(MemberDTO dto) throws Exception {
 		int result = service.delete_check(dto);
 		return result;
 	}
-	
+
 //	@RequestMapping(value = "/update_pass.do", method = RequestMethod.POST)
 //	public String updatePasswordAction(@RequestParam(value="update_id", defaultValue="", required=false) String member_id, MemberDTO dto) {
 //		dto.setMember_id(member_id);
@@ -269,9 +310,6 @@ public class MemberController {
 //		return "마이페이지 회원정보 수정 경로";
 //	}
 //	
-
-
-	
 
 	// 대학교 메일 인증
 	/*

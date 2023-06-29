@@ -2,11 +2,15 @@
 package com.multi.quizwiki.member.dao;
 
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.member.entity.MemberEntity;
 
 public interface MemberDAO {
 	
 	// 로그인
 	MemberDTO login(MemberDTO loginUser);
+	
+	// 카카오 로그인
+	MemberEntity loginKakao(String kakaoID);
 	
 	// 아이디 중복 체크
 	int idCheck(MemberDTO member_id) throws Exception;
