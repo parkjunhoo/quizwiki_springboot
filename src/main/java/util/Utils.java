@@ -15,7 +15,6 @@ import com.multi.quizwiki.dto.MemberDTO;
 //기능별로 파일 나누고싶은데 일단 몇개없으니 Utils파일에 다 때려박앗씁니당..
 public class Utils {
 	
-	
 	/***
 	 * 마이바티스로 페이징처리할때 sql맵퍼에서 limit동적으로 받아올때 파라미터로 넘길 Map에 키밸류 추가
 	 * @param 맵퍼에 넘길 map , size = 페이지에 보여줄 갯수 , page = 현재 페이지인덱스(1부터시작)

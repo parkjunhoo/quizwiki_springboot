@@ -1,0 +1,333 @@
+#pboard-title{
+    margin: 0 auto;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    margin-bottom:30px;
+}
+
+.title-subject{
+    font-family: "Esamanru";
+    font-size: 32px;
+}
+.title-subtext{
+    font-family: "Esamanru";
+    font-size: 24px;
+    color:#3e3e3e;
+    text-decoration: none;
+    text-shadow: 3px 3px #558abb3d;
+    transform: rotate(0deg);
+    background: linear-gradient(to top, #ffa1e2 40%, transparent 40%);
+    transition: .5s;
+}
+.title-subtext:hover{
+	transform: rotate(2deg);
+}
+.title::selection{
+    background-color: #006407;
+}
+
+#write-btn{
+    align-self: center;
+    width: fit-content;
+    height: fit-content;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    background: #2b5293;
+    text-align: center;
+    color: white;
+    font-family: "Esamanru";
+    font-size: 18px;
+
+    margin-left: auto;
+}
+
+#write-btn:hover{
+    background: white;
+    outline:3px solid #2b5293;
+    color: #2b5293;
+
+}
+
+
+#pboard-list{
+    width: 1200px;
+    height: fit-content;
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.2);
+    padding: 30px 0 30px 15px;
+
+    border: 2px #949494 dashed;
+}
+
+
+
+
+#search-bar{
+    margin: 0 auto;
+    width: 90%;
+    border-radius: 7px;
+    background: #f5f5f5;
+    padding: 15px 20px;
+    justify-content: space-between;
+
+    display: flex;
+}
+
+.serach-group{
+    display: flex;
+}
+
+.custom {
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #dfdfdf;
+    box-sizing: border-box;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #212121;
+    background-size: 10px;
+}
+
+input[type="text"].custom {
+    width: 240px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #dfdfdf;
+    box-sizing: border-box;
+    padding: 0 15px;
+    font-size: 14px;
+    color: #212121;
+}
+
+.search-input button {
+    width: 75px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #ebebeb;
+    box-sizing: border-box;
+    color: #212121;
+    font-size: 14px;
+    background: #fff;
+    margin-left: 3px;
+}
+
+.pboard{
+    margin: 15px auto;
+    width: 90%;
+    background: #fafafa;
+    padding: 15px 20px;
+}
+
+.pboard table{
+    width: 100%;
+    max-width: 100%;
+    font-family: 'Pretendard';
+    table-layout: fixed;
+}
+.pboard th{
+    border-color: black;
+    border-style: solid;
+    border-width: 2px 0 1px 0;
+
+    height: 37px;
+    vertical-align: middle;
+    text-align: center;
+    color: #333;
+}
+
+.pboard tbody td{
+    padding:10px 0;
+    text-align: center;
+    vertical-align:middle;
+    border-bottom: 2px dashed #c6c6c6;
+}
+
+.pboard thead{
+    font-size: 12px;
+}
+.pboard tbody{
+    font-size: 12px;
+}
+
+.pboard tbody td a{
+	font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.pboard .text-left{
+    text-align: left;
+}
+
+.board-layout-no{
+    width: 8%;
+    padding: 0 1%;
+}
+.board-layout-title{
+    max-width: 48%;
+    padding: 0 1%;
+}
+.board-layout-author{
+    width: 8%;
+    padding: 0 1%;
+}
+.board-layout-regdate{
+    width: 8%;
+    padding: 0 1%;
+}
+.board-layout-view{
+    width: 8%;
+    padding: 0 1%;
+}
+.board-layout-like{
+    width: 8%;
+    padding: 0 1%;
+}
+
+.paging-wrap{
+    margin: 15px auto;
+    width: 90%;
+    padding: 15px 20px;
+    display:flex;
+    justify-content: center;
+}
+
+#paging-btn-list{
+    display: flex;
+}
+#paging-btn-list .page-btn{
+	color:black;
+	font-family: "Esamanru";
+    font-size: 18px;
+    
+    padding: 0 10px;
+}
+#paging-btn-list .disabled{
+	color:#656565;
+}
+
+#paging-btn-list .current-page-btn a{
+	color: #116aff;
+}
+
+
+.noteList{
+	width:90%;
+	margin: 30px auto;
+	font-family: "Typo_Crayon";
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.noteItem{
+	width:50%;
+    background-color: white;
+    padding:30px 0;
+    cursor: pointer;
+}
+
+.papers, .papers:before, .papers:after  {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.papers  {
+	position: relative;
+	width: 80%;
+	padding: 2em;
+	margin: 10px auto;
+	z-index:1;
+}
+
+.papers:before, .papers:after  {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-transform: rotateZ(2deg);
+	-o-transform: rotate(2deg);
+	transform: rotateZ(2deg);
+	z-index: -1;
+	transition:1s;
+	
+	
+}
+
+.papers:after  {
+	-webkit-transform: rotateZ(-2deg);
+	-o-transform: rotate(-2deg);
+	transform: rotateZ(-2deg);
+	
+	background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: 100px;
+    background-origin: content-box;
+}
+
+.papers[lock="true"]:after  {
+	background-image:url("/images/note/listlock.png");
+}
+
+.papers h2  {
+	font-size: 1.8em;
+	font-weight: normal;
+	text-align: center;
+	padding: 0.2em 0;
+	margin: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 3px solid #858585;
+}
+
+.papers p  {
+	clear:both;
+	text-align: left;
+	margin:1.5rem 0;
+	border-bottom: 2px solid #c9c9c9;
+}
+
+.noteItem:hover .papers:before{
+	-webkit-transform: rotateZ(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotateZ(0deg);
+}
+.noteItem:hover .papers:after{
+	-webkit-transform: rotateZ(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotateZ(0deg);
+}
+
+.note-regdate{
+	white-space: nowrap;
+	font-size:1rem;
+	background: linear-gradient(to top, #a1e1ff 40%, transparent 40%);
+	padding:1px 3px;
+}
+.note-author{
+	white-space: nowrap;
+	font-size:1rem;
+	background: linear-gradient(to top, #ffa1a1 40%, transparent 40%);
+	padding:1px 3px;
+}
+.note-title{
+	background: linear-gradient(to top, #bfffa1 40%, transparent 40%);
+	padding:1px 1rem;
+}
+.note-page{
+	background: linear-gradient(to top, #fffca1 40%, transparent 40%);
+	padding:1px .5rem;
+}

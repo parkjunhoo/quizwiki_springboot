@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/note_layout}"
+layout:fragment="content"
+>
+<head>
+<meta charset="UTF-8">
+<title>Quiz Wiki</title>
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/note/note_list.css}" />
+
+</head>
+<body>
+	<div id="pboard-list">
+		<div id="pboard-title">
+			<span class="title-subject">나의 오답노트</span>
+			<a href="#" class="title-subtext">오답노트 게시판으로 가기 <i class="fa-solid fa-arrow-right"></i></a>
+		</div>
+
+		<form method="get" id="search-bar" name="search-bar-form" action="/pboard/list">
+			<div class="serach-group">
+				<select name="stype" id="stype" class="custom">
+					<option value="title">제목</option>
+					<option value="id">작성자</option>
+				</select>
+
+				<div class="search-input">
+					<input type="text" name="keyword" value=""
+						placeholder="검색어를 입력해 주세요." class="custom">
+					<button>검색</button>
+				</div>
+				
+				<input type="hidden" name="cate" th:value="${param.cate}"/>
+			</div>
+
+			<div onclick="location.href='/pboard/write?cate='+new URLSearchParams(window.location.search).get('cate')" id="write-btn">
+				<i class="fa-solid fa-pencil"></i> 오답노트 쓰기
+			</div>
+		</form>
+		
+		<ul class="noteList">
+			<th:block th:each="n:${#numbers.sequence(1,5)}">
+				<li th:onclick="openNoteRead([[${n}]])" class="noteItem">
+					<div class="papers" th:attr="lock=${n%2==0} ? 'true':'false'">
+						<h2><span class="note-title">[[${n}]]월 모의고사 오답노트</span></h2>
+						<p>작성자: <span class="note-author">test</span></p>
+						<p>작성일자: <span class="note-regdate">2023-06-23</span></p>
+						<p>페이지 수: <span class="note-page">[[${n}]] 페이지</span></p>
+						<div style="display: flex; width:100%; margin:0 auto; justify-content: space-around;">
+							<div class="custom-btn blue-btn"><i class="fa-solid fa-pen-to-square"></i> 수정하기</div>
+							<div class="custom-btn red-btn"><i class="fa-solid fa-trash"></i> 삭제하기</div>
+						</div>
+					</div>
+				</li>
+			</th:block>
+		</ul>
+
+		
+	</div>
+	
+	<script type="text/javascript">
+	
+		function openNoteRead(no){
+			let cbt = window.open(
+			  "/note/read?no="+no,
+			);
+		}
+		
+	</script>
+</body>
+</html>

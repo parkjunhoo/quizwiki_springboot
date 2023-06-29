@@ -254,19 +254,7 @@ body{
 	display: flex;
 }
 
-.custom-btn{
-    align-self: center;
-    width: fit-content;
-    height: fit-content;
-    padding: 8px 10px;
-    cursor: pointer;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    font-family: "Esamanru";
-    font-size: 18px;
-	margin:10px;
-}
+
 .cbt-footer-ui{
 	padding: 15px;
 }
@@ -280,46 +268,6 @@ body{
     margin:15px auto;
     border: 2px dashed #5a5a5a54;
 
-}
-
-.green-btn{
-	background: #2d932b;
-    outline:2px solid #ffffff;
-}
-.green-btn:hover{
-	background: white;
-    outline:3px solid #2d932b;
-    color: #2d932b;
-}
-
-.blue-btn{
-	background: #1986a7;
-    outline:2px solid #ffffff;
-}
-.blue-btn:hover{
-	background: white;
-    outline:3px solid #1986a7;
-    color: #1986a7;
-}
-
-.red-btn{
-	background: #b73232;
-    outline:2px solid white;
-}
-.red-btn:hover{
-	background: white;
-    outline:3px solid #b73232;
-    color: #b73232;
-}
-
-.navy-btn{
-	background: #2b5293;
-    outline:2px solid white;
-}
-.navy-btn:hover{
-	background: white;
-    outline:3px solid #2b5293;
-    color: #2b5293;
 }
 
 

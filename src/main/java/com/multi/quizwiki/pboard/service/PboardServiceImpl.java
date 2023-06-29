@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +28,7 @@ import com.multi.quizwiki.problem.entity.ProblemChoiseEntity;
 import com.multi.quizwiki.problem.entity.ProblemEntity;
 import com.multi.quizwiki.problem.entity.ProblemInquiryEntity;
 import com.multi.quizwiki.problem.entity.ProblemLikeEntity;
+import com.multi.quizwiki.qboard.dto.FileRequest;
 import com.multi.quizwiki.solv.entity.SolvEntity;
 
 import lombok.NoArgsConstructor;
@@ -35,16 +40,18 @@ public class PboardServiceImpl implements PboardService {
 
 	PboardDAO pboardDAO;
 	ProblemDAO problemDAO;
+	FileUploadLogicService fileService;
 
 	@Autowired
-	public PboardServiceImpl(PboardDAO pboardDAO, ProblemDAO problemDAO) {
+	public PboardServiceImpl(PboardDAO pboardDAO, ProblemDAO problemDAO,FileUploadLogicService fileService) {
 		this.pboardDAO = pboardDAO;
 		this.problemDAO = problemDAO;
+		this.fileService = fileService;
 	}
 
 	@Override
 	public void pboard_edit(PboardEntity pboard, List<ProblemEntity> problemList, List<List<String>> problemChoiseList,
-		List<MultipartFile> printfileList, List<Integer> printfileArr) {
+		List<MultipartFile> printfileList, List<Integer> printfileArr) throws IOException {
 		int pboardId = pboard.getPboardId();
 		
 		pboardDAO.pboard_edit(pboard);
@@ -64,14 +71,14 @@ public class PboardServiceImpl implements PboardService {
 
 	@Override
 	public PboardEntity pboard_insert(PboardEntity pboard, List<ProblemEntity> problemList,
-			List<List<String>> problemChoiseList, List<MultipartFile> printfileList, List<Integer> printfileArr) {
+			List<List<String>> problemChoiseList, List<MultipartFile> printfileList, List<Integer> printfileArr) throws IOException {
 		PboardEntity pi = pboardDAO.insert(pboard);
 		pboard_write_logic(pboard, problemList, problemChoiseList, printfileList, printfileArr);
 		return pi;
 	}
 
 	private void pboard_write_logic(PboardEntity pboard, List<ProblemEntity> problemList,
-			List<List<String>> problemChoiseList, List<MultipartFile> printfileList, List<Integer> printfileArr) {
+			List<List<String>> problemChoiseList, List<MultipartFile> printfileList, List<Integer> printfileArr) throws IOException {
 		
 		int pboardId = pboard.getPboardId();
 		problemList.forEach((p) -> {
