@@ -119,29 +119,23 @@ $(document).ready(function(){
 
 
 				<div class="inner_section">
-					<form action="/update/member" name="updateMemberForm" method="post" style="margin: 0px;">
+					<form action="/update/member" enctype="multipart/form-data" name="updateMemberForm" method="post" style="margin: 0px;">
 						<input type="hidden" name="member_id" th:value="${session.user.member_id}"> 
 						<div class="modify_wrapper">
 							<ul class="modify_list">
-							<li id="userpropil">
-								<div class="centered">
-									<img src="/images/myphoto.jpg" id="userImage" style="width: 100px">
+							<!-- <li id="userprofile">
+								<div class="centered" style="width:10%;">
+									<img src="/images/myphoto.jpg" id="userImage">
 								</div>
 								<div>
-									<input type="file" name="userImage"
+									<input type="file" name="member_photo" id="profile_file"
 										onchange="document.getElementById('userImage').src = window.URL.createObjectURL(this.files[0])"
 										accept="image/*">
 								</div>
-							</li>
+							</li> -->
 							<li>
 								<div class="list_title">이름</div> <input
 								type="text" id="member_name" name="member_name"
-								class="pass text_field" required="" style="width: 100%">
-							</li>
-							
-							<li>
-								<div class="list_title">성별</div> <input
-								type="text" id="member_gender" name="member_gender"
 								class="pass text_field" required="" style="width: 100%">
 							</li>
 							
@@ -171,9 +165,17 @@ $(document).ready(function(){
 								type="text" class="form-control" id="sample4_detailAddress" name="member_detail_addr"
 								placeholder="상세주소" style="width: 100%" required>
 							</li>
+							
+							<li class="zipcode">
+								<label class="list_title" for="sample4_extraAddress">참고항목</label> <input type="text"
+								class="form-control" id="sample4_extraAddress" name="member_extra_addr"
+								placeholder="참고항목" style="width: 100%">
+							</li>
+							
 							<li>
-								<div class="list_title">휴대전화</div> <input type="text"
-								value="" readonly="" > <!--<button type="button" name="button">인증번호</button>-->
+								<div class="list_title">휴대전화</div> 
+								<input type="text" class="pass text_field" id="member_telnum" name="member_telnum"
+								placeholder="-제외 입력"> 
 							</li>
 							<li class="fixed-box single">
 								<p>SMS 수신에 동의하시겠습니까?</p>
@@ -208,7 +210,7 @@ $(document).ready(function(){
 							<p style="font-family: 'Pretendard'">※이메일 수신동의를 하시면 다양한 할인혜택과
 								이벤트/기획전 등의 정보를 받아보실 수 있습니다. 단, 회원가입 및 주요알림사항 메일은 수신동의와 상관없이 자동
 								발송됩니다.</p>
-							<button type="submit" class="comm_buttons fill">회원정보 저장</button>
+							<button type="submit" id="updateMemberBtn" class="comm_buttons fill">회원정보 저장</button>
 						</div>
 						<!-- modify_wrapper END -->
 

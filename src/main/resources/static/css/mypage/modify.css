@@ -128,11 +128,20 @@ input[type=text], input[type=password], textarea {
     background-color: #000;
     border-color: #000;
 }
-#userpropil{
+#userprofile{
+	display: flex;
 	padding-left: 35px;
 }
 #addr{
 	display: flex;	
+}
+#userImage{
+	width: 100px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+#profile_file{
+	padding-top: 50px;
 }
 /* #addrbtn{
 	margin-top: 10px;
