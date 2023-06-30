@@ -12,6 +12,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -108,6 +112,35 @@ public class PboardController {
 		//전체 페이지 숫자를 담는다 (담는 이유: 프론트단에서 page다음버튼 이전버튼 활성화 비활성화하려고)
 		model.addAttribute("totalPage",totalPage);
 		
+		//PreviewHTML을 만드는 과정
+		pboardPage.forEach((p)->{
+			String previewHTML = " <div class='pboard_list_preview'> ";
+			String previewText = "";
+			
+			Document html = Jsoup.parse(p.getPboardContent());
+			Elements imgs = html.select("img");
+			if(imgs.size() > 0) {
+				String imgPath = imgs.get(0).attr("src");
+				previewHTML += " <img src='"+imgPath+"' /> ";
+			}
+			
+			Elements pTags = html.select("p");
+			for(Element pTag : pTags) {
+				if(previewText.length() > 50) {
+					break;
+				}
+				previewText += pTags.text();
+			}
+			previewText = previewText.substring(0, Math.min(previewText.length(), 50));
+			
+			previewHTML += " <p>"+previewText+"</p> ";
+			
+			previewHTML += " </div>";
+			System.out.println("======================");
+			System.out.println(previewHTML);
+			System.out.println("======================");
+			p.setPreviewHTML(previewHTML);
+		});
 		//게시물 정보가 담긴 객체를 담는다
 		model.addAttribute("pboardList",pboardPage);
 		

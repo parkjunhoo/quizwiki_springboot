@@ -207,3 +207,17 @@ input[type="text"].custom {
 #paging-btn-list .current-page-btn a{
 	color: #116aff;
 }
+
+/* test용으로 추가 */
+.pboard_list_preview{
+	display:flex;
+}
+.pboard_list_preview img{
+	width:50%;
+	max-height:100%;
+}
+.pboard_list_preview p{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
