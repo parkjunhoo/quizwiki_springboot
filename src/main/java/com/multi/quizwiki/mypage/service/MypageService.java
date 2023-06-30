@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.multi.quizwiki.dto.PboardDTO;
 import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryFileDTO;
 import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
 import com.multi.quizwiki.mypage.dto.NoteDTO;
 import com.multi.quizwiki.mypage.dto.PointDTO;
+import com.multi.quizwiki.mypage.dto.ProblemInquiryDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 
 public interface MypageService {
@@ -21,15 +23,25 @@ public interface MypageService {
 	List<InquryDTO> inquryread(String member_id,String inqury_category);
 	//문의사항 자세히보기
 	InquryDTO inqurydetail(String inqury_id);
+	List<InquryFileDTO> fileread (String inqury_id);
 	//문의사항 입력 
 	int inquryinsert(InquryDTO inqurydto);
+	int inquryinsert(InquryDTO inqurydto,List<InquryFileDTO> inquiryfile);
 	//문의사항 수정 
 	int inquryupdate(InquryDTO inqurydto);
+	int fileupdate(List<InquryFileDTO> inquiryfile);
 	//문의사항 삭제 
 	int inqurydelete(String member_id);
+	int filedelete(String inqury_id);
+	
+	//첨부파일 다운로드
+	InquryFileDTO filedown(InquryFileDTO inquryfile);
 	
 	//문의사항 답변
 	InquryReplyDTO inquryreply(String inqury_id);
+	
+	//오류문항 신고내역 
+	List<ProblemInquiryDTO> probleminquryread(String member_id);
 		
 	//내문제보기
 	List<PboardDTO> pboardread(String member_id);
