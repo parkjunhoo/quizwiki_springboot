@@ -31,14 +31,14 @@
   		set inqury_title=#{inqury_title},inqury_content=#{inqury_content}, inqury_date=sysdate()
   		where inqury_id=#{inqury_id}
 	</update>
-	<insert id="inquryfileinsert" parameterType="inquryFile">
-		insert into board_file values
-  		(null,#{inqury_id},#{inqury_origin},#{inqury_store})
-	</insert>
 	<!--문의사항 답변(inqury)  -->
 	<select id="inquryreply" resultType="inquryReply" parameterType="String">
 		select * from inqury_reply where inqury_id=#{inqury_id}
 	</select>
+	<!--오답신고  -->
+	<select id="probleminquiry" parameterType="String" resultType="probleminquiry">
+		select * from problem_inquiry where member_id=#{member_id}
+	</select> 
 	<!--내문제보기(myproblem) -->
 	<select id="pboardread" resultType="pboard" parameterType="String" >
 		select * from pboard where member_id=#{member_id} 
@@ -63,4 +63,27 @@
 	<select id="noteserch" resultType="note" parameterType="String">
     SELECT * FROM note WHERE solv_reg_date &gt;= #{startday} AND solv_reg_date &lt;= #{endday} AND member_id = #{member_id}
 	</select>
+	<!--첨부파일  -->
+	<insert id="inquryFile" parameterType="inquryFile">
+		insert into inqury_file values
+		<foreach collection="list" item="file" separator=",">
+  			(null,last_insert_id(),#{file.inqury_origin},#{file.inqury_store})
+  		</foreach>
+	</insert>
+	<update id="fileupdate" parameterType="inquryFile">
+		update inqury_file set
+  		<foreach collection="list" item="file" separator=",">
+  		inqury_origin=#{file.inqury_origin}, inqury_store=#{file.inqury_store}
+  		where inqury_file_id=#{file.inqury_file_id}
+  		</foreach>
+	</update>
+	<select id="fileread" resultType="inquryFile" parameterType="String">
+		select * from inqury_file where inqury_id=#{inqury_id}
+	</select>
+	<delete id="filedelete" parameterType="String">
+		delete from inqury_file where inqury_id=#{inqury_id}
+	</delete>
+	<select id="filedown" parameterType="String" resultType="inquryFile">
+  		select * from inqury_file where inqury_id=#{inqury_id} and inqury_file_id=#{inqury_file_id}
+  	</select>
 </mapper>

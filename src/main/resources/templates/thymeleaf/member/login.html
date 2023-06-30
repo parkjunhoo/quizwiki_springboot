@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <title>Quiz Wiki 로그인</title>
 
+<!-- <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.2.0/kakao.min.js"
+  integrity="sha384-x+WG2i7pOR+oWb6O5GV5f1KN2Ko6N7PTGPS7UlasYWNxZMKQA63Cj/B2lbUmUfuC" crossorigin="anonymous"></script>
+<script>
+  Kakao.init('d1c549bb120ac47bddff8f33df3de387'); // 사용하려는 앱의 JavaScript 키 입력
+</script> -->
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
 <link rel="stylesheet" type="text/css" href="./css/common.css" />
@@ -26,7 +31,29 @@ function chk_form() {
 
 </head>
 <body>
+<!-- <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 	<script type="text/javascript" src="./js/member/login.js"></script>
+	<script type="text/javascript">
+	
+	window.Kakao.init("d1c549bb120ac47bddff8f33df3de387");
+	
+	function kakaoLogin(){
+		window.Kakao.Auth.login({
+			scope:'profile_nickname, account_email, gender',
+			success: function(authObj){
+				console.log(authObj);
+				window.Kakao.API.request({
+					url:'/v2/user/me',
+					success: res => {
+						const kakao_account = res.kakao_account;
+						console.log(kakao_account);
+					}
+				})
+			}
+		});
+	}
+	
+	</script> -->
 	<div class="login">
 		<div class="login__content">
 			<div class="login__forms">
@@ -54,13 +81,50 @@ function chk_form() {
 					<div style="margin-top: 10px;">
 						<div class="logo_wrap">
 							<!-- 카카오 간편 로그인 -->
-							<a	href="https://kauth.kakao.com/oauth/authorize
+							<a href="https://kauth.kakao.com/oauth/authorize
 									?client_id=e2758d85befb75965fd0776467743592
-									&redirect_uri=http://localhost:8087/main
+									&redirect_uri=http://localhost:8087/kakao/login
 									&response_type=code">
+							<!-- <a href="javascript:kakaoLogin();"> -->
+							<!-- <a th:href="@{|${kakaoUrl}|}"> -->
+							<!-- <a id="kakao-login-btn" href="javascript:loginWithKakao()"> -->
 								<img src="/images/icon_kakao.png" id="login_title_img"
 								width="100%" height="100%">
 							</a>
+							<!-- <p id="token-result"></p>
+						
+							<script>
+							  function loginWithKakao() {
+							    Kakao.Auth.authorize({
+							      redirectUri: 'http://localhost:8087/main',
+							    });
+							  }
+							
+							  // 아래는 데모를 위한 UI 코드입니다.
+							  displayToken()
+							  function displayToken() {
+							    var token = getCookie('authorize-access-token');
+							
+							    if(token) {
+							      Kakao.Auth.setAccessToken(token);
+							      Kakao.Auth.getStatusInfo()
+							        .then(function(res) {
+							          if (res.status === 'connected') {
+							            document.getElementById('token-result').innerText
+							              = 'login success, token: ' + Kakao.Auth.getAccessToken();
+							          }
+							        })
+							        .catch(function(err) {
+							          Kakao.Auth.setAccessToken(null);
+							        });
+							    }
+							  }
+							
+							  function getCookie(name) {
+							    var parts = document.cookie.split(name + '=');
+							    if (parts.length === 2) { return parts[1].split(';')[0]; }
+							  }
+							</script> -->
 						</div>
 						<div class="logo_wrap">
 							<!-- 네이버 간편 로그인 -->

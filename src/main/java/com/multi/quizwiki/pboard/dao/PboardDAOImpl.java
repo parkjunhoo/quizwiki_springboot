@@ -1,13 +1,19 @@
 package com.multi.quizwiki.pboard.dao;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.PboardDTO;
 import com.multi.quizwiki.pboard.entity.PboardCateEntity;
 import com.multi.quizwiki.pboard.entity.PboardEntity;
@@ -28,6 +34,7 @@ public class PboardDAOImpl implements PboardDAO{
 	PboardCateRepository pboardCateRepo;
 	PboardReplyRepository pboardReplyRepo;
 	PboardLikeRepository pboardLikeRepo;
+	FileUploadLogicService fileService;
 	SqlSession ss;
 	
 	
@@ -36,11 +43,13 @@ public class PboardDAOImpl implements PboardDAO{
 			PboardCateRepository pboardCateRepo,
 			PboardReplyRepository pboardReplyRepo,
 			PboardLikeRepository pboardLikeRepo,
+			FileUploadLogicService fileService,
 			SqlSession ss) {
 		this.pboardRepo = pboardRepo;
 		this.pboardCateRepo = pboardCateRepo;
 		this.pboardReplyRepo = pboardReplyRepo;
 		this.pboardLikeRepo = pboardLikeRepo;
+		this.fileService = fileService;
 		this.ss = ss;
 	}
 	
@@ -48,14 +57,35 @@ public class PboardDAOImpl implements PboardDAO{
 	
 
 	@Override
-	public PboardEntity insert(PboardEntity pboard) {
+	public PboardEntity insert(PboardEntity pboard) throws IOException {
+		Document html = Jsoup.parse(pboard.getPboardContent());
+		Elements el = html.select("img[title]");
+		
+		for(Element e : el) {
+			String originName = e.attr("title");
+			String base64 = e.attr("src");
+			String uuid = fileService.uploadFile(base64, originName, "pboardimage");
+			e.attr("src","/pboard/find/image/"+uuid);
+			e.removeAttr("title");
+		}
+		pboard.setPboardContent(html.html());
+		
 		return pboardRepo.save(pboard);
 	}
 	
 	@Override
-	public void pboard_edit(PboardEntity pboard) {
+	public void pboard_edit(PboardEntity pboard) throws IOException {
 		PboardEntity data =  pboardRepo.findById(pboard.getPboardId()).get();
-		data.setPboardContent(pboard.getPboardContent());
+		Document html = Jsoup.parse(pboard.getPboardContent());
+		Elements el = html.select("img[title]");
+		
+		for(Element e : el) {
+			String originName = e.attr("title");
+			String base64 = e.attr("src");
+			String uuid = fileService.uploadFile(base64, originName, "pboardimage");
+			e.attr("src","/pboard/find/image/"+uuid);
+		}
+		data.setPboardContent(html.html());
 		data.setPboardTitle(pboard.getPboardTitle());
 	}
 

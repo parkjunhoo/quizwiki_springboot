@@ -1,0 +1,22 @@
+.custombtn-list{
+	width: 100%;
+	height:26px;
+ 	border: 1px solid #dfdfdf;
+ 	box-sizing: border-box;
+ 	padding: 1px 5px;
+}
+.custombtn-list li{
+	padding:3px;
+	box-sizing: border-box;
+	border: 1px solid #dfdfdf;
+    border-radius: 3px;
+}
+#imageUploadBtn{
+	width:22px;
+	height:22px;
+	cursor: pointer;
+	background-image: url("/images/se2custom/imguploadbtn.png");
+	background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

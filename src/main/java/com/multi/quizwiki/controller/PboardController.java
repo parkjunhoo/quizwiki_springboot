@@ -1,5 +1,6 @@
 package com.multi.quizwiki.controller;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -11,6 +12,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -58,7 +63,6 @@ public class PboardController {
 	FileUploadLogicService fileUpload;
 	
 	public PboardController() {
-		
 	}
 	
 	@Autowired
@@ -108,6 +112,35 @@ public class PboardController {
 		//전체 페이지 숫자를 담는다 (담는 이유: 프론트단에서 page다음버튼 이전버튼 활성화 비활성화하려고)
 		model.addAttribute("totalPage",totalPage);
 		
+		//PreviewHTML을 만드는 과정
+		pboardPage.forEach((p)->{
+			String previewHTML = " <div class='pboard_list_preview'> ";
+			String previewText = "";
+			
+			Document html = Jsoup.parse(p.getPboardContent());
+			Elements imgs = html.select("img");
+			if(imgs.size() > 0) {
+				String imgPath = imgs.get(0).attr("src");
+				previewHTML += " <img src='"+imgPath+"' /> ";
+			}
+			
+			Elements pTags = html.select("p");
+			for(Element pTag : pTags) {
+				if(previewText.length() > 50) {
+					break;
+				}
+				previewText += pTags.text();
+			}
+			previewText = previewText.substring(0, Math.min(previewText.length(), 50));
+			
+			previewHTML += " <p>"+previewText+"</p> ";
+			
+			previewHTML += " </div>";
+			System.out.println("======================");
+			System.out.println(previewHTML);
+			System.out.println("======================");
+			p.setPreviewHTML(previewHTML);
+		});
 		//게시물 정보가 담긴 객체를 담는다
 		model.addAttribute("pboardList",pboardPage);
 		
@@ -196,7 +229,7 @@ public class PboardController {
 	public JsonNode pboard_write(
 		@RequestPart(name= "sendData") String sendData, //파일이 아닌것들 jsonString으로 프론트에서 통째로 받아온다.
 		@RequestPart(name = "printfile", required = false) List<MultipartFile> printfileList, //업로드한 파일 리스트 받아온다
-		HttpServletRequest req) throws JsonMappingException, JsonProcessingException{
+		HttpServletRequest req) throws IOException{
 		
 		//일단 성공못하면 다 false칠거기떄매 msg에 false로 초기화 ㅋㅋ
 		String msg = "false";
@@ -213,6 +246,7 @@ public class PboardController {
 		
 		//pboard에 memberId를 로그인 되어있는 아이디로 바꿔치기한다.
 		pps.pboard.setMemberId(Utils.getSessionUser(req).getMember_id());
+		
 		
 		//만들어둔 insert로직에 pps의 정보들을 전달하여 게시물을 작성한다.
 		PboardEntity p = pboardService.pboard_insert(pps.getPboard(), pps.getProblemList(), 
@@ -231,7 +265,7 @@ public class PboardController {
 	public JsonNode pboard_edit(
 		HttpServletRequest req,
 		@RequestPart(name= "sendData") String sendData, 
-		@RequestPart(name = "printfile", required = false) List<MultipartFile> printfileList) throws JsonMappingException, JsonProcessingException{
+		@RequestPart(name = "printfile", required = false) List<MultipartFile> printfileList) throws IOException{
 		
 		//todo 로그인된 유저와 작성자를 대조해서 예외처리 할 예정 (get에서 막고잇어서 정상적인 루트로는 여기로 들어올일은 없겠지만 여기서도 막아야된다)
 		
@@ -289,6 +323,17 @@ public class PboardController {
 		//String encoded = UriUtils.encode(printfile.getPrintfileOrigin(),"UTF-8");
 		//String contentType = "attachment; filename=\"" + encoded +"\"";
 		
+		
+		return ResponseEntity.ok()
+				.contentType(MediaType.IMAGE_JPEG)
+				.body(resource);
+	}
+	
+	//업로드된 이미지를 찾아와서 뿌린당. 요거 어떻게 맵핑이랑 파일경로 잘 처리하면 통합적으로 만들수잇을거같긴한디 일단...
+	@RequestMapping("/find/image/{uuid}")
+	public ResponseEntity<UrlResource> pboard_find_image(@PathVariable String uuid) throws MalformedURLException{
+		System.out.println("file:"+fileUpload.getUploadpath("pboardimage",uuid));
+		UrlResource resource = new UrlResource("file:"+fileUpload.getUploadpath("pboardimage",uuid));
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.IMAGE_JPEG)

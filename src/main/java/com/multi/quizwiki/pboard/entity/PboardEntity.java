@@ -50,7 +50,8 @@ public class PboardEntity {
 	@Formula("(SELECT COUNT(1) FROM pboard_reply pr WHERE pr.pboard_id = pboard_id)")
 	private int pboardReplyCount;
 	
-	
+	@Transient
+	private String previewHTML;
 	
 	
 	String pboardStatus;

@@ -1,5 +1,6 @@
 package com.multi.quizwiki.pboard.dao;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,8 +13,8 @@ import com.multi.quizwiki.pboard.entity.PboardLikeEntity;
 import com.multi.quizwiki.pboard.entity.PboardReplyEntity;
 
 public interface PboardDAO {
-	public PboardEntity insert(PboardEntity pboard);
-	public void pboard_edit(PboardEntity pboard);
+	public PboardEntity insert(PboardEntity pboard) throws IOException;
+	public void pboard_edit(PboardEntity pboard) throws IOException;
 	public void reply_insert(PboardReplyEntity pboardReply);
 	
 	public Page<PboardEntity> pboard_findByCate(int pboardCateId,Pageable pageable);

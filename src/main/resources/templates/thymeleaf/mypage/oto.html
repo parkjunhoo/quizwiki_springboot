@@ -36,10 +36,11 @@
 									<span th:text="${oto.inqury_content}"></span>
 								</dd>
 							</dl>
-							<dl>
+						
+							<dl th:each="file:${inquryfile}">
 								<dt>파일첨부</dt>
 								<dd>
-									문제 파일
+									<a th:href="@{/mypage/filedown/{inqury_id}/{inqury_file_id}(inqury_id=${file.inqury_id}, inqury_file_id=${file.inqury_file_id})}" th:text="${file.inqury_origin}"></a>
 								</dd>
 							</dl>
 						</div>

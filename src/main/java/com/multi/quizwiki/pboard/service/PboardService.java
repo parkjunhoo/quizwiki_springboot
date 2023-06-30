@@ -1,5 +1,6 @@
 package com.multi.quizwiki.pboard.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ public interface PboardService {
 			List<ProblemEntity> problemList,
 			List<List<String>> problemChoiseList,
 			List<MultipartFile> printfileList,
-			List<Integer> printfileArr);
+			List<Integer> printfileArr) throws IOException;
 	
 	public void reply_insert(PboardReplyEntity pboardReply);
 	
@@ -33,7 +34,7 @@ public interface PboardService {
 			List<ProblemEntity> problemList,
 			List<List<String>> problemChoiseList,
 			List<MultipartFile> printfileList,
-			List<Integer> printfileArr);
+			List<Integer> printfileArr) throws IOException;
 	
 
 	public Page<PboardEntity> pboard_findByCate(int pboardCateId , Pageable pageable);

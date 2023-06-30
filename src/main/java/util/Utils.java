@@ -15,7 +15,6 @@ import com.multi.quizwiki.dto.MemberDTO;
 //기능별로 파일 나누고싶은데 일단 몇개없으니 Utils파일에 다 때려박앗씁니당..
 public class Utils {
 	
-	
 	/***
 	 * 마이바티스로 페이징처리할때 sql맵퍼에서 limit동적으로 받아올때 파라미터로 넘길 Map에 키밸류 추가
 	 * @param 맵퍼에 넘길 map , size = 페이지에 보여줄 갯수 , page = 현재 페이지인덱스(1부터시작)
@@ -37,6 +36,8 @@ public class Utils {
 		int pageIndex = (n-1)/size;
 		int start = pageIndex*size;
 		for(int i= start+1; i<= start+size; i++) {
+			System.out.println("i==>"+i);
+			System.out.println("max==>"+max);
 			if(i> max) break;
 			seq.add(i);
 		}
@@ -51,7 +52,9 @@ public class Utils {
 	 * @return 페이징 처리에 필요한 페이징버튼 list를 반환해줘요
 	 */
 	public static int getTotalPage(int count , int size) {
-		return (int)Math.ceil(count/size)+1;
+		int result = (int)Math.ceil(count/size);
+		
+		return result<=0 ? 1 : result;
 	}
 	
 	
