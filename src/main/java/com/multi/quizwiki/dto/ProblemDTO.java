@@ -1,6 +1,10 @@
 package com.multi.quizwiki.dto;
 
+import java.util.List;
+
 import org.apache.ibatis.type.Alias;
+
+import com.multi.quizwiki.mypage.dto.ProblemInquiryDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -3,8 +3,10 @@ package com.multi.quizwiki.mypage.dto;
 
 
 import java.sql.Date;
+import java.util.List;
 
 import org.apache.ibatis.type.Alias;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,5 +24,6 @@ public class InquryDTO {
 	private String inqury_title;
 	private String inqury_content;
 	private Date inqury_date;
+	List<MultipartFile> files;
 }
 

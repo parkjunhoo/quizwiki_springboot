@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.multi.quizwiki.dto.PboardDTO;
 import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryFileDTO;
 import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
 import com.multi.quizwiki.mypage.dto.NoteDTO;
 import com.multi.quizwiki.mypage.dto.PointDTO;
+import com.multi.quizwiki.mypage.dto.ProblemInquiryDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 
 public interface MypageDAO {
@@ -30,6 +32,9 @@ public interface MypageDAO {
 	//문의사항 답변
 	InquryReplyDTO inquryreply(String inqury_id);
 	
+	//오류문항 신고내역 
+	List<ProblemInquiryDTO> probleminquryread(String member_id);
+	
 	//내문제보기
 	List<PboardDTO> pboardread(String member_id);
 	//내문제갯수
@@ -46,4 +51,14 @@ public interface MypageDAO {
 	String notecount(String member_id);
 	//날짜로 조회하기 
 	List<NoteDTO> notesearch(String startday,String endday,String member_id);
+	
+	//첨부파일 저장 
+	int insertFile(List<InquryFileDTO> inquiryfile);
+	int fileupdate(List<InquryFileDTO> inquiryfile);
+	//첨부파일read
+	List<InquryFileDTO> fileread (String inqury_id);
+	//첨부파일 삭제
+	int filedelete(String inqury_id);
+	//첨부파일 다운로드
+	InquryFileDTO filedown(InquryFileDTO inquryfile);
 }

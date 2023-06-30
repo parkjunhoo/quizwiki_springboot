@@ -23,30 +23,24 @@
 				<caption>회원님의 오류신고를 확인할 수 있습니다.</caption>
 
 				<colgroup>
-					<col width="10%">
-					<col width="60%">
-					<col width="15%">
-					<col width="15%">
+					<col width="20%">
+					<col width="80%">
 				</colgroup>
 
 				<thead>
 					<tr>
 						<th>번호</th>
-						<th>제목</th>
-						<th>등록일</th>
-						<th>답변</th>
+						<th>내용</th>
 					</tr>
 				</thead>
 
 				<tbody>
-					<tr th:if="${inqurylist.size==0}">
+					<tr th:if="${pilist.size==0}">
 						<td colspan="6" class="empty_li">오답신고가 없습니다.</td>
 					</tr>
-					<tr th:each="inqury:${inqurylist}" th:unless="${inqurylist.size==0}">
-						<td><span th:text="${inqury.inqury_id}"></span></td>
-						<td><a th:text="${inqury.inqury_title}" href="#"></a></td>
-						<td><span th:text="${inqury.inqury_date}"></span></td>
-						<td><span th:text="${inqury.inqury_comment}"></span></td>
+					<tr th:each="inqury:${pilist}" th:unless="${pilist.size==0}">
+						<td><span th:text="${inqury.problem_inquiry_id}"></span></td>
+						<td><a th:text="${inqury.problem_inquiry_content}" href="#"></a></td>
 					</tr>
 				</tbody>
 			</table>

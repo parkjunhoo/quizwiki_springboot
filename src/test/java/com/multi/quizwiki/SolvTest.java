@@ -30,14 +30,14 @@ public class SolvTest {
 		ld = LocalDate.of(2023, 6, 21);
 		Date maxDate = Date.valueOf(ld);
 		
-		int count = dao.findCountByFilter(memberId, 0, null, null , null);
-		int size = 5;
-		int page = 1;
+		int count = dao.findCountByFilter(memberId, 29, null, null , null);
+		int size = 1;
+		int page = 5;
 		int totalPage = Utils.getTotalPage(count, size);
 		
 		List<Integer> pages = Utils.makePagingSeq(page, size, totalPage);
 		
-		List<SolvDTO> result = dao.findByFilter(memberId, 0, null, null, null,size,page);
+		List<SolvDTO> result = dao.findByFilter(memberId, 29, null, null, null,size,page);
 		
 		System.out.println("view에 뿌려질 페이지 버튼"+pages);
 		System.out.println("총 레코드 갯수"+count);

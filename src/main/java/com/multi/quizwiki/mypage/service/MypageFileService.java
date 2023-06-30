@@ -1,12 +1,16 @@
-package com.multi.quizwiki.service;
+package com.multi.quizwiki.mypage.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.multi.quizwiki.mypage.dto.InquryFileDTO;
 
 @Service
 public class MypageFileService {
@@ -41,6 +45,18 @@ public class MypageFileService {
 				System.out.println("저장파일명=>"+inqury_store);
 				}
 			return inqury_store;
+		}
+		public List<InquryFileDTO> uploadFiles(List<MultipartFile> multipartFiles) throws IllegalStateException, IOException {
+			List<InquryFileDTO> filedtolist= new ArrayList<InquryFileDTO>();
+			int count =1;		
+			for (MultipartFile multipartFile : multipartFiles) {
+				//업로드를 하는 경우 원본 파일명과 서버에서 식별할 수 있는 실제 서버에서 저장되는 파일명 두개 관리(원본만 하면 파일명 겹칠수있으니까)
+				String storeFilename = uploadFile(multipartFile);
+				filedtolist.add(new InquryFileDTO(count+"",null, multipartFile.getOriginalFilename(), storeFilename));
+				count++;
+				}
+			
+			return filedtolist;
 		}
 			
 }
