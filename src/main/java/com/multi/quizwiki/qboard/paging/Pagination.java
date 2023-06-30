@@ -1,4 +1,4 @@
-package com.multi.quizwiki.qboard.paging;
+	package com.multi.quizwiki.qboard.paging;
 
 
 import com.multi.quizwiki.qboard.dto.SearchDto;
@@ -20,6 +20,7 @@ public class Pagination {
         if (totalRecordCount > 0) {
             this.totalRecordCount = totalRecordCount;
             calculation(params);
+            params.setPagination(this);
         }
     }
 

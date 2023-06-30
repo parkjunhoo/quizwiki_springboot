@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -46,7 +47,6 @@ import util.FileUtils;
 @RequestMapping("quizwiki")
 @RequiredArgsConstructor
 public class QboardController {
-	private final String DEFAULT_CATEGORY = "전체보기";
 	
 	@Autowired
 	QboardService qboardservice;
@@ -97,8 +97,8 @@ public class QboardController {
 			
 			Document html = Jsoup.parse(qboard.getContent());
 			Elements el = html.select("img[title="+origin+"]");
-			el.attr("src", "/quizwiki/qboard/find/"+uuid);
 			
+			el.attr("src", "/quizwiki/qboard/find/"+uuid);
 			qboard.setContent(html.html());
 		}
 		
@@ -148,30 +148,21 @@ public class QboardController {
 	}
 	
 	
-	@GetMapping("/qboard/list.do") 
-    public String QboardList(@ModelAttribute("params") SearchDto params, Model model ) {
-       log.info("list.do 실행");
-       PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
-       model.addAttribute("category",params.getCategory());
-       model.addAttribute("qboardlist",qboardlist); 
-       return "thymeleaf/qboard/qboard_list"; 
-    }
-	
 	  @GetMapping("/qboard/list.do") 
 	  public String QboardList(@ModelAttribute("params") SearchDto params, Model model ) {
 		  log.info("list.do 실행");
 		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
 		  model.addAttribute("category",params.getCategory());
 		  model.addAttribute("qboardlist",qboardlist); 
+		  
 	  	return "thymeleaf/qboard/qboard_list"; 
 	  }
 	  
-	  @GetMapping("/qboard/read.do")
-		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, Model model ) {
-				/*	
-				 * if (qboard_id == null) { return "redirect:/qboard/list"; }
-				 */
-			 QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
+	  @GetMapping("/qboard/read.do" )
+		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, 
+				MemberDTO member, Model model, HttpSession session,HttpServletRequest req) {
+		  
+		  QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 			  qboardservice.increaseViewCount(qboard_id);
 			 model.addAttribute("qboard", qboard);
 			
@@ -192,18 +183,10 @@ public class QboardController {
 		
 	}
 	
+
 	
 	
-	
- 	
-	@RequestMapping(value = "/board/ajax/list.do",produces = "application/json;charset=utf-8")
-	@ResponseBody
-	public List<QboardDTO> ajaxlist(String category){
-		 List<QboardDTO> data = qboardservice.findByCategory(category);
-		 System.out.println(data+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		return data;
-	}
-	
+		
 	
  	@PostMapping("/qboard/upload/image")
  	@ResponseBody

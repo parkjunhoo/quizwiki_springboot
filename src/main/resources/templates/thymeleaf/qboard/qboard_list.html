@@ -90,7 +90,7 @@ layout:fragment="content"><head>
 							<li class="active" th:value="국어"><a href="/quizwiki/qboard/list.do?category=국어">국어</a></li>
 							<li class="active" th:value="수학"><a href="/quizwiki/qboard/list.do?category=수학">수학</a></li>
 							<li class="active" th:value="영어"><a href="/quizwiki/qboard/list.do?category=영어">영어</a></li>
-							<li><a href="#">전체</a> </li>
+							
 							<li><a href="/quizwiki/qboard/list.do">전체</a></li>
 						</ul> 
 					
@@ -214,6 +214,7 @@ layout:fragment="content"><head>
                                
                               </h3>
                             </div>
+                            </a>
                             <p class="question__body" >
                             ${qboard.content}
                             </p>
@@ -248,7 +249,7 @@ layout:fragment="content"><head>
                             </div>
                           </div>
                         </div>
-                        </a>
+                       
                       </li>
                     `;
                 })
