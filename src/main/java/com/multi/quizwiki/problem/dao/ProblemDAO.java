@@ -22,6 +22,7 @@ public interface ProblemDAO {
 	public PrintFileEntity printfile_findByPboardId(int problemId);
 	public List<ProblemCateEntity> problemCate_findAll();
 	
+	public ProblemEntity problem_findByProblemId(int problemId);
 	public List<ProblemEntity> probleme_findByPboardId(int pboardId);
 	
 	public void problem_delete(int problemId);

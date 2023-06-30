@@ -11,6 +11,19 @@
     font-family: "Esamanru";
     font-size: 32px;
 }
+.title-subtext{
+    font-family: "Esamanru";
+    font-size: 24px;
+    color:#3e3e3e;
+    text-decoration: none;
+    text-shadow: 3px 3px #558abb3d;
+    transform: rotate(0deg);
+    background: linear-gradient(to top, #ffa1e2 40%, transparent 40%);
+    transition: .5s;
+}
+.title-subtext:hover{
+	transform: rotate(2deg);
+}
 .title::selection{
     background-color: #006407;
 }
@@ -40,7 +53,7 @@
 
 
 #pboard-list{
-    width: 880px;
+    width: 1200px;
     height: fit-content;
     background-color: white;
     border-top-left-radius: 10px;
@@ -208,16 +221,113 @@ input[type="text"].custom {
 	color: #116aff;
 }
 
-/* test용으로 추가 */
-.pboard_list_preview{
-	display:flex;
+
+.noteList{
+	width:90%;
+	margin: 30px auto;
+	font-family: "Typo_Crayon";
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
 }
-.pboard_list_preview img{
+.noteItem{
 	width:50%;
-	max-height:100%;
+    background-color: white;
+    padding:30px 0;
+    cursor: pointer;
 }
-.pboard_list_preview p{
-	text-overflow: ellipsis;
+
+.papers, .papers:before, .papers:after  {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.papers  {
+	position: relative;
+	width: 80%;
+	padding: 2em;
+	margin: 10px auto;
+	z-index:1;
+}
+
+.papers:before, .papers:after  {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-transform: rotateZ(2deg);
+	-o-transform: rotate(2deg);
+	transform: rotateZ(2deg);
+	z-index: -1;
+	transition:1s;
+	
+	
+}
+
+.papers:after  {
+	-webkit-transform: rotateZ(-2deg);
+	-o-transform: rotate(-2deg);
+	transform: rotateZ(-2deg);
+	
+	background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: 100px;
+    background-origin: content-box;
+}
+
+.papers[lock="true"]:after  {
+	background-image:url("/images/note/listlock.png");
+}
+
+.papers h2  {
+	font-size: 1.8em;
+	font-weight: normal;
+	text-align: center;
+	padding: 0.2em 0;
+	margin: 0;
+	border-top: 1px solid #ddd;
+	border-bottom: 3px solid #858585;
+}
+
+.papers p  {
+	clear:both;
+	text-align: left;
+	margin:1.5rem 0;
+	border-bottom: 2px solid #c9c9c9;
+}
+
+.noteItem:hover .papers:before{
+	-webkit-transform: rotateZ(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotateZ(0deg);
+}
+.noteItem:hover .papers:after{
+	-webkit-transform: rotateZ(0deg);
+	-o-transform: rotate(0deg);
+	transform: rotateZ(0deg);
+}
+
+.note-regdate{
 	white-space: nowrap;
-	overflow: hidden;
+	font-size:1rem;
+	background: linear-gradient(to top, #a1e1ff 40%, transparent 40%);
+	padding:1px 3px;
+}
+.note-author{
+	white-space: nowrap;
+	font-size:1rem;
+	background: linear-gradient(to top, #ffa1a1 40%, transparent 40%);
+	padding:1px 3px;
+}
+.note-title{
+	background: linear-gradient(to top, #bfffa1 40%, transparent 40%);
+	padding:1px 1rem;
+}
+.note-page{
+	background: linear-gradient(to top, #fffca1 40%, transparent 40%);
+	padding:1px .5rem;
 }

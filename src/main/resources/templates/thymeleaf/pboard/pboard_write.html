@@ -11,6 +11,8 @@
 	href="/css/pboard/pboard_write.css" />
 <link rel="stylesheet" type="text/css"
 	href="/css/pboard/pboard_add_popup.css" />
+<link rel="stylesheet" type="text/css"
+	href="/css/se2custom/se2custom.css" />
 <!-- js -->
 <script src="/libs/se2/js/service/HuskyEZCreator.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
@@ -33,6 +35,10 @@
 					<input maxlength="30" id="pboard-title-input" placeholder="글 제목을 입력해주세요. (최대 30자)"
 						name="title" type="text" />
 				</div>
+				<ul class="custombtn-list">
+					<li title="사진 업로드" id="imageUploadBtn">
+					</li>
+				</ul>
 				<textarea name="se2" id="se2" rows="10" cols="100"></textarea>
 
 				<div class="hr-shifter"></div>
@@ -253,10 +259,11 @@
 	
 //■■■■■■■■■■■■■■■■■■■■initialized■■■■■■■■■■■■■■■■■■■■
 
-			
 window.onbeforeunload = ()=>{
 	return '';
 }
+
+const uploadImageNameMap = new Set();
 
 const editorform = document.getElementById("editorform");
 let addform = document.getElementById("add_popup_form");
@@ -302,6 +309,19 @@ syncProblemList();
 
 /*■■■■■■■■■■■■■■■■■■■■UI EVENT HANDLER■■■■■■■■■■■■■■■■■■■■*/
 /*========================게시하기 버튼==========================  */
+
+
+
+//이미지 업로드 버튼
+imageUploadBtn.addEventListener("click",()=>{
+	openPopup("/popup/upload/image","uploadimage",500,800);
+});
+
+//이미지 업로드 팝업에서 base64문자열 받았을때
+window.addEventListener('message', function(e) {
+  const imgTag = "<img src="+e.data.base+" style='max-width:100%;' title='"+e.data.origin+"' />";
+  oEditors.getById["se2"].exec("PASTE_HTML",[imgTag]);
+});
 
 
 
@@ -1196,6 +1216,17 @@ function ImageFileCheck({value}){
 	}
 	
 	
+}
+
+function openPopup(url,name,width,height){
+	let left = Math.floor((screen.width - width) / 2);
+	let top = Math.floor((screen.height - height) / 2);
+	
+	let cbt = window.open(
+	  url,
+	  name,
+	  "width="+width+", height="+height+", top="+top+", left="+left
+	);
 }
 
 /* =================================================== */
