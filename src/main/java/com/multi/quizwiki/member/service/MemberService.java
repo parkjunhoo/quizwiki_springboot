@@ -4,12 +4,16 @@ package com.multi.quizwiki.member.service;
 import javax.servlet.http.HttpServletResponse;
 
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.member.entity.MemberEntity;
 
 public interface MemberService {
 
 	// 로그인
 	MemberDTO login(MemberDTO loginUser);
 
+	// 카카오 로그인
+	MemberEntity loginKakao(String kakaoID);
+	
 	// 아이디 중복
 	int idCheck(MemberDTO member_id) throws Exception;
 
@@ -36,6 +40,7 @@ public interface MemberService {
 	
 	// 회원 탈퇴 - 회원 특정
 	public int delete_check(MemberDTO dto) throws Exception;
+	
 	
 //	//이메일발송
 //	public void sendEmail(MemberDTO dto, String div) throws Exception;

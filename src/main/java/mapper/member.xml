@@ -13,7 +13,14 @@
 			  and member_pass=#{member_pass}
 			  and member_state=1
 	</select>
-
+	
+	<!-- 카카오 로그인 -->
+	<!-- <select id="kakaologin" resultType="member" parameterType="member">
+		select *
+		from member2
+		where kakaoID=#{kakaoID} 
+	</select>
+ -->
 	<!-- id 중복 체크 -->
 	<select id="idcheck" resultType="int">
 		select count(*)
@@ -29,17 +36,23 @@
 	</select>
 
 	<!-- 회원가입 insert -->
-	<insert id="insert" parameterType="member">
-		insert into member2
-		(member_id,member_pass,member_name,
-		member_grade,member_gender,email,member_telnum,member_zipcode,
-		member_road_addr,member_jibun_addr,member_detail_addr,member_extra_addr,
-		member_mkt_opt,member_point,member_regdate,member_type,member_major,universityName,member_state)
-		values(#{member_id},#{member_pass},#{member_name},#{member_grade},#{member_gender},#{email},
-		#{member_telnum},#{member_zipcode},#{member_road_addr},#{member_jibun_addr},#{member_detail_addr},
-		#{member_extra_addr},#{member_mkt_opt},#{member_point},sysdate(),
-		#{member_type},#{member_major},#{universityName},#{member_state})
-	</insert>
+    <insert id="insert" parameterType="member">
+        insert into member2    (member_id,member_pass,member_name,
+        member_grade,member_gender,email,member_telnum,member_zipcode,
+        member_road_addr,member_jibun_addr,member_detail_addr,member_extra_addr,
+        member_mkt_opt,member_point,member_regdate,member_type,member_major,university_name,member_state
+        <if test="kakaoID != null">
+            ,kakaoID
+        </if>
+        )
+        values(#{member_id},#{member_pass},#{member_name},#{member_grade},#{member_gender},#{email},
+        #{member_telnum},#{member_zipcode},#{member_road_addr},#{member_jibun_addr},#{member_detail_addr},
+        #{member_extra_addr},#{member_mkt_opt},#{member_point},sysdate(),#{member_type},#{member_major},#{university_name},0
+        <if test="kakaoID != null">
+            ,#{kakaoID}
+        </if>
+        )
+    </insert>
 
 	<!-- id 찾기 -->
 	<select id="findid" resultType="member">
