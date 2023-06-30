@@ -2,85 +2,124 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
- <mapper namespace="com.multi.quizwiki.member">
- 	
- 	<!-- 로그인 -->
- 	<select id="login" resultType="member" parameterType="member">
+
+<mapper namespace="com.multi.quizwiki.member">
+
+	<!-- 로그인 -->
+	<select id="login" resultType="member" parameterType="member">
 		select *
-		from member2	
-		where member_id=#{member_id} and member_pass=#{member_pass}
+		from member2
+		where member_id=#{member_id} 
+			  and member_pass=#{member_pass}
+			  and member_state=1
 	</select>
 	
+	<!-- 카카오 로그인 -->
+	<!-- <select id="kakaologin" resultType="member" parameterType="member">
+		select *
+		from member2
+		where kakaoID=#{kakaoID} 
+	</select>
+ -->
 	<!-- id 중복 체크 -->
 	<select id="idcheck" resultType="int">
 		select count(*)
-		from member2 
+		from member2
 		where member_id=#{member_id}
 	</select>
-	
+
 	<!-- pass 일치 불일치 -->
 	<select id="passcheck" resultType="int">
 		select count(*)
-		from member2 
+		from member2
 		where member_id=#{member_id} and member_pass=#{member_pass}
 	</select>
-	
+
 	<!-- 회원가입 insert -->
-	<insert id="insert" parameterType="member">
-		insert into member2	(member_id,member_pass,member_name,
-		member_grade,member_gender,email,member_telnum,member_zipcode,
-		member_road_addr,member_jibun_addr,member_detail_addr,member_extra_addr,
-		member_mkt_opt,member_point,member_regdate,member_type,member_major,universityName)
-		values(#{member_id},#{member_pass},#{member_name},#{member_grade},#{member_gender},#{email},
-		#{member_telnum},#{member_zipcode},#{member_road_addr},#{member_jibun_addr},#{member_detail_addr},
-		#{member_extra_addr},#{member_mkt_opt},#{member_point},sysdate(),#{member_type},#{member_major},#{universityName})
-	</insert>
-	
+    <insert id="insert" parameterType="member">
+        insert into member2    (member_id,member_pass,member_name,
+        member_grade,member_gender,email,member_telnum,member_zipcode,
+        member_road_addr,member_jibun_addr,member_detail_addr,member_extra_addr,
+        member_mkt_opt,member_point,member_regdate,member_type,member_major,university_name,member_state
+        <if test="kakaoID != null">
+            ,kakaoID
+        </if>
+        )
+        values(#{member_id},#{member_pass},#{member_name},#{member_grade},#{member_gender},#{email},
+        #{member_telnum},#{member_zipcode},#{member_road_addr},#{member_jibun_addr},#{member_detail_addr},
+        #{member_extra_addr},#{member_mkt_opt},#{member_point},sysdate(),#{member_type},#{member_major},#{university_name},0
+        <if test="kakaoID != null">
+            ,#{kakaoID}
+        </if>
+        )
+    </insert>
+
 	<!-- id 찾기 -->
 	<select id="findid" resultType="member">
-	    select *
-	    from member2
-	    where member_name = #{member_name} and email = #{email}
- 	</select>
- 	
- 	<!-- pass 찾기 -->
- 	<select id="findpass" resultType="member">
- 		select *
-	    from member2
-	    where member_id = #{member_id} and member_name = #{member_name} and email = #{email}
- 	</select>
- 	
- 	<!-- pass update -->
- 	<update id="passUpdate" parameterType="member">
- 		update member2
- 		set member_pass = #{member_pass}
- 		where member_id = #{member_id}
- 	</update>
- 	
- 	<!-- 회원 정보 update -->
- 	<update id="memberUpdate" parameterType="member">
- 		update member2
- 		set member_name=#{member_name} and member_gender=#{member_gender}
- 			and member_zipcode=#{member_zipcode} and member_road_addr=#{member_road_addr}
- 			and member_jibun_addr=#{member_jibun_addr} and member_detail_addr=#{member_detail_addr}
- 			and member_extra_addr=#{member_extra_addr} and member_photo=#{member_photo}
- 			and member_major=#{member_major}
- 		where member_id=#{member_id}
- 	</update>
- 	
- 	<!-- 회원탈퇴 -->
-	<select id="delete">
-		delete from member2
-		where member_id=#{member_id} and member_pass=#{member_pass}
+		select *
+		from member2
+		where
+		member_name = #{member_name} and email = #{email}
 	</select>
+
+	<!-- pass 찾기 -->
+	<select id="findpass" resultType="member">
+		select *
+		from member2
+		where
+		member_id = #{member_id} and member_name = #{member_name} and email =
+		#{email}
+	</select>
+
+	<!-- pass update -->
+	<update id="passUpdate" parameterType="member">
+		update member2
+		set
+		member_pass = #{member_pass}
+		where member_id = #{member_id}
+	</update>
+
+	<!-- 회원 정보 update --><!-- member_photo=#{member_photo}, -->
+	<update id="memberUpdate" parameterType="member">
+		update member2
+		set
+		member_name=#{member_name}
+		,member_zipcode=#{member_zipcode}
+		,member_road_addr=#{member_road_addr}
+		,member_jibun_addr=#{member_jibun_addr}
+		,member_detail_addr=#{member_detail_addr}
+		,member_extra_addr=#{member_extra_addr}
+		,member_telnum =
+		#{member_telnum}
+		where member_id=#{member_id}
+	</update>
+
+	<!-- 회원탈퇴 -->
+	<!-- <select id="delete">
+		delete from member2
+		where member_id=#{member_id} and
+		member_pass=#{member_pass}
+	</select> -->
 	
+	<update id="delete">
+		update member2
+		set member_state=0
+		where member_id=#{member_id} 
+			  and member_pass=#{member_pass}
+			  
+	</update>
+	
+
 	<!-- 회원 탈퇴에 쓰일 유저 특정하기 -->
 	<select id="deleteUser" resultType="int">
 		select count(*)
 		from member2
 		where member_id=#{member_id} and member_pass=#{member_pass}
 	</select>
-	
- </mapper>
 
+
+
+	
+
+
+</mapper>

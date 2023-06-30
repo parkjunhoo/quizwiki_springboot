@@ -9,16 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.member.entity.MemberEntity;
+import com.multi.quizwiki.member.repository.MemberRepository;
 
 @Repository
 public class MemberDAOImpl implements MemberDAO {
 
 	SqlSession sqlSession;
+	MemberRepository memberRepository;
 
 	@Autowired
-	public MemberDAOImpl(SqlSession sqlSession) {
+	public MemberDAOImpl(SqlSession sqlSession, MemberRepository memberRepository) {
 		super();
 		this.sqlSession = sqlSession;
+		this.memberRepository = memberRepository;
 	}
 
 	public MemberDAOImpl() {
@@ -34,6 +38,12 @@ public class MemberDAOImpl implements MemberDAO {
 		return user;
 	}
 
+	// 카카오 로그인
+	@Override
+	public MemberEntity loginKakao(String kakaoID) {
+		return memberRepository.findByKakaoID(kakaoID);
+	}
+	
 	// 아이디 중복 체크
 	@Override
 	public int idCheck(MemberDTO member_id) {

@@ -53,6 +53,7 @@
 		join problem p
 		on p.problem_id = s.problem_id
 		<include refid="solvFilter"></include>
+ 		limit #{startLimit},#{sizeLimit} 
 	</select>
 	
 

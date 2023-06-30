@@ -10,9 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import com.multi.quizwiki.dto.PboardDTO;
 import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryFileDTO;
 import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
 import com.multi.quizwiki.mypage.dto.NoteDTO;
 import com.multi.quizwiki.mypage.dto.PointDTO;
+import com.multi.quizwiki.mypage.dto.ProblemInquiryDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 
 @Repository
@@ -112,6 +114,30 @@ public class MypageDAOImpl implements MypageDAO{
 	    params.put("startday", startday);
 	    params.put("endday",endday );
 		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.noteserch",params);
+	}
+	@Override//오류문항 신고 내역 
+	public List<ProblemInquiryDTO> probleminquryread(String member_id) {
+		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.probleminquiry",member_id);
+	}
+	@Override//첨부파일 저장 
+	public int insertFile(List<InquryFileDTO> inquiryfile) {
+		return sqlSessionTemplate.insert("com.multi.quizwiki.mypage.inquryFile", inquiryfile);
+	}
+	@Override//첨부파일 read
+	public List<InquryFileDTO> fileread(String inqury_id) {
+		return sqlSessionTemplate.selectList("com.multi.quizwiki.mypage.fileread", inqury_id);
+	}
+	@Override//첨부파일 삭제
+	public int filedelete(String inqury_id) {
+		return sqlSessionTemplate.delete("com.multi.quizwiki.mypage.filedelete", inqury_id);
+	}
+	@Override//첨부파일 다운 
+	public InquryFileDTO filedown(InquryFileDTO inquryfile) {
+		return sqlSessionTemplate.selectOne("com.multi.quizwiki.mypage.filedown", inquryfile);
+	}
+	@Override//첨부파일 업데이트 
+	public int fileupdate(List<InquryFileDTO> inquiryfile) {
+		return sqlSessionTemplate.update("com.multi.quizwiki.mypage.fileupdate", inquiryfile);
 	}
 	
 
