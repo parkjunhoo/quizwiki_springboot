@@ -24,13 +24,18 @@ th:fragment="header"
 		<div class="util-sub-menu">
 			<!-- <span th:text="${session.user}"></span> -->
 			<!-- 로그인이 되어있지 않은 경우 -->
-			<th:block th:if="${session.user==null}">
+			<th:block th:if="${session.user==null && session.kakaoUser==null}">
 				<a th:href="@{/login.do}" class="shift-between"> 로그인 </a>
 				<a th:href="@{/signupType}" class="shift-between"> 회원가입 </a> 
 			</th:block>
-			<!-- 로그인이 되어있는 경우 -->
+			<!-- 일반 - 로그인이 되어있는 경우 -->
 			<th:block th:if="${session.user!=null}">
 				<a th:href="@{/logout.do}" class="shift-between"> 로그아웃 </a>
+				<a th:href="@{/mypage/mycontentroom}" class="shift-between"> 마이페이지 </a>
+			</th:block>
+			<!-- 카카오 - 로그인이 되어있는 경우 -->
+			<th:block th:if="${session.kakaoUser!=null}">
+				<a th:href="@{/kakao/logout}" class="shift-between"> 카카오 로그아웃 </a>
 				<a th:href="@{/mypage/mycontentroom}" class="shift-between"> 마이페이지 </a>
 			</th:block>
 			

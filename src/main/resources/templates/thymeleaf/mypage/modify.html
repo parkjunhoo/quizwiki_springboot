@@ -134,7 +134,7 @@ $(document).ready(function(){
 								</label>
 								<input type="file" name="member_image" id="profile_file"
 										onchange="document.getElementById('userImage').src = window.URL.createObjectURL(this.files[0])"
-										accept="image/*" style="display: none;">
+										accept="image/*" onError="javascript:this.src='/images/myphoto.jpg'" style="display: none;">
 							</li>
 							<li>
 								<div class="list_title">이름</div> <input

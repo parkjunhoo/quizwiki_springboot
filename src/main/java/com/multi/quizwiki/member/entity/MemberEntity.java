@@ -56,6 +56,7 @@ public class MemberEntity {
 	private String kakaoID; // 카카오 간편 로그인
 
 	
+	
 	  public static MemberEntity toEntity(MemberDTO dto) { 
 		  return MemberEntity.builder()
 				  .memberId(dto.getMember_id()) 
@@ -81,6 +82,7 @@ public class MemberEntity {
 				  .kakaoID(dto.getKakaoID())
 				  .build();
 	  }
-	 
+
+
 
 }
