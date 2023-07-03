@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.multi.quizwiki.dto.ProblemDTO;
 import com.multi.quizwiki.problem.dao.ProblemDAO;
+import com.multi.quizwiki.problem.entity.ProblemCateEntity;
 import com.multi.quizwiki.problem.entity.ProblemEntity;
 
 import lombok.NoArgsConstructor;
@@ -38,5 +39,10 @@ public class ProblemServiceImpl implements ProblemService{
 	@Override
 	public ProblemEntity problem_findByProblemId(int problemId) {
 		return dao.problem_findByProblemId(problemId);
+	}
+
+	@Override
+	public List<ProblemCateEntity> problemCate_findAll() {
+		return dao.problemCate_findAll();
 	}
 }
