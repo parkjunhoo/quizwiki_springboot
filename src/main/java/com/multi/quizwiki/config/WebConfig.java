@@ -46,8 +46,5 @@ public class WebConfig implements WebMvcConfigurer{
 		
 	}
 	
-	public final static String IMAGE_RESOURCE_BASE = "/images/";
-			
-			public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	}
+	
 }

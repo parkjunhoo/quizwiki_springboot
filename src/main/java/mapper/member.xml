@@ -47,7 +47,7 @@
         )
         values(#{member_id},#{member_pass},#{member_name},#{member_grade},#{member_gender},#{email},
         #{member_telnum},#{member_zipcode},#{member_road_addr},#{member_jibun_addr},#{member_detail_addr},
-        #{member_extra_addr},#{member_mkt_opt},#{member_point},sysdate(),#{member_type},#{member_major},#{university_name},0
+        #{member_extra_addr},#{member_mkt_opt},#{member_point},sysdate(),#{member_type},#{member_major},#{university_name},1
         <if test="kakaoID != null">
             ,#{kakaoID}
         </if>
@@ -79,18 +79,18 @@
 		where member_id = #{member_id}
 	</update>
 
-	<!-- 회원 정보 update --><!-- member_photo=#{member_photo}, -->
+	<!-- 회원 정보 update -->
 	<update id="memberUpdate" parameterType="member">
 		update member2
 		set
-		member_name=#{member_name}
+		member_photo=#{member_photo}
+		,member_name=#{member_name}
 		,member_zipcode=#{member_zipcode}
 		,member_road_addr=#{member_road_addr}
 		,member_jibun_addr=#{member_jibun_addr}
 		,member_detail_addr=#{member_detail_addr}
 		,member_extra_addr=#{member_extra_addr}
-		,member_telnum =
-		#{member_telnum}
+		,member_telnum =#{member_telnum}
 		where member_id=#{member_id}
 	</update>
 

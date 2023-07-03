@@ -1,8 +1,6 @@
 
 package com.multi.quizwiki.member.service;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.member.entity.MemberEntity;
 

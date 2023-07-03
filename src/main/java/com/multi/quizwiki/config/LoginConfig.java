@@ -16,7 +16,7 @@ public class LoginConfig implements WebMvcConfigurer{
 		.addPathPatterns("/**") //모든 것에 대해 로그인 가능하도록
 		.excludePathPatterns("/main","/login.do","/signupType","/findId.do","/findPass.do",
 				"/findId","/findPass","/signupAgreement1","/signup1","/signup2","/signupAgreement2",
-				"/faqt","/images/**","/css/**","/font/**","/js/**","/libs/**","/pboard/**","/qboard/**","/kakao/**",
+				"/faqt","/images/**","/css/**","/font/**","/js/**","/libs/**","/pboard/**","/kakao/**",
 				"/idChk","/login/mailConfirm","/signup","/note/**","/popup/**");
 	}
 }

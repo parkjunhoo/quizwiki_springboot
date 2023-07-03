@@ -71,7 +71,7 @@ layout:fragment="content"><head>
 			</div>
 			<div class="post_features">
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
-					<button>
+					<button id="likeBtn">
 						<img src="/images/qboard/thumbsup.svg" width="16px"; height="16px" >
 						<div class="text freatures_text">0</div>
 						
@@ -177,7 +177,11 @@ layout:fragment="content"><head>
   <script th:inline="javascript">
         /*<![CDATA[*/
 			
-        	
+        	 window.onload = () => {
+                findAllComment();
+                findLike();
+            }
+        
         	
         	// 댓글 수정 팝업 open
             function openCommentUpdatePopup(comment_id) {
@@ -242,10 +246,7 @@ layout:fragment="content"><head>
                 findAllComment();
             }
 
-        	 window.onload = () => {
-                findAllComment();
-            }
-        
+        	
         	 function goWritePage() {
                  location.href = '/quizwiki/qboard/write.do' + location.search;
              }
@@ -311,6 +312,10 @@ layout:fragment="content"><head>
                 drawComments(response.list);
                 
                 drawPage(pagination, page);
+            }
+            
+            function findLike() {
+            	const uri = `/qboard/${qboard_id}/`;
             }
 			
             
@@ -402,7 +407,10 @@ layout:fragment="content"><head>
               }
               
 
-             
+             //질문 게시글 추천
+             $("goodBtn").click(function(){
+            	 
+             })
 
         /*]]>*/
 

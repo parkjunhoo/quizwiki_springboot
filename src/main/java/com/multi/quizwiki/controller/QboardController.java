@@ -33,10 +33,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.qboard.dto.FileRequest;
+import com.multi.quizwiki.qboard.dto.LikeDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
 import com.multi.quizwiki.qboard.service.FileService;
+import com.multi.quizwiki.qboard.service.LikeService;
 import com.multi.quizwiki.qboard.service.QboardService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,6 +57,7 @@ public class QboardController {
 	
 	 private final FileUtils fileUtils;
 	 
+	 private final LikeService likeservice;
 	 @Autowired
 	 private FileUploadLogicService fileUploadService;
 	
@@ -166,6 +169,8 @@ public class QboardController {
 			  qboardservice.increaseViewCount(qboard_id);
 			 model.addAttribute("qboard", qboard);
 			
+			 LikeDTO like = new LikeDTO();
+			 
 			return "thymeleaf/qboard/qboard_read";
 		 }
 		 	
