@@ -1,22 +1,115 @@
 <!DOCTYPE html>
 <html xmlns:th="http//www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layout/mypagelayout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{/layout/mypagelayout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="/css/common.css" />
-<link rel="stylesheet" type="text/css" href="/css/mypage/mycontentroom.css" />
+<link rel="stylesheet" type="text/css"
+	href="/css/mypage/mycontentroom.css" />
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+	integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+	integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+	integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script type="text/javascript">
+	$(document).ready(
+			function() {
 
+				$("#day1").on(
+						"click",
+						function() {
+							var now = new Date()
+							var yesterday = new Date(now
+									.setDate(now.getDate() - 1));//하루전 날짜로 셋팅	
+							var yesterday = new Date(now.getFullYear(), now
+									.getMonth(), now.getDate()); // 로컬 날짜로 변환
+							var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
+							$("#startday").attr("value", a)
+							$("#endday").attr("value", a)
+							now = new Date()
+
+						})
+				$("#day3").on("click", function() {
+					var now = new Date()
+					var yesterday = new Date(now.setDate(now.getDate() - 3));//하루전 날짜로 셋팅	
+					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
+					$("#startday").attr("value", a)
+					$("#endday").attr("value", a)
+					now = new Date()
+
+				})
+				$("#day7").on("click", function() {
+					var now = new Date()
+					var yesterday = new Date(now.setDate(now.getDate() - 7));//하루전 날짜로 셋팅	
+					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
+					$("#startday").attr("value", a)
+					$("#endday").attr("value", a)
+					now = new Date()
+				})
+
+				$(function() {
+					//input을 datepicker로 선언
+					$("#startday,#endday").datepicker(
+							{
+								dateFormat : 'yy-mm-dd' //달력 날짜 형태
+								,
+								showOtherMonths : true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+								,
+								showMonthAfterYear : true // 월- 년 순서가아닌 년도 - 월 순서
+								,
+								changeYear : true //option값 년 선택 가능
+								,
+								changeMonth : true //option값  월 선택 가능                
+								,
+								showOn : "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시  
+								,
+								buttonImage : "../images/calendar.png" //버튼 이미지 경로
+								,
+								buttonImageOnly : true //버튼 이미지만 깔끔하게 보이게함
+								,
+								buttonText : "선택" //버튼 호버 텍스트              
+								,
+								yearSuffix : "년" //달력의 년도 부분 뒤 텍스트
+								,
+								monthNamesShort : [ '1월', '2월', '3월', '4월',
+										'5월', '6월', '7월', '8월', '9월', '10월',
+										'11월', '12월' ] //달력의 월 부분 텍스트
+								,
+								monthNames : [ '1월', '2월', '3월', '4월', '5월',
+										'6월', '7월', '8월', '9월', '10월', '11월',
+										'12월' ] //달력의 월 부분 Tooltip
+								,
+								dayNamesMin : [ '일', '월', '화', '수', '목', '금',
+										'토' ] //달력의 요일 텍스트
+								,
+								dayNames : [ '일요일', '월요일', '화요일', '수요일', '목요일',
+										'금요일', '토요일' ] //달력의 요일 Tooltip
+								,
+								minDate : "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+								,
+								maxDate : "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
+							});
+
+					//초기값을 오늘 날짜로 설정
+					$('#datepicker').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)            
+				});
+
+			})
 </script>
 
 </head>
 <body>
-	<!--다운로드내역 센터 맞춤 안됨  -->
+
 	<section layout:fragment="content">
 		<div id="myPage_contents">
 			<div class="inner_cont">
@@ -25,10 +118,7 @@
 					<p style="font-size: 15px">나만의 내신도서관</p>
 				</div>
 
-		
-				
-
-				<div class="inner_section">
+				<!-- 			<div class="inner_section">
 					<div class="section_title flex_wrap">
 						<p class="title">
 							<span class="bl01">추천콘텐츠</span>
@@ -58,9 +148,9 @@
 
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- // 추천콘텐츠 -->
-						<div class="inner_section">
+				<div class="inner_section">
 					<div class="section_title flex_wrap">
 						<p class="title">
 							<span class="bl01">내가 푼 문제</span>
@@ -69,75 +159,82 @@
 							<strong>문제를 검색해보세요</strong>
 						</p>
 					</div>
+					<form action="/mypage/solvsearch" method="post">
+						<div class="search_bar flex_wrap">
+							<div class="search_condition">
+							
+								<select name="problemCateId" id="ca_id" class="custom">
+									<option value="null">과목선택</option>
+									<th:block th:if="${solvParam == null}" th:each="pcate : ${problemCateList}">
+										<option th:value="${pcate.problemCateId}" th:text="${pcate.problemCateName}">과목선택</option>
+									</th:block>
+									<th:block th:unless="${solvParam == null}" th:each="pcate : ${problemCateList}">
+										<option th:selected="${pcate.problemCateId} == ${solvParam.problemCateId}" th:value="${pcate.problemCateId}" th:text="${pcate.problemCateName}">과목선택</option>
+									</th:block>
+								</select>
+								
+								
+							</div>
 
-					<div class="search_bar flex_wrap">
-						<div class="search_condition">
-							<select name="ca_id" id="ca_id" class="custom"
-								>
-								<option selected="selected">과목선택</option>
-								<option value="10">국어</option>
-								<option value="20">영어</option>
-								<option value="30">수학</option>
-								<option value="40">사회</option>
-								<option value="50">과학</option>
-								<option value="60">기타</option>
-							</select>
-						</div>
-						
-						<div class="search_condition">
-							<select name="ca_id" id="ca_id" class="custom"
-								>
-								<option selected="selected">세부과목</option>
-								<option value="10">공통국어</option>
-								<option value="20">화법과 작문</option>
-								<option value="30">독서</option>
-								<option value="40">문학</option>
-								<option value="40">실용 국어</option>
-								<option value="40">심화 국어</option>
-								<option value="40">고전 읽기</option>
-								<option value="40">공통 영어</option>
-								<option value="40">영어 회화</option>
-								<option value="40">영어1</option>
-								<option value="40">영어2</option>
-								<option value="40">영어 독해와 작문</option>
-								<option value="40">실용 영어</option>
-								<option value="40">영어권 문화</option>
-								<option value="40">진로 영어</option>
-								<option value="40">영미 문학 읽기</option>
-							</select>
-						</div>
+							<div class="search_condition">
+								<select name="solvRight" id="ca_id" class="custom">
+									<th:block th:if="${solvParam == null}">
+										<option selected value="true">맞은 문제</option>
+										<option value="false">틀린 문제</option>
+									</th:block>
+									<th:block th:unless="${solvParam == null}">
+										<option th:selected="${solvParam.solvRight} == ${true}" value="true">맞은 문제</option>
+										<option th:selected="${solvParam.solvRight} == ${false}" value="false">틀린 문제</option>
+									</th:block>
+								</select>
+							</div>
 
-						<ul class="multi_line">
-							<li><input type="radio" name="day" id="day1" value="1"
-								onclick="dateInput('2023-05-24', 'startDate', 'endDate')"><label
-								for="day1">1일</label></li>
-							<li><input type="radio" name="day" id="day3"
-								onclick="dateInput('2023-05-22', 'startDate', 'endDate')"><label
-								for="day3">3일</label></li>
-							<li><input type="radio" name="day" id="day7"
-								onclick="dateInput('2023-05-18', 'startDate', 'endDate')"><label
-								for="day7">7일</label></li>
-						</ul>
-						<form name="search_frm" method="get">
-							<input type="hidden" name="ca_id" value="">
+							<ul class="multi_line">
+								<li><input type="radio" name="day" id="day1"> <label
+									for="day1">1일</label></li>
+								<li><input type="radio" name="day" id="day3"> <label
+									for="day3">3일</label></li>
+								<li><input type="radio" name="day" id="day7"> <label
+									for="day7">7일</label></li>
+							</ul>
+							<input type="hidden" name="memberId" value="test">
 							<div class="calendar_box flex_wrap">
+							
+							<th:block th:if="${solvParam == null}">
 								<div class="dateBox">
-									<input type="text" name="stime" id="startDate" class="calendar"
-										value=""><img class="ui-datepicker-trigger "
-										src="../images/calendar.png" alt="Select date"
-										title="Select date">
+									<input type="text" name="startDate" id="startday"
+										class="calendar" value=""> <img
+										class="ui-datepicker-trigger" src="../images/calendar.png"
+										alt="Select date" title="Select date">
 								</div>
 								<div class="dateBox">─</div>
 								<div class="dateBox">
-									<input type="text" name="etime" id="endDate" class="calendar"
-										value=""><img class="ui-datepicker-trigger"
+									<input type="text" name="endDate" id="endday" class="calendar"
+										value=""> <img class="ui-datepicker-trigger"
 										src="../images/calendar.png" alt="Select date"
 										title="Select date">
 								</div>
+							</th:block>
+							<th:block th:unless="${solvParam == null}">
+								<div class="dateBox">
+									<input type="text" name="startDate" id="startday"
+										class="calendar" th:value="${solvParam.startDate}"> <img
+										class="ui-datepicker-trigger" src="../images/calendar.png"
+										alt="Select date" title="Select date">
+								</div>
+								<div class="dateBox">─</div>
+								<div class="dateBox">
+									<input type="text" name="endDate" id="endday" class="calendar"
+										th:value="${solvParam.endDate}"> <img class="ui-datepicker-trigger"
+										src="../images/calendar.png" alt="Select date"
+										title="Select date">
+								</div>
+							</th:block>
+								
 								<button class="search">조회</button>
 							</div>
-						</form>
-					</div>
+						</div>
+					</form>
 				</div>
 				<!-- // 이용중인 이용권 -->
 				<div class="inner_section">
@@ -152,8 +249,9 @@
 
 						<colgroup>
 							<col width="10%">
-							<col width="45%">
-							<col width="15%">
+							<col width="10%">
+							<col width="25%">
+							<col width="25%">
 							<col width="15%">
 							<col width="15%">
 						</colgroup>
@@ -161,26 +259,61 @@
 						<thead>
 							<tr>
 								<th>번호</th>
-								<th>제목</th>
-								<th>과목</th>
-								<th>문제 유형</th>
+								<th>문제 번호</th>
+								<th>문제 답</th>
+								<th>나의 답</th>
+								<th>정답/오답</th>
 								<th>푼 날짜</th>
 							</tr>
 						</thead>
-
 						<tbody>
-							<tr>
-								<td colspan="5" class="empty_li">다운로드 내역이 없습니다.</td>
-							</tr>
-
-						</tbody>
+						<tr th:if="${solvs==null or solvs.size==0}">
+								<td colspan="6" class="empty_li">푼 문제가 없습니다.</td>
+						</tr>
+						<tr th:each="solv:${solvs}" th:unless="${solvs==null or solvs.size==0}">
+							<td><span th:text="${solv.solv_id}"></span></td>
+							<td><span th:text="${solv.problem_id}"></span></td>
+							<td><span th:text="${solv.problem.problem_answer}"></span></td>
+							<td><span th:text="${solv.solv_answer}"></span></td>
+							<td><span th:text="${solv.solv_right}"></span></td>
+							<td><span th:text="${solv.solv_edit_date}"></span></td>
+						</tr>
+					</tbody>
 					</table>
 					<div class="bbs_pagination">
 						<div class="page_num flex_wrap"></div>
 					</div>
 				</div>
 				<!-- // 추천콘텐츠 -->
-
+				
+				
+				
+				<!-- 페이징 버튼 -->
+				<div th:if="${currentPage != null}" class="paging-wrap">
+		        	<ul id="paging-btn-list">
+			            <li>
+			                <a class="page-btn disabled" th:if="${currentPage == 1}">
+			                	<i class="fa-solid fa-square-caret-left"></i>
+		                	</a>
+			                <a class="page-btn" th:unless="${currentPage == 1}" th:href="@{/mypage/solvsearch(page=${currentPage - 1},problemCateId=${solvParam.problemCateId},solvRight=${solvParam.solvRight},startDate=${solvParam.startDate},endDate=${solvParam.endDate})}">
+			                	<i class="fa-solid fa-square-caret-left"></i>
+			                </a>
+			            </li>
+			
+			            <th:block th:each="page : ${pages}">
+			                <li th:class="${currentPage == page ? 'current-page-btn' : ''}">
+			                    <a class="page-btn" th:if="${currentPage == page}" th:text="${page}"></a>
+			                    <a class="page-btn" th:unless="${currentPage == page}" th:href="@{/mypage/solvsearch(page=${page},problemCateId=${solvParam.problemCateId},solvRight=${solvParam.solvRight},startDate=${solvParam.startDate},endDate=${solvParam.endDate})}" th:text="${page}"></a>
+			                </li>
+			            </th:block>
+			
+			            <li>
+			                <a class="page-btn disabled" th:if="${currentPage >= totalPage}"><i class="fa-solid fa-square-caret-right"></i></a>
+			                <a class="page-btn" th:unless="${currentPage >= totalPage}" th:href="@{/mypage/solvsearch(page=${currentPage + 1},problemCateId=${solvParam.problemCateId},solvRight=${solvParam.solvRight},startDate=${solvParam.startDate},endDate=${solvParam.endDate})}"><i class="fa-solid fa-square-caret-right"></i></a>
+			            </li>
+		        	</ul>
+				</div>
+				<!-- 페이징 버튼 END -->
 			</div>
 		</div>
 	</section>

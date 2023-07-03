@@ -34,6 +34,8 @@ public class SolvServiceImpl implements SolvService{
 	@Override
 	public List<SolvDTO> findByFilter(String memberId, Integer problemCateId, Boolean solvRight, Date minDate,
 			Date maxDate, int size, int page) {
+		System.out.println(problemCateId+"서비스"+solvRight+memberId+minDate+maxDate);
+		System.out.println("서비스"+dao.findByFilter(memberId, problemCateId, solvRight, minDate, maxDate, size, page));
 		return dao.findByFilter(memberId, problemCateId, solvRight, minDate, maxDate, size, page);
 	}
 	

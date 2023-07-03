@@ -36,6 +36,8 @@ public class Utils {
 		int pageIndex = (n-1)/size;
 		int start = pageIndex*size;
 		for(int i= start+1; i<= start+size; i++) {
+			System.out.println("i==>"+i);
+			System.out.println("max==>"+max);
 			if(i> max) break;
 			seq.add(i);
 		}
@@ -50,7 +52,9 @@ public class Utils {
 	 * @return 페이징 처리에 필요한 페이징버튼 list를 반환해줘요
 	 */
 	public static int getTotalPage(int count , int size) {
-		return (int)Math.ceil(count/size)+1;
+		int result = (int)Math.ceil(count/size);
+		
+		return result<=0 ? 1 : result;
 	}
 	
 	

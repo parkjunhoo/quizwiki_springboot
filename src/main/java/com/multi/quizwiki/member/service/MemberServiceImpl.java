@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.multi.quizwiki.dto.EmailRequestDTO;
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.member.dao.MemberDAO;
+import com.multi.quizwiki.member.entity.MemberEntity;
+import com.multi.quizwiki.member.repository.MemberRepository;
 
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
@@ -37,8 +39,14 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDTO login(MemberDTO loginUser) {
 		//user가 db인증 후에 받은 결과
 		MemberDTO user= dao.login(loginUser);
-		System.out.println("서비스==>"+user);
+		//System.out.println("서비스단 : "+user);
 		return user;
+	}
+	
+	// 카카오 로그인
+	@Override
+	public MemberEntity loginKakao(String kakaoID) {
+		 return dao.loginKakao(kakaoID);
 	}
 	
 	// 아이디 중복
@@ -55,6 +63,8 @@ public class MemberServiceImpl implements MemberService {
 		//System.out.println(user);
 		user.setMember_point(2000); // 회원가입 시 2000 포인트를 제공
 		
+		user.setMember_state(1); // 회원가입 시 state는 1, 탈퇴 시 0
+		
 		if (user.getMember_extra_addr() == "") { // 주소 참고항목란
 			user.setMember_extra_addr("참고항목 없음");
 		}
@@ -62,10 +72,10 @@ public class MemberServiceImpl implements MemberService {
 			user.setMember_mkt_opt("마케팅 수신 미동의");
 		}
 		
-		if (user.getUniversityName() == null) { // 회원 타입 지정
+		if (user.getUniversity_name() == null) { // 회원 타입 지정
 	        user.setMember_type("1"); // 고등학생
 	    } 
-		if (user.getUniversityName() != null) { // 회원 타입 지정
+		if (user.getUniversity_name() != null) { // 회원 타입 지정
 	        user.setMember_type("2"); // 대학생
 	    }
 		System.out.println(user);
@@ -112,7 +122,7 @@ public class MemberServiceImpl implements MemberService {
 		int result = dao.delete_check(dto);
 		return result;
 	}
-
+	
 	
 	@Override
 	 public void certifiedPhoneNumber(String telnum, String numStr) {

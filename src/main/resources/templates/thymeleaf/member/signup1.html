@@ -170,6 +170,7 @@ $(document).ready(function() {
 				<h4 class="mb-3">회원가입 - 고등학생</h4>
 				<form name="join" class="validation-form" method="post" action="/signup" autocomplete="off"
 					encType="utf-8" novalidate>
+					<input name="kakaoID" type="hidden" th:if="${session.kakaoid != null}" th:value="${session.kakaoid}" />
 					<div class="row">
 						<div class="col-md-11 mb-3">
 							<label for="member_name">이름</label> <input type="text"

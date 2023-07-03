@@ -20,7 +20,7 @@
 
 	<section layout:fragment="content">
 		<div id="myPage_contents">
-			<form action="/mypage/oto/insert" method="post">
+			<form action="/mypage/oto/insert" method="post" enctype="multipart/form-data">
 				<div class="inner_cont">
 					<div class="myPage_title flex_wrap">
 						<h6 style="font-size: 35px">1 : 1 문의</h6>
@@ -51,7 +51,7 @@
 								<div class="filebox">
 									<label for="ex_filename">업로드</label> <input class="upload-name"
 										value="파일선택" disabled="disabled"> <input type="file"
-										name="re_file" id="ex_filename" class="upload-hidden">
+										name="files" id="ex_filename" class="upload-hidden">
 
 								</div>
 							</dd>

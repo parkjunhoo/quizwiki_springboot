@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.multi.quizwiki.dto.PboardDTO;
 import com.multi.quizwiki.mypage.dao.MypageDAO;
 import com.multi.quizwiki.mypage.dto.InquryDTO;
+import com.multi.quizwiki.mypage.dto.InquryFileDTO;
 import com.multi.quizwiki.mypage.dto.InquryReplyDTO;
 import com.multi.quizwiki.mypage.dto.NoteDTO;
 import com.multi.quizwiki.mypage.dto.PointDTO;
+import com.multi.quizwiki.mypage.dto.ProblemInquiryDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 
 @Service
@@ -53,11 +55,21 @@ public class MypageServiceImpl implements MypageService {
 	public int inquryinsert(InquryDTO inqurydto) {
 		return dao.inquryinsert(inqurydto);
 	}
-	@Override//문의사항 수정 
+	@Override//첨부파일,내용 insert
+	public int inquryinsert(InquryDTO inqurydto, List<InquryFileDTO> inquiryfile) {
+		dao.inquryinsert(inqurydto);
+		dao.insertFile(inquiryfile);
+		return 0;
+	}
+	@Override
 	public int inquryupdate(InquryDTO inqurydto) {
-		System.out.println("서비스=>"+dao.inquryupdate(inqurydto));
 		return dao.inquryupdate(inqurydto);
 	}
+	@Override//첨부파일 수정 
+	public int fileupdate(List<InquryFileDTO> inquiryfile) {
+		return dao.fileupdate(inquiryfile);
+	}
+	
 	@Override//문의사항 삭제 
 	public int inqurydelete(String inqury_id) {
 		return dao.inqurydelete(inqury_id);
@@ -65,6 +77,10 @@ public class MypageServiceImpl implements MypageService {
 	@Override//문의사항 답변 
 	public InquryReplyDTO inquryreply(String inqury_id) {
 		return dao.inquryreply(inqury_id);
+	}
+	@Override//오류문항 신고내역 
+	public List<ProblemInquiryDTO> probleminquryread(String member_id) {
+		return dao.probleminquryread(member_id);
 	}
 	@Override//내문제 리스트 
 	public List<PboardDTO> pboardread(String member_id) {
@@ -95,6 +111,22 @@ public class MypageServiceImpl implements MypageService {
 	public List<NoteDTO> notesearch(String startday, String endday, String member_id) {
 		return dao.notesearch(startday, endday, member_id);
 	}
+	@Override//첨부파일 내용 read
+	public List<InquryFileDTO> fileread(String inqury_id) {
+		return dao.fileread(inqury_id);
+	}
+	@Override//첨부파일 삭제
+	public int filedelete(String inqury_id) {
+		return dao.filedelete(inqury_id);
+	}
+	@Override//첨부파일 다운 
+	public InquryFileDTO filedown(InquryFileDTO inquryfile) {
+		return dao.filedown(inquryfile);
+	}
+
+
+
+
 	
 	
 	
