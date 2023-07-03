@@ -120,62 +120,66 @@ $(document).ready(function(){
 
 				<div class="inner_section">
 					<form action="/update/member" enctype="multipart/form-data" name="updateMemberForm" method="post" style="margin: 0px;">
-						<input type="hidden" name="member_id" th:value="${session.user.member_id}"> 
+						<input type="hidden" name="member_id" th:value="${session.user.member_id}">
+						<input type="hidden" name="member_photo" th:value="${session.user.member_photo}"> 
 						<div class="modify_wrapper">
 							<ul class="modify_list">
-							<!-- <li id="userprofile">
-								<div class="centered" style="width:10%;">
-									<img src="/images/myphoto.jpg" id="userImage">
+							<li id="userprofile">
+								<div class="centered" style="width:10%;margin-right: 31%;">
+									<img th:src="|/data/${session.user.member_photo}|" id="userImage">
 								</div>
-								<div>
-									<input type="file" name="member_photo" id="profile_file"
+								
+								<label for="profile_file">
+									<div id="upload_btn" class="code_num_btn comm_btnStyle view study_dwn mr5 preview_btn">프로필 이미지</div>
+								</label>
+								<input type="file" name="member_image" id="profile_file"
 										onchange="document.getElementById('userImage').src = window.URL.createObjectURL(this.files[0])"
-										accept="image/*">
-								</div>
-							</li> -->
+										accept="image/*" onError="javascript:this.src='/images/myphoto.jpg'" style="display: none;">
+							</li>
 							<li>
 								<div class="list_title">이름</div> <input
 								type="text" id="member_name" name="member_name"
-								class="pass text_field" required="" style="width: 100%">
+								class="pass text_field" required="" style="width: 100%" th:value="${session.user.member_name}">
 							</li>
 							
 							<li id="addr">
 								<label class="list_title" for="sample4_postcode">우편번호</label> 
 								<input type="text" class="form-control pass text_field" id="sample4_postcode" 
-								name="member_zipcode" placeholder="우편번호" style="width: 34%" required>
+								name="member_zipcode" placeholder="우편번호" th:value="${session.user.member_zipcode}" style="width: 34%" required>
 								
 								<input type="button" id="zipcode_btn" class="code_num_btn comm_btnStyle view study_dwn mr5 preview_btn"
-								onclick="sample4_execDaumPostcode()" value="우편번호 찾기" style="margin-top: 12px;">
+								onclick="sample4_execDaumPostcode()" value="우편번호 찾기" style="margin-top: 12px;" >
 								
 							</li>
 							<li class="zipcode">
 								<label class="list_title" for="sample4_roadAddress">도로명 주소</label> <input
 								type="text" class="form-control" id="sample4_roadAddress"
-								name="member_road_addr"	placeholder="도로명주소" style="width: 100%" required>
+								name="member_road_addr"	placeholder="도로명주소" th:value="${session.user.member_road_addr}"
+								style="width: 100%" required>
 							</li>
 							
 							<li class="zipcode">
 								<label class="list_title" for="sample4_jibunAddress">지번주소</label> <input type="text"
-								class="form-control" id="sample4_jibunAddress" name="member_jibun_addr"
+								class="form-control" id="sample4_jibunAddress" name="member_jibun_addr" th:value="${session.user.member_jibun_addr}"
 								placeholder="지번주소" style="width: 100%" required>
 							</li>
 							
 							<li class="zipcode">
 								<label class="list_title" for="sample4_detailAddress">상세주소</label> <input
 								type="text" class="form-control" id="sample4_detailAddress" name="member_detail_addr"
-								placeholder="상세주소" style="width: 100%" required>
+								placeholder="상세주소" th:value="${session.user.member_detail_addr}" style="width: 100%" required>
 							</li>
 							
 							<li class="zipcode">
 								<label class="list_title" for="sample4_extraAddress">참고항목</label> <input type="text"
-								class="form-control" id="sample4_extraAddress" name="member_extra_addr"
-								placeholder="참고항목" style="width: 100%">
+								class="form-control" id="sample4_extraAddress" name="member_extra_addr" 
+								placeholder="참고항목" th:value="${session.user.member_extra_addr}" style="width: 100%">
 							</li>
 							
 							<li>
 								<div class="list_title">휴대전화</div> 
 								<input type="text" class="pass text_field" id="member_telnum" name="member_telnum"
-								placeholder="-제외 입력"> 
+								placeholder="-제외 입력" th:value="${session.user.member_telnum}"> 
 							</li>
 							<li class="fixed-box single">
 								<p>SMS 수신에 동의하시겠습니까?</p>

@@ -3,6 +3,8 @@ package com.multi.quizwiki.member.service;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.member.entity.MemberEntity;
 
@@ -32,14 +34,18 @@ public interface MemberService {
 	// 비밀번호 업데이트
 	public void update_pass(MemberDTO dto) throws Exception;
 	
-	// 회원정보 수정
+	// 회원 정보 수정
 	public void update_member(MemberDTO dto) throws Exception;
+	
+	// 회원 정보 수정 - 프로필 이미지
+	int insert(MemberDTO dto, MultipartFile file, String realpath,String filename);
 	
 	// 회원탈퇴
 	public void delete_member(MemberDTO dto) throws Exception;
 	
 	// 회원 탈퇴 - 회원 특정
 	public int delete_check(MemberDTO dto) throws Exception;
+	
 	
 	
 //	//이메일발송

@@ -41,6 +41,9 @@ public class MemberDAOImpl implements MemberDAO {
 	// 카카오 로그인
 	@Override
 	public MemberEntity loginKakao(String kakaoID) {
+//		MemberEntity ent=memberRepository.findByKakaoID(kakaoID);
+//		System.out.println("ent"+ent);
+//		return ent;
 		return memberRepository.findByKakaoID(kakaoID);
 	}
 	

@@ -46,8 +46,13 @@ public class WebConfig implements WebMvcConfigurer{
 		
 	}
 	
-	public final static String IMAGE_RESOURCE_BASE = "/images/";
-			
-			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/data/**").addResourceLocations("file:///C:/javaweb/upload/");
 	}
+//	
+//	public final static String IMAGE_RESOURCE_BASE = "/images/";
+//			
+//			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//	}
 }
