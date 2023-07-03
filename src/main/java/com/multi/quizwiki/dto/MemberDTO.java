@@ -40,13 +40,13 @@ public class MemberDTO {
 	//private String member_mkt_email; // 마케팅 email
 	private Date member_regdate; // 가입날짜 
 	private int member_point; // 포인트
-	private String member_photo; // 플필 이미지
+	private String member_photo; // storeFilename 저장
 	private String member_type; // 회원타입 - 1:청소년, 2:대학생
 	private String member_major; // 전공
 	private String university_name; // 대학교명
 	private int member_state; // 상태값 : 회원가입시 1을 주고 없는 회원에게는 0을 준다
 	private String kakaoID; // 카카오 간편 로그인
-	
+	MultipartFile member_image; // 플필 이미지
 	
 	// 마케팅 수신 전체 동의, sms, email, null일떈 미동의 이렇게 한다면?
 	// 체크박스의 name을 동일하게 하면 배열로 넘어오니까 그거에 대한 처리가 필요하다고 한다.ㅠㅠ

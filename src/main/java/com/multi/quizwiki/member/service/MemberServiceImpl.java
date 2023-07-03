@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.quizwiki.dto.EmailRequestDTO;
 import com.multi.quizwiki.dto.MemberDTO;
@@ -110,6 +111,13 @@ public class MemberServiceImpl implements MemberService {
 		dao.update_member(dto);
 	}
 
+	// 회원 정보 수정 - 프로필 이미지
+	@Override
+	public int insert(MemberDTO dto, MultipartFile file, String realpath, String filename) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	// 회원탈퇴
 	@Override
 	public void delete_member(MemberDTO dto) throws Exception {

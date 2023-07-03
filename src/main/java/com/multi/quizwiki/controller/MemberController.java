@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -30,9 +31,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.EmailRequestDTO;
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.member.entity.MemberEntity;
@@ -44,8 +47,9 @@ import com.univcert.api.UnivCert;
 public class MemberController {
 
 	MemberService service;
+	FileUploadLogicService fileuploadService;
 	private KakaoService ms;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	public MemberController() {
@@ -53,10 +57,11 @@ public class MemberController {
 	}
 
 	@Autowired
-	public MemberController(MemberService service, KakaoService ms) {
+	public MemberController(MemberService service, KakaoService ms, FileUploadLogicService fileuploadService) {
 		super();
 		this.service = service;
 		this.ms = ms;
+		this.fileuploadService = fileuploadService;
 	}
 
 	// 로그인
@@ -147,38 +152,38 @@ public class MemberController {
 	}
 
 	// 카카오 로그인
-		@RequestMapping(value = "/kakao/login", method = RequestMethod.GET)
-		public String kakaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
-				HttpSession session) throws Exception {
-			String view = "";
-			String access_Token = ms.getAccessToken(code);
-			HashMap<String, Object> userInfo = ms.getUserInfo(access_Token);
-			
-			System.out.println("userInfo : " + userInfo); 
-			// userInfo : {nickname=혜원, id=2877651179, email=vh1116@kakao.com}
-			
-			String loginname = (String) userInfo.get("id");
-			System.out.println("loginname : "+loginname);
-			// loginname : 2877651179 -> id값
-			
-			MemberEntity loginUser = service.loginKakao(loginname);
-			System.out.println("loginUser : "+loginUser); 
-			// loginUser : null
-			
-			if (loginUser != null && loginUser.getKakaoID().equals(loginname)) {
-				session.setAttribute("user", MemberDTO.toDTO(loginUser));
-				view = "redirect:/main";
-			} else {
-				//model.addAttribute("nickname", userInfo.get("nickname"));
-				//model.addAttribute("email", userInfo.get("email"));
-				//model.addAttribute("id", userInfo.get("id"));
-				session.setAttribute("kakaoid", loginname);
-				view = "redirect:/signupType";
-			}
-				
-			return view;
+	@RequestMapping(value = "/kakao/login", method = RequestMethod.GET)
+	public String kakaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
+			HttpSession session) throws Exception {
+		String view = "";
+		String access_Token = ms.getAccessToken(code);
+		HashMap<String, Object> userInfo = ms.getUserInfo(access_Token);
 
+		System.out.println("userInfo : " + userInfo);
+		// userInfo : {nickname=혜원, id=2877651179, email=vh1116@kakao.com}
+
+		String loginname = (String) userInfo.get("id");
+		System.out.println("loginname : " + loginname);
+		// loginname : 2877651179 -> id값
+
+		MemberEntity loginUser = service.loginKakao(loginname);
+		System.out.println("loginUser : " + loginUser);
+		// loginUser : null
+
+		if (loginUser != null && loginUser.getKakaoID().equals(loginname)) {
+			session.setAttribute("user", MemberDTO.toDTO(loginUser));
+			view = "redirect:/main";
+		} else {
+			// model.addAttribute("nickname", userInfo.get("nickname"));
+			// model.addAttribute("email", userInfo.get("email"));
+			// model.addAttribute("id", userInfo.get("id"));
+			session.setAttribute("kakaoid", loginname);
+			view = "redirect:/signupType";
 		}
+
+		return view;
+
+	}
 
 	// 로그아웃
 	@RequestMapping("/logout.do")
@@ -266,14 +271,36 @@ public class MemberController {
 		return "redirect:/mypage/modify";
 	}
 
-	// 회원정보 수정
+	// 회원 정보 수정
 	@RequestMapping(value = "/update/member", method = RequestMethod.POST)
-	public String updateMember(MemberDTO dto, HttpSession session) throws Exception {
-		System.out.println("회원 정보 수정 dto 출력 : " + dto);
+	public String updateMember(MemberDTO dto, HttpSession session, @RequestParam("member_image") MultipartFile file)
+			throws Exception {
+		if (!file.isEmpty()) {
+			String storeFilename = fileuploadService.uploadFile(file); // 파일을 업로드하고 저장하는 서비스 메서드 호출
+			dto.setMember_photo(storeFilename);
+		}
 		service.update_member(dto);
 		session.setAttribute("user", dto);
 		return "redirect:/mypage/modify";
 	}
+
+	// 회원정보 수정
+//	@RequestMapping(value = "/update/member", method = RequestMethod.POST)
+//	public String updateMember( MemberDTO dto, HttpSession session) throws Exception {
+//		
+//		MultipartFile file = dto.getMember_image();
+//		System.out.println("controller - 파일 업로드 11111");
+//		System.out.println(dto);
+//		System.out.println("controller - 파일 업로드 22222");
+//	
+//		String storeFilename = fileuploadService.uploadFile(file);
+//		dto.setMember_photo(storeFilename);
+//		
+//		System.out.println("회원 정보 수정 dto 출력 : " + dto);
+//		service.update_member(dto);
+//		session.setAttribute("user", dto);
+//		return "redirect:/mypage/modify";
+//	}
 
 	// 회원탈퇴
 	@RequestMapping(value = "/delete/user.do", method = RequestMethod.POST)

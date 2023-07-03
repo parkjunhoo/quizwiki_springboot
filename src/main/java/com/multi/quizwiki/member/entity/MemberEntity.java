@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Formula;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.multi.quizwiki.dto.MemberDTO;
 
@@ -47,7 +48,7 @@ public class MemberEntity {
 	//private String member_mkt_email; // 마케팅 email
 	private Date memberRegdate; // 가입날짜 
 	private int memberPoint; // 포인트
-	private String memberPhoto; // 플필 이미지
+	private String memberPhoto; // storeFilename 저장
 	private String memberType; // 회원타입 - 1:청소년, 2:대학생
 	private String memberMajor; // 전공
 	private String universityName; // 대학교명

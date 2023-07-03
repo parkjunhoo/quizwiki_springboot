@@ -143,6 +143,9 @@ input[type=text], input[type=password], textarea {
 #profile_file{
 	padding-top: 50px;
 }
+#upload_btn{
+	text-align: center;
+}
 /* #addrbtn{
 	margin-top: 10px;
 } */
