@@ -60,7 +60,37 @@ function passChk(){
 
 }
 
-
+// sms - 이거 테스트하면 20p씩 나갑니닷ㅋㅋㅋ 유료임 ㅠㅠ 
+function sendSMS() {
+	
+	const to = $('#to').val();
+	
+	$.ajax ({
+		url: '/check/sendSMS',
+		type: 'GET',
+		data: {
+			"to" : to
+		},
+		success: function(data) {
+			const checkNum = data;
+			//alert('checkNum:'+ checkNum);
+			alert(to+'으로 메시지를 전송하였습니다. \n인증번호를 입력하세요.');
+			
+			$('#enterBtn').click(function() {	
+				const userNum = $('#userNum').val();
+				
+				if(checkNum === userNum) {
+					alert('인증 성공하였습니다.');
+				}
+				else {
+					alert('인증 실패하였습니다. 다시 입력해주세요.');
+				}
+			});
+			
+		}
+	});
+	
+};
 
 $(document).ready(function() {
 	
@@ -167,7 +197,7 @@ $(document).ready(function() {
 		<div class="input-form-backgroud row">
 
 			<div class="input-form col-md-12 mx-auto">
-				<h4 class="mb-3">회원가입 - 고등학생</h4>
+				<h4 class="mb-3">회원가입 - 청소년</h4>
 				<form name="join" class="validation-form" method="post" action="/signup" autocomplete="off"
 					encType="utf-8" novalidate>
 					<input name="kakaoID" type="hidden" th:if="${session.kakaoid != null}" th:value="${session.kakaoid}" />
@@ -273,25 +303,24 @@ $(document).ready(function() {
 
 					<div class="row">
 						<div class="col-md-8 mb-2">
-							<label for="member_telnum">연락처</label> <input type="text"
-								class="form-control" id="member_telnum" name="member_telnum" placeholder="-제외 숫자만 입력"
+							<label for="to">연락처</label> <input type="text"
+								class="form-control" id="to" name="member_telnum" placeholder="-제외 숫자만 입력"
 								required>
 							<div class="invalid-feedback">전화번호를 입력해주세요.</div>
 						</div>
 						<div class="col-md-1.5 mb-2 div_btn">
-							<input type="button" id="tel_btn" class="code_num_btn" onclick=""
-								value="인증번호 발송">
+							<input type="button" id="send" onclick="sendSMS()" class="code_num_btn" value="인증번호 발송">
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-8 mb-2">
-							<label for="telnum_check">인증번호</label> <input type="text"
-								class="form-control" id="telnum_check" placeholder="6자리 숫자 입력"
+							<label for="userNum">인증번호</label> <input type="text"
+								class="form-control" id="userNum" placeholder="4자리 숫자 입력"
 								required>
 							<div class="invalid-feedback">인증번호를 확인해주세요.</div>
 						</div>
 						<div class="col-md-1.5 mb-2 div_btn">
-							<input type="button" id="telnum_check_btn" class="code_num_btn"
+							<input type="button" id="enterBtn" class="code_num_btn"
 								onclick="" value="인증번호 확인">
 						</div>
 					</div>
@@ -352,16 +381,16 @@ $(document).ready(function() {
 						<div class="child-custom-control">
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox"
-									class="check_all_list custom-control-input" id="aggrement_sms"
-									onclick="checkSelectAll()" name="mkt_opt_sub" value="sms">
+									class="check_all_list custom-control-input mkt_opt_sub" id="aggrement_sms"
+									onclick="checkSelectAll()" name="member_mkt_opt" value="sms">
 								<label class="custom-control-label" for="aggrement_sms">SMS
 									수신 동의</label>
 							</div>
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox"
-									class="check_all_list custom-control-input"
+									class="check_all_list custom-control-input mkt_opt_sub"
 									id="aggrement_email" onclick="checkSelectAll()"
-									name="mkt_opt_sub" value="email"> <label
+									name="member_mkt_opt" value="email"> <label
 									class="custom-control-label" for="aggrement_email">이메일
 									수신 동의</label>
 							</div>
