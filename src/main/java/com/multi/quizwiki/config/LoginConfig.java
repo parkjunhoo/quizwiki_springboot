@@ -17,6 +17,6 @@ public class LoginConfig implements WebMvcConfigurer{
 		.excludePathPatterns("/main","/login.do","/signupType","/findId.do","/findPass.do",
 				"/findId","/findPass","/signupAgreement1","/signup1","/signup2","/signupAgreement2",
 				"/faqt","/images/**","/css/**","/font/**","/js/**","/libs/**","/pboard/**","/qboard/**","/kakao/**",
-				"/idChk","/login/mailConfirm","/signup","/note/**","/popup/**");
+				"/idChk","/login/mailConfirm","/signup","/note/**","/popup/**", "/check/sendSMS", "/sms", "/memberPhoneCheck");
 	}
 }

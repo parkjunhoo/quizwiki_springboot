@@ -126,17 +126,21 @@
 
 		<!-- https://mvnrepository.com/artifact/net.nurigo/sdk -->
 		<!-- sms 서비스 이용을 위한 추가 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>net.nurigo</groupId>
 			<artifactId>sdk</artifactId>
 			<version>4.2.7</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>net.nurigo</groupId>
 			<artifactId>javaSDK</artifactId>
 			<version>2.2</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 		<!--json 처리 관련 라이브러리인 json parser나 json maker를 기본 라이브러리로 -->
 		<dependency>
