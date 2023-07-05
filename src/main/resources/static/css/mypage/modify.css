@@ -91,7 +91,7 @@ input[type=text], input[type=password], textarea {
 
 .modify_wrapper ul.modify_list li .check_my {
     position: absolute;
-    right: 740px;
+    /* right: 740px; */
     top: 23px;
 }
 .single input[type="radio"] + label {
@@ -149,6 +149,12 @@ input[type=text], input[type=password], textarea {
     position: absolute;
     top: 50%;
     transform: translate(0,-50%);
+}
+.check_my{
+	left: 11rem;
+}
+.check_my label{
+	margin-right: 10px;
 }
 /* #addrbtn{
 	margin-top: 10px;
