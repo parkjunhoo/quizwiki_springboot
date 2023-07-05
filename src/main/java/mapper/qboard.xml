@@ -82,7 +82,11 @@
 	
 	<!--  게시글 삭제 -->
 	<delete id="deleteById" parameterType="long" >
-			delete from qboard where qboard_id=#{qboard_id}
+			update qboard
+			SET
+				delete_yn =1
+			WHERE
+				qboard_id = #{qboard_id} 
 	</delete>
   
   
@@ -107,5 +111,12 @@
   	select * from qboard where category =#{category}
   </select>
   
+  
+  <!-- 좋아요 체크  -->
+ <!--  <select id="checkLike">
+  	select  
+  
+  
+  </select> -->
   
   </mapper>

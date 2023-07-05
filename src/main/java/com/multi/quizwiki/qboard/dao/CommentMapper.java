@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.multi.quizwiki.qboard.dto.CommentRequest;
 import com.multi.quizwiki.qboard.dto.CommentResponse;
+import com.multi.quizwiki.qboard.dto.CommentSearchDTO;
 
 @Mapper
 public interface CommentMapper {
@@ -19,7 +20,9 @@ public interface CommentMapper {
 	
 	void deleteById(Long comment_id);
 	
-	List<CommentResponse> findAll(Long qboard_id);
+	List<CommentResponse> findAll(CommentSearchDTO params);
 	
-	int count(Long qboard_id);
+	int count(CommentSearchDTO params);
+	
+	
 }

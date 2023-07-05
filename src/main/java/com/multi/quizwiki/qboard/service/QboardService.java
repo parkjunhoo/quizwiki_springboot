@@ -22,6 +22,7 @@ public interface QboardService {
 	  
 	  void increaseViewCount(Long qboard_id);
 	  
-	List<QboardDTO> findByCategory(String category);
+	  List<QboardDTO> findByCategory(String category);
+
 
 } 

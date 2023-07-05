@@ -1,7 +1,4 @@
-
 package com.multi.quizwiki.member.service;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
