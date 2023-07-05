@@ -44,7 +44,7 @@ public class ProblemServiceImpl implements ProblemService{
 	@Override
 	public List<ProblemCateEntity> problemCate_findAll() {
 		// TODO Auto-generated method stub
-		return null;
+		
 		return dao.problemCate_findAll();
 	}
 }
