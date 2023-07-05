@@ -25,4 +25,9 @@ public class NoteController {
 	public String show_read() {
 		return "thymeleaf/note/note_read_popup";
 	}
+	
+	@GetMapping("/write")
+	public String show_write() {
+		return "thymeleaf/note/note_write_popup";
+	}
 }

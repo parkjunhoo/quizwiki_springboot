@@ -1,0 +1,73 @@
+body{
+	overflow-x: hidden;
+}
+
+.popup-header{
+	width:100%;
+	height:50px;
+	line-height: 50px;
+	font-family: "Esamanru";
+	font-size: 3vh;
+	color:white;
+	
+	position: fixed;
+	top:0;
+	left:0;
+	padding:0 10px;
+	box-sizing: border-box;
+}
+
+.popup-content{
+	display: flex;
+	margin-top: 60px;
+	width:100%;
+	height: calc(100vh - 60px);
+}
+
+.page-area{
+	width:200px;
+	min-width:100px;
+	overflow-y:auto;
+	border: 1px solid #c9c9c9;
+}
+.page-item{
+	width: 90%;
+	aspect-ratio: 16 / 9;
+	margin: 1rem auto;
+	background-color:white;
+	border: 1px solid #c9c9c9;
+	
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    cursor: pointer;
+}
+
+.active-page{
+	border: 2px solid #b5b5ff;
+}
+
+.workspace-area{
+	width:100%;
+	display: flex;
+	justify-content: space-around;
+	overflow-y:auto;
+	
+}
+
+#workspace{
+	width:80%;
+	max-width:80%;
+	max-height: 80%;
+	aspect-ratio: 16 / 9;
+    margin: auto;
+    overflow:hidden;
+    border: 1px solid #c9c9c9;
+}
+.testText{
+	font-size: 44px;
+}
+
+
+
