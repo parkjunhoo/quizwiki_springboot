@@ -21,12 +21,18 @@ public interface MemberService {
 
 	// 회원가입
 	void register(MemberDTO user) throws Exception;
+	
+	// 회원 정보 조회
+	MemberDTO read(String member_id) throws Exception;
 
+	// 비번 이멜 발송
+	public void sendEmail(MemberDTO dto, String div) throws Exception;
+	
 	// 아이디 찾기
 	public MemberDTO find_id(MemberDTO dto);
 	
 	// 비밀번호 찾기
-	public MemberDTO find_pass(MemberDTO dto);
+	public void find_pass(MemberDTO dto) throws Exception;
 
 	// 임시 비번 생성
 	public String generate_pass(String member_id);

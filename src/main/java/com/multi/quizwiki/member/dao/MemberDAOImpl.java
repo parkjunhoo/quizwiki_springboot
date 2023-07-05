@@ -60,6 +60,20 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.insert("com.multi.quizwiki.member.insert", user);
 	}
 
+	// 회원 정보 조회
+	@Override
+	public MemberDTO read(String member_id) throws Exception{
+		MemberDTO dto = sqlSession.selectOne("com.multi.quizwiki.member.read", member_id);
+		return dto;
+	}
+	
+	// 비번 변경 임시 비번
+	@Override
+	public int updatePw(MemberDTO dto) throws Exception {
+		return sqlSession.update("com.multi.quizwiki.member.passUpdate", dto);
+	}
+	
+	
 	// 아이디 찾기
 	@Override
 	public MemberDTO find_id(MemberDTO dto) {
@@ -101,6 +115,8 @@ public class MemberDAOImpl implements MemberDAO {
 		int result = sqlSession.selectOne("com.multi.quizwiki.member.deleteUser", dto);
 		return result;
 	}
+
+	
 	
 	// 임시 비밀번호
 //	@Override
@@ -111,16 +127,5 @@ public class MemberDAOImpl implements MemberDAO {
 //		sqlSession.update("com.multi.quizwiki.member.update", map);
 //	}
 
-	@Override
-	public void certifiedPhone(String telnum) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void certifiedNum(String numStr) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 }
