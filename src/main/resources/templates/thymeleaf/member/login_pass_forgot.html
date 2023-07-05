@@ -12,6 +12,9 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 <script type="text/javascript">
+
+
+
 function chk_form() {
 	if(document.getElementById("member_name").value==''){
 		alert("이름을 입력하세요.");
@@ -29,8 +32,27 @@ function chk_form() {
 	}
 
 $(document).ready(function(){
+	
+	$("#findBtn").click(function(){
+		$.ajax({
+			url : "/findpw",
+			type : "POST",
+			data : {
+				member_id : $("#member_id").val(),
+				email : $("#memail").val()
+			},
+			success : function(data) {
+				alert($("#memail").val()+"로 인증번호 발송이 완료되었습니다. \n확인 후 인증해주세요.")
+				console.log("data -> "+data);
+			},
+			error : function(){
+				alert('error')
+			}
+		})
+	});
+	
 	// 이메일 인증번호
-	 $("#checkEmail").on("click",function(){
+	/*  $("#checkEmail").on("click",function(){
 	    $.ajax({
 	       type : "POST",
 	       url : "/login/mailConfirm",
@@ -44,7 +66,7 @@ $(document).ready(function(){
 	       }
 	    })
 	 })
-	 
+	  */
 	
 });
 
@@ -77,8 +99,14 @@ $(document).ready(function(){
 						<input type="text" id="member_id" name="member_id"
 							placeholder="" class="login__input">
 					</div>
-						<div class="row">
-							<div class="login__box login_tel">이메일 주소
+					<div class="login__box login_tel">
+							이메일 주소
+							<input type="email" placeholder="quizwiki@naver.com" name="email"
+							id="memail" class="login__input" required>
+						</div>
+				<!-- 	<div class="row">
+						<div class="login__box login_tel">
+							이메일 주소
 							<input type="email" placeholder="quizwiki@naver.com" name="email"
 							id="memail" class="login__input" required>
 						</div>
@@ -92,10 +120,10 @@ $(document).ready(function(){
 					<div class="login__box login_num">
 					인증번호 <input type="text" placeholder="6자리 인증번호 입력" id="memailconfirm" 
 					class="login__input" required>
-					</div>
+					</div> -->
 					<label for="memailconfirm" id="memailconfirmTxt" style="float: left;padding-top: 10px;"></label>
 					
-					<a onclick="chk_form()" class="login__button">비밀번호 찾기</a>
+					<a onclick="" class="login__button" id="findBtn">비밀번호 찾기</a>
 				</form>	
 			</div>
 		</div>

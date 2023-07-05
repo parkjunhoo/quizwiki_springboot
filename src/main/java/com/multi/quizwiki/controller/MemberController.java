@@ -255,6 +255,21 @@ public class MemberController {
 		return "redirect:/login.do";
 	}
 
+	// 회원 정보 보기
+	@RequestMapping(value = "/info", method = RequestMethod.GET)
+	public void infoGET(HttpSession session, Model model) throws Exception{
+
+		//세션 객체 안에 있는 ID정보 저장
+		String member_id = (String) session.getAttribute("member_id");
+		System.out.println("controller -> "+member_id);
+		
+		MemberDTO dto = service.read(member_id);
+		System.out.println("controller -> "+dto);
+		
+		model.addAttribute("readDto", dto);
+	}
+	
+	
 	// 아이디 찾기 실행
 	@RequestMapping(value = "/find_id.do", method = RequestMethod.POST)
 	public String findIdAction(MemberDTO dto, Model model) {
@@ -273,22 +288,34 @@ public class MemberController {
 		return "thymeleaf/member/login_id_forgot_find";
 	}
 
-	// 비밀번호 찾기 실행
-	@RequestMapping(value = "/find_pass.do", method = RequestMethod.POST)
-	public String findPassAction(MemberDTO dto, Model model) {
-		MemberDTO user = service.find_pass(dto);
-		System.out.println(dto);
-		if (user == null) {
-			System.out.println("null");
-			model.addAttribute("check", 1);
-		} else {
-			System.out.println("null 아님");
-			model.addAttribute("check", 0);
-			model.addAttribute("update_id", user.getMember_id());
-			model.addAttribute("member_pass", user.getMember_pass());
-		}
-		return "thymeleaf/member/login_pass_forgot_find";
-
+	// 비밀번호 찾기 실행 - 그냥 비번 보여주기. 지양하고 싶다.
+//	@RequestMapping(value = "/find_pass.do", method = RequestMethod.POST)
+//	public String findPassAction(MemberDTO dto, Model model) {
+//		MemberDTO user = service.find_pass(dto);
+//		System.out.println(dto);
+//		if (user == null) {
+//			System.out.println("null");
+//			model.addAttribute("check", 1);
+//		} else {
+//			System.out.println("null 아님");
+//			model.addAttribute("check", 0);
+//			model.addAttribute("update_id", user.getMember_id());
+//			model.addAttribute("member_pass", user.getMember_pass());
+//		}
+//		return "thymeleaf/member/login_pass_forgot_find";
+//
+//	}
+	
+	//비밀번호 찾기 get
+	@RequestMapping(value = "/findpw", method = RequestMethod.GET)
+	public void findPwGET() throws Exception{
+	}
+	
+	//비밀번호 찾기 post
+	@RequestMapping(value = "/findpw", method = RequestMethod.POST)
+	public String findPwPOST(@ModelAttribute MemberDTO member) throws Exception{
+		service.find_pass(member);
+		return "thymeleaf/member/login_pass_forgot";
 	}
 
 	// 비밀번호 변경

@@ -23,6 +23,7 @@
 <!-- js -->
 <script type="text/javascript" src="../js/member/zipcode.js"></script>
 <script type="text/javascript" src="../js/member/signup.js"></script>
+<script type="text/javascript" src="../js/member/modify_mkt_opt.js"></script>
 
 <!-- 글꼴 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +34,7 @@
 
 
 <script type="text/javascript">
+	
 	//비밀번호 일치 불일치
 	function passChk() {
 
@@ -96,10 +98,9 @@
 
 							<!-- <li>
 								<div class="list_title" style="width: 180px">기존 비밀번호</div> <input
-								type="password" id="mod_mb_password" name="mb_password"
+								type="password" name="currentPassword" 
 								required="" style="width: 100%">
 							</li> -->
-							<!-- id hidden으로 넘겨주기 -->
 							<li>
 								<div class="list_title">새 비밀번호</div> <input type="password"
 								id="pass" name="member_pass" minlength="4" maxlength="15"
@@ -123,7 +124,7 @@
 					</div>
 					<!-- modify_wrapper END -->
 				</form>
-
+				
 
 				<div class="inner_section">
 					<form action="/update/member" enctype="multipart/form-data"
@@ -224,31 +225,38 @@
 									class="pass text_field" id="member_telnum" name="member_telnum"
 									placeholder="-제외 입력" th:value="${session.user.member_telnum}">
 								</li>
-								<li class="fixed-box single">
+								<!-- <li class="fixed-box single">
 									<p>SMS 수신에 동의하시겠습니까?</p>
 									<div class="check_my">
-										&nbsp; <input type="radio" name="mb_sms" value="1"
+										&nbsp; <input type="radio" name="member_" value="sms"
 											style="vertical-align: -3px; margin-left: 10px;" id="agr_y">
-										<label for="agr_y" style="color: black;">동의합니다</label>&nbsp; <input
-											type="radio" name="mb_sms" value="0"
+										<label for="agr_y" style="color: black;">동의합니다</label>&nbsp; 
+										<input type="radio" name="member_sms" value="sms 미동의"
 											style="vertical-align: -3px; margin-left: 5px;" id="agr_n"
-											checked="checked"> <label for="agr_n">아니오</label>
+											checked="checked"> 
+										<label for="agr_n">아니오</label>
 
 									</div>
-								</li>
+								</li> -->
 								<li>
 									<div class="list_title">이메일</div> <input type="text"
-									name="mb_email" value="" style="width: 100%">
+									name="email" th:value="${session.user.email}" style="width: 100%" readonly>
 								</li>
 								<li class="fixed-box single">
-									<p>이메일 수신에 동의하시겠습니까?</p>
+									<p>마케팅 수신 동의</p>
 									<div class="check_my">
-										<input type="radio" name="mb_mailling" value="1"
-											style="vertical-align: -3px; margin-left: 10px;" id="agr2_y"><label
-											for="agr2_y">동의합니다</label> <input type="radio"
-											name="mb_mailling" value="0"
-											style="vertical-align: -3px; margin-left: 5px;" id="agr2_n"
-											checked="checked"><label for="agr2_n">아니오</label>
+										<input type="radio" name="member_mkt_opt" value="마케팅 수신 동의"
+										style="vertical-align: -3px; margin-left: 10px;" id="agreement" checked>
+										<label for="agreement">모두 동의</label> 
+										<input type="radio" name="member_mkt_opt" value="sms"
+										style="vertical-align: -3px; margin-left: 5px;" id="agreement_sms">
+										<label for="agreement_sms">sms만 동의</label>
+										<input type="radio" name="member_mkt_opt" value="email"
+										style="vertical-align: -3px; margin-left: 10px;" id="agreement_email">
+										<label for="agreement_email">email만 동의</label> 
+										<input type="radio" name="member_mkt_opt" value="마케팅 수신 미동의"
+										style="vertical-align: -3px; margin-left: 10px;" id="disagreement">
+										<label for="disagreement">마케팅 수신 미동의</label> 
 									</div>
 								</li>
 							</ul>
@@ -257,7 +265,7 @@
 							<p style="font-family: 'Pretendard'">※이메일 수신동의를 하시면 다양한 할인혜택과
 								이벤트/기획전 등의 정보를 받아보실 수 있습니다. 단, 회원가입 및 주요알림사항 메일은 수신동의와 상관없이 자동
 								발송됩니다.</p>
-							<button type="submit" id="updateMemberBtn"
+							<button type="submit" id="updateMemberBtn" onclick="updateMemberMktOpt()"
 								class="comm_buttons fill">회원정보 저장</button>
 						</div>
 						<!-- modify_wrapper END -->

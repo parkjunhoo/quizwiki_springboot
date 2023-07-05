@@ -7,7 +7,7 @@ function updateMemberMktOpt() {
 	  var emailCheckbox = document.getElementById("aggrement_email");
 
 	  if (selectAllCheckbox.checked) {
-	    mktOpt = "마케팅 수신 전체 동의";
+	    mktOpt = "마케팅 수신 동의";
 	  } else {
 	    if (smsCheckbox.checked) {
 	      mktOpt = "sms";

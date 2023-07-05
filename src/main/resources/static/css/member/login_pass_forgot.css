@@ -109,8 +109,8 @@ hr{
 	column-gap: 4.3rem;
 }
 .login_tel {
-	column-gap: 1.8rem;
-    width: 66.5%;
+	column-gap: 1.5rem;
+   	/* width: 66.5%; */
 }
 .login__icon {
   font-size: 1.5rem;
@@ -223,7 +223,7 @@ hr{
     justify-self: center;
   }
   .login__register {
-    bottom: -21rem;
+    bottom: -18rem;
     justify-content: center;
   }
 }
@@ -254,7 +254,7 @@ hr{
     left: -11rem;
   }
   .login__register {
-    bottom: -10rem;
+    bottom: -7rem;
   }
   .login__create {
     bottom: -5.5rem;
