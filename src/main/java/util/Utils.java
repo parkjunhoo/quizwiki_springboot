@@ -36,8 +36,6 @@ public class Utils {
 		int pageIndex = (n-1)/size;
 		int start = pageIndex*size;
 		for(int i= start+1; i<= start+size; i++) {
-			System.out.println("i==>"+i);
-			System.out.println("max==>"+max);
 			if(i> max) break;
 			seq.add(i);
 		}

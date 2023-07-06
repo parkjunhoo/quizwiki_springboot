@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http//www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{/layout/mypagelayout}">
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{/layout/mypagelayout}">
+
 <head>
 <meta charset="UTF-8">
 <title>QuizWiki 회원 정보 수정</title>
@@ -21,9 +22,9 @@
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <!-- js -->
-<script type="text/javascript" src="../js/member/zipcode.js"></script>
-<script type="text/javascript" src="../js/member/signup.js"></script>
-<script type="text/javascript" src="../js/member/modify_mkt_opt.js"></script>
+<script type="text/javascript" src="/js/member/zipcode.js"></script>
+<script type="text/javascript" src="/js/member/signup.js"></script>
+<script type="text/javascript" src="/js/member/modify_mkt_opt.js"></script>
 
 <!-- 글꼴 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -149,7 +150,7 @@
 							</li> -->
 								<li id="userprofile">
 									<div class="centered" style="width: 10%; margin-right: 31%;">
-										<img th:src="|/data/${session.user.member_photo}|"
+										<img th:src="|/data/memberprofile/${session.user.member_photo}|"
 											id="userImage"
 											onError="javascript:this.src='/images/myphoto.jpg'">
 									</div> <label for="profile_file">

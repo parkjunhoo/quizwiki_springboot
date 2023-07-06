@@ -4,94 +4,158 @@ xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 
+<link rel="stylesheet" type="text/css" th:href="@{/css/note/note_popup_common.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/css/note/note_read_popup.css}">
 <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script th:src="@{/libs/fabric/fabric.min.js}"></script>
+<script th:src="@{/libs/sortable/sortable.min.js}"></script>
 
 <title>5월 모의고사 오답노트 - test</title>
 </head>
 <body>
 	<div class="popup-header">
-		<h2>5월 모의고사 오답노트</h2>
+		<div class="title-input-wrap">
+			<h2>5월 모의고사 오답노트</h2>
+		</div>
 	</div>
+	
 	<div class="popup-content">
-		<ul class="page-area">
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
-			<li class="page-item">
-			</li>
+	
+		<ul class="page-area" id="pageArea">
 		</ul>
+		
 		<div class="workspace-area">
-			<div class="workspace">
-				<pre>
-문제1. 다음중 옳은거를 고르세요,,
-1.ㅎㅇ
-2.ㅎㅇ
-3.ㅎㅇ
-4.ㅎㅇ
-</pre>
-			</div>
-			
-			
-			<div class="workspace">
-				<pre class="testText">
-내가 쓴 필기
-sdfsd
-f
-sdf
-sd
-fsd
-fsd
-f
-sdf
-sd
-fsd
-fsd
-f
-dsf
-sd
-fsd
-fds
-f
-sdf
-end.
-</pre>
+			<div id="workspace">
+			<div class="protext-canvas"></div>
+				<canvas id="c" ></canvas>
 			</div>
 		</div>
 	</div>
 	
-	
-	
-	
 </body>
 
-<script type="text/javascript">
+<script th:inline="javascript">
 	///////////////////////이니셜라이징////////////////
-	////////////////////////////////////
+	const noteId = /*[[${noteId}]]*/'';
+	let doNotSync = false;
+	
+	let currentIndex = 0;
+	
+	const c = new fabric.Canvas('c');
+	c.selection = false;
+	c.isDrawingMode = false;
+	resizeCanvas();
+	
+	///////////////post로 note 정보 가져오기 ㅋㅋ 정보가 크다보니  get은 글자제한이../////////////////////
+    let note = null;
+    $.ajax({
+    	url:"/note/read/"+noteId,
+    	type:"POST",
+    	async:false,
+    	success:(res)=>{
+    		note = res;
+    	},
+    });
+    
+    let pageList = note.notePageList;
+    
+    pageList.forEach((p,idx)=>{
+    	addPageWithData(p.notePageContent);
+    });
+    /////////////////////////////////////////////////////
+	
+	
+	
+	
+	/////////////////////////////////////////////////
+	function getPageItem(n){
+		return pageArea.querySelector(".page-item:nth-child("+(n+1)+")");
+	}
+	
+	function getPageCanvas(n){
+		return pageArea.querySelector(".page-item:nth-child("+(n+1)+")").pageCanvas;
+	}
+	
+	function setPageCanvas(n,obj){
+		pageArea.querySelector(".page-item:nth-child("+(n+1)+")").pageCanvas = obj;
+	}
+	//////////////CANVAS EVENT/////////////////////
+	function resizeCanvas(){
+		let containerWidth = workspace.offsetWidth;
+		let containerHeight = workspace.offsetHeight;
+		
+	  
+		let scaleFactor = containerWidth / c.getWidth(); // 현재 너비 대비 스케일 팩터 계산
 
+		c.setWidth(containerWidth); 
+		c.setHeight(containerHeight); 
+		
+		c.getObjects().forEach(function(object) {
+		   object.scaleX *= scaleFactor;
+		   object.scaleY *= scaleFactor;
+		   object.left *= scaleFactor;
+		   object.top *= scaleFactor;
+		   object.setCoords(); // 오브젝트 코디네이트 갱신
+		});
+
+		c.renderAll();
+	}
+	const resizeObserver = new ResizeObserver((e)=>{
+		resizeCanvas();
+	});
+	resizeObserver.observe(workspace.parentNode);
 	
-	////////////////////이벤트 핸들러///////////////////////
-	//////////////////////////////////////////////////////
+
+	function addPageWithData(data) {
+		const li = document.createElement('li');
+		li.setAttribute("onclick", "changePage(this)");
+		li.classList.add("page-item");
+		li.pageCanvas = data;
+		pageArea.appendChild(li);
+		
+		
+		c.loadFromJSON(data, ()=>{
+			const imageUrl = c.toDataURL({
+				  format: 'png',
+				  quality: 0.1,
+				  multiplier: 0.1,
+			});
+			li.style.backgroundImage = "url("+imageUrl+")";
+			changePage(0,true);
+		});
+	}
+
+	function changePage(el, isNum) {
+		let index = null;
+		$(".active-page").removeClass("active-page");
+		if (isNum) {
+		  index = el;
+		  $("#pageArea li").eq(index).addClass("active-page");
+		} else {
+		  index = $(el).index();
+		  el.classList.add("active-page");
+		}
+		
+		c.clear();
+		c.loadFromJSON(getPageCanvas(index), ()=>{
+			c.renderAll();
+		});
+		currentIndex = index;
+	}
 	
-	
-	
-	/////////////////////////펑션/////////////////////////
-	////////////////////////////////////////////////////
+	/////////////////////////
+	//배열 순서 바꾸기 
+	function changeArrObj(arr,idx,idx2){
+		[arr[idx],arr[idx2]]=[arr[idx2],arr[idx]];
+	}
+	//배열 특정인덱스요소 바꿔치기
+	function editArrObj(arr,idx,obj){
+		[arr[idx]] = [obj];
+	}
+//////////////////////////
 </script>
 </html>

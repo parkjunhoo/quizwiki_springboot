@@ -17,14 +17,13 @@ layout:fragment="content"
 	<div id="pboard-list">
 		<div id="pboard-title">
 			<span class="title-subject">나의 오답노트</span>
-			<a href="#" class="title-subtext">오답노트 게시판으로 가기 <i class="fa-solid fa-arrow-right"></i></a>
+			<!-- <a href="#" class="title-subtext">오답노트 게시판으로 가기 <i class="fa-solid fa-arrow-right"></i></a> -->
 		</div>
 
 		<form method="get" id="search-bar" name="search-bar-form" action="/pboard/list">
 			<div class="serach-group">
 				<select name="stype" id="stype" class="custom">
 					<option value="title">제목</option>
-					<option value="id">작성자</option>
 				</select>
 
 				<div class="search-input">
@@ -36,19 +35,20 @@ layout:fragment="content"
 				<input type="hidden" name="cate" th:value="${param.cate}"/>
 			</div>
 
-			<div onclick="location.href='/pboard/write?cate='+new URLSearchParams(window.location.search).get('cate')" id="write-btn">
+			<div onclick="openNoteWrite()" id="write-btn">
 				<i class="fa-solid fa-pencil"></i> 오답노트 쓰기
 			</div>
 		</form>
 		
 		<ul class="noteList">
-			<th:block th:each="n:${#numbers.sequence(1,5)}">
-				<li th:onclick="openNoteRead([[${n}]])" class="noteItem">
-					<div class="papers" th:attr="lock=${n%2==0} ? 'true':'false'">
-						<h2><span class="note-title">[[${n}]]월 모의고사 오답노트</span></h2>
-						<p>작성자: <span class="note-author">test</span></p>
-						<p>작성일자: <span class="note-regdate">2023-06-23</span></p>
-						<p>페이지 수: <span class="note-page">[[${n}]] 페이지</span></p>
+			<th:block th:each="note : ${noteList}">
+				<li th:onclick="openNoteRead([[${note.noteId}]])" class="noteItem">
+					<div class="papers">
+						<h2><span class="note-title" th:text="${note.noteTitle}"></span></h2>
+						<p>작성자: <span class="note-author" th:text="${note.memberId}">test</span></p>
+						<p th:if="${note.noteRegdate.after(today)}">작성일자: <span th:text="${#dates.format(note.noteRegdate, '오늘 HH시 mm분')}" class="note-regdate">2023-06-23</span></p>
+						<p th:unless="${note.noteRegdate.after(today)}">작성일자: <span th:text="${#dates.format(pboard.pboardRegDate, 'yy-MM-dd')}" class="note-regdate">2023-06-23</span></p>
+						<p>페이지 수: <span class="note-page">[[${note.pageCount}]] 페이지</span></p>
 						<div style="display: flex; width:100%; margin:0 auto; justify-content: space-around;">
 							<div class="custom-btn blue-btn"><i class="fa-solid fa-pen-to-square"></i> 수정하기</div>
 							<div class="custom-btn red-btn"><i class="fa-solid fa-trash"></i> 삭제하기</div>
@@ -57,16 +57,60 @@ layout:fragment="content"
 				</li>
 			</th:block>
 		</ul>
+		
+		
+		<div class="paging-wrap">
+        	<ul id="paging-btn-list">
+	            <li>
+	                <a class="page-btn disabled" th:if="${currentPage == 1}"><i class="fa-solid fa-square-caret-left"></i></a>
+	                <a class="page-btn" th:unless="${currentPage == 1}" th:href="@{/note/mylist(page=${currentPage - 1})}"><i class="fa-solid fa-square-caret-left"></i></a>
+	            </li>
+	
+	            <th:block th:each="page : ${pages}">
+	                <li th:class="${currentPage == page ? 'current-page-btn' : ''}">
+	                    <a class="page-btn" th:if="${currentPage == page}" th:text="${page}"></a>
+	                    <a class="page-btn" th:unless="${currentPage == page}" th:href="@{/note/mylist(page=${page})}" th:text="${page}"></a>
+	                </li>
+	            </th:block>
+	
+	            <li>
+	                <a class="page-btn disabled" th:if="${currentPage >= totalPage}"><i class="fa-solid fa-square-caret-right"></i></a>
+	                <a class="page-btn" th:unless="${currentPage >= totalPage}" th:href="@{/note/mylist(page=${currentPage + 1})}"><i class="fa-solid fa-square-caret-right"></i></a>
+	            </li>
+        	</ul>
+		</div>
 
 		
 	</div>
 	
 	<script type="text/javascript">
 	
-		function openNoteRead(no){
-			let cbt = window.open(
-			  "/note/read?no="+no,
+		function fromChild(data){
+			if(data==="done"){
+				location.reload(true);
+			}
+		}
+	
+		function openPopup(link,name){
+			let width = Math.floor(screen.width * 0.95);
+			let height = Math.floor(screen.height * 0.95);
+			let left = Math.floor((screen.width - width) / 2);
+			let top = Math.floor((screen.height - height) / 2);
+			
+			let popup = window.open(
+			  link,
+			  name,
+			  "width="+width+", height="+height+", top="+top+", left="+left
 			);
+			popup.opener = window;
+		}
+	
+		function openNoteRead(no){
+			openPopup("/note/read/"+no , "오답노트 보기");
+		}
+		
+		function openNoteWrite(){
+			openPopup("/note/write/" , "오답노트 작성");
 		}
 		
 	</script>

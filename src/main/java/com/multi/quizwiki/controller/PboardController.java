@@ -136,9 +136,6 @@ public class PboardController {
 			previewHTML += " <p>"+previewText+"</p> ";
 			
 			previewHTML += " </div>";
-			System.out.println("======================");
-			System.out.println(previewHTML);
-			System.out.println("======================");
 			p.setPreviewHTML(previewHTML);
 		});
 		//게시물 정보가 담긴 객체를 담는다
