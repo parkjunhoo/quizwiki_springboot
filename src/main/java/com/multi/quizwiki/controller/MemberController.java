@@ -30,9 +30,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.EmailRequestDTO;
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.member.entity.MemberEntity;
@@ -49,7 +51,8 @@ public class MemberController {
 	MemberService service;
 	private KakaoService ms;
 	SmsService sms;
-	
+	FileUploadLogicService fs;
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
 	public MemberController() {
@@ -57,11 +60,12 @@ public class MemberController {
 	}
 
 	@Autowired
-	public MemberController(MemberService service, KakaoService ms, SmsService sms) {
+	public MemberController(MemberService service, KakaoService ms, SmsService sms, FileUploadLogicService fs) {
 		super();
 		this.service = service;
 		this.ms = ms;
 		this.sms = sms;
+		this.fs = fs;
 	}
 
 	// 로그인
@@ -165,74 +169,68 @@ public class MemberController {
 	}
 
 	// 카카오 로그인
-			@RequestMapping(value = "/kakao/login", method = RequestMethod.GET)
-			public String kakaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
-					HttpSession session) throws Exception {
-				String view = "";
-				String access_Token = ms.getAccessToken(code);
-				
-				HashMap<String, Object> userInfo = ms.getUserInfo(access_Token);
-				
-				System.out.println("userInfo : " + userInfo); 
-				// userInfo : {nickname=혜원, id=2877651179, email=vh1116@kakao.com}
-				
-				String loginname = (String) userInfo.get("id");
-				System.out.println("loginname : "+loginname);
-				// loginname : 2877651179 -> id값
-				
-				MemberEntity loginUser = service.loginKakao(loginname);
-				System.out.println("loginUser : "+loginUser); 
-				// loginUser : null
-				
-				if (loginUser != null && loginUser.getKakaoID().equals(loginname)) {
-					session.setAttribute("kakaoUser", MemberDTO.toDTO(loginUser));
-					session.setAttribute("access_Token", access_Token);
-					view = "redirect:/main";
-				} else {
-					//model.addAttribute("nickname", userInfo.get("nickname"));
-					//model.addAttribute("email", userInfo.get("email"));
-					//model.addAttribute("id", userInfo.get("id"));
-					session.setAttribute("kakaoid", loginname);
-					view = "redirect:/signupType";
-				}
-					
-				return view;
+	@RequestMapping(value = "/kakao/login", method = RequestMethod.GET)
+	public String kakaoLogin(@RequestParam(value = "code", required = false) String code, Model model,
+			HttpSession session) throws Exception {
+		String view = "";
+		String access_Token = ms.getAccessToken(code);
 
-			}
-	
-	
+		HashMap<String, Object> userInfo = ms.getUserInfo(access_Token);
+
+		System.out.println("userInfo : " + userInfo);
+		// userInfo : {nickname=혜원, id=2877651179, email=vh1116@kakao.com}
+
+		String loginname = (String) userInfo.get("id");
+		System.out.println("loginname : " + loginname);
+		// loginname : 2877651179 -> id값
+
+		MemberEntity loginUser = service.loginKakao(loginname);
+		System.out.println("loginUser : " + loginUser);
+		// loginUser : null
+
+		if (loginUser != null && loginUser.getKakaoID().equals(loginname)) {
+			session.setAttribute("kakaoUser", MemberDTO.toDTO(loginUser));
+			session.setAttribute("access_Token", access_Token);
+			view = "redirect:/main";
+		} else {
+			// model.addAttribute("nickname", userInfo.get("nickname"));
+			// model.addAttribute("email", userInfo.get("email"));
+			// model.addAttribute("id", userInfo.get("id"));
+			session.setAttribute("kakaoid", loginname);
+			view = "redirect:/signupType";
+		}
+
+		return view;
+
+	}
+
 	// 카카오 로그아웃
-	  
-	  @RequestMapping(value="/kakao/logout") 
-	  public String kakaoLogout(HttpSession session) {
-		  
-			
-		  
-		  String access_Token = (String)session.getAttribute("access_Token");
-		  System.out.println(access_Token);
-		  
-		  if(access_Token != null && !"".equals(access_Token)){
-			  
-			  ms.kakaoLogout(access_Token); 
-			  session.removeAttribute("access_Token");
-			  
-			  System.out.println("kakaoUser가 null이 아님 : "+session.getAttribute("kakaoUser"));
-			  
-			  session.removeAttribute("kakaoUser"); 
-			  System.out.println("kakaoUser가 null : "+session.getAttribute("kakaoUser"));
-			 
-		  
-		  }else{ 
-			  System.out.println("access_Token가 null"); 
-			  //return "redirect:/"; 
-		  	}
-		  
-		  
-		  //return "index"; 
-		  return "redirect:/main"; 
-	  }
-	
-	
+
+	@RequestMapping(value = "/kakao/logout")
+	public String kakaoLogout(HttpSession session) {
+
+		String access_Token = (String) session.getAttribute("access_Token");
+		System.out.println(access_Token);
+
+		if (access_Token != null && !"".equals(access_Token)) {
+
+			ms.kakaoLogout(access_Token);
+			session.removeAttribute("access_Token");
+
+			System.out.println("kakaoUser가 null이 아님 : " + session.getAttribute("kakaoUser"));
+
+			session.removeAttribute("kakaoUser");
+			System.out.println("kakaoUser가 null : " + session.getAttribute("kakaoUser"));
+
+		} else {
+			System.out.println("access_Token가 null");
+			// return "redirect:/";
+		}
+
+		// return "index";
+		return "redirect:/main";
+	}
+
 	// 아이디 중복 확인
 	@RequestMapping(value = "/idChk", method = RequestMethod.POST)
 	@ResponseBody
@@ -257,19 +255,18 @@ public class MemberController {
 
 	// 회원 정보 보기
 	@RequestMapping(value = "/info", method = RequestMethod.GET)
-	public void infoGET(HttpSession session, Model model) throws Exception{
+	public void infoGET(HttpSession session, Model model) throws Exception {
 
-		//세션 객체 안에 있는 ID정보 저장
+		// 세션 객체 안에 있는 ID정보 저장
 		String member_id = (String) session.getAttribute("member_id");
-		System.out.println("controller -> "+member_id);
-		
+		System.out.println("controller -> " + member_id);
+
 		MemberDTO dto = service.read(member_id);
-		System.out.println("controller -> "+dto);
-		
+		System.out.println("controller -> " + dto);
+
 		model.addAttribute("readDto", dto);
 	}
-	
-	
+
 	// 아이디 찾기 실행
 	@RequestMapping(value = "/find_id.do", method = RequestMethod.POST)
 	public String findIdAction(MemberDTO dto, Model model) {
@@ -305,15 +302,15 @@ public class MemberController {
 //		return "thymeleaf/member/login_pass_forgot_find";
 //
 //	}
-	
-	//비밀번호 찾기 get
+
+	// 비밀번호 찾기 get
 	@RequestMapping(value = "/findpw", method = RequestMethod.GET)
-	public void findPwGET() throws Exception{
+	public void findPwGET() throws Exception {
 	}
-	
-	//비밀번호 찾기 post
+
+	// 비밀번호 찾기 post
 	@RequestMapping(value = "/findpw", method = RequestMethod.POST)
-	public String findPwPOST(@ModelAttribute MemberDTO member) throws Exception{
+	public String findPwPOST(@ModelAttribute MemberDTO member) throws Exception {
 		service.find_pass(member);
 		return "thymeleaf/member/login_pass_forgot";
 	}
@@ -337,6 +334,10 @@ public class MemberController {
 	@RequestMapping(value = "/update/member", method = RequestMethod.POST)
 	public String updateMember(MemberDTO dto, HttpSession session) throws Exception {
 		System.out.println("회원 정보 수정 dto 출력 : " + dto);
+		MultipartFile file = dto.getMember_image();
+		if (file != null) {
+			dto.setMember_photo(fs.uploadFile(file, "memberprofile"));
+		}
 		service.update_member(dto);
 		session.setAttribute("user", dto);
 		return "redirect:/mypage/modify";
@@ -368,21 +369,31 @@ public class MemberController {
 		int result = service.delete_check(dto);
 		return result;
 	}
-	
+
 	// sms
 	// coolSMS 테스트 화면
 	@GetMapping("/sms")
 	public String mySms() {
 		return "thymeleaf/member/sms";
 	}
-	    
-	// coolSMS 연결  
+
+	// coolSMS 연결
 	@GetMapping("/check/sendSMS")
-	public @ResponseBody String sendSMS(@RequestParam(value="to") String to) throws CoolsmsException {  	
+	public @ResponseBody String sendSMS(@RequestParam(value = "to") String to) throws CoolsmsException {
 		return sms.PhoneNumberCheck(to);
 	}
 
-	
+	// 네이버 로그인 test login view
+	@RequestMapping("/naver/login")
+	public String naverLogin() {
+		return "thymeleaf/member/naver_login";
+	}
+
+	// 네이버 로그인 test callback view
+	@RequestMapping("/naver/callback")
+	public String naverCallback() {
+		return "thymeleaf/member/naver_callback";
+	}
 
 	// 대학교 메일 인증
 	/*
@@ -407,13 +418,10 @@ public class MemberController {
 		return "test";
 	}
 
-	
-
 }
 
-
 /*
-
+ * 
  * 
  * // 카카오 로그인
  * 
