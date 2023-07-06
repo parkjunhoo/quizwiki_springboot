@@ -184,7 +184,7 @@
 							</tr>
 							<tr th:each="pboard:${pboardlist}" th:unless="${pboardlist.size==0}">
 								<td ><span th:text="${pboard.pboard_id}"></span></td>
-								<td ><span th:text="${pboard.pboard_title}"></span></td>
+								<td ><a th:href="@{/pboard/read(cate=${pboard.pboard_cate_id},no=${pboard.pboard_id})}"><span th:text="${pboard.pboard_title}"></span></a></td>
 								<td ><span th:text="${pboard.pboard_reg_date}"></span></td>
 								<td ><span th:text="${pboard.pboard_show_count}"></span></td>
 								

@@ -101,6 +101,23 @@
 
 			})
 </script>
+
+	<script type="text/javascript">
+		function popupPreview(no){
+			const url = "/note/read/"+no;
+			
+			let width = Math.floor(screen.width * 0.95);
+			let height = Math.floor(screen.height * 0.95);
+			let left = Math.floor((screen.width - width) / 2);
+			let top = Math.floor((screen.height - height) / 2);
+			
+			let cbt = window.open(
+				url,
+				"문제 보기",
+				"width="+width+", height="+height+", top="+top+", left="+left
+			);
+		}
+	</script>
 </head>
 <body>
 		<section layout:fragment="content">
@@ -181,7 +198,7 @@
 							</tr>
 							<tr th:each="note:${notelist}" th:unless="${notelist.size==0}">
 								<td><span th:text="${note.note_id}"></span></td>
-								<td><span th:text="${note.note_title}"></span></td>
+								<td style="cursor:pointer;" th:attr="onclick=|popupPreview(${note.note_id})|"><span th:text="${note.note_title}"></span></a></td>
 								<td><span th:text="${note.note_regdate}"></span></td>
 								<td><span th:text="${note.note_private}"></span></td>
 							</tr>
