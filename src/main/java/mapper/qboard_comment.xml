@@ -13,7 +13,7 @@
 	
 	<!-- 댓글저장 -->
 	<insert id="save" parameterType="comment_req" 
-	keyProperty="comment_Id">
+				keyProperty="comment_Id">
 	  		INSERT INTO qboard_comment (
             <include refid="commentColumns" />
         ) VALUES (
@@ -44,7 +44,7 @@
         SET
               editDate = NOW()
             , content = #{content}
-            , member_id = #{memberId}
+            , member_id = #{member_id}
         WHERE
             comment_id = #{comment_id}
     </update>
@@ -61,16 +61,28 @@
 
 
     <!-- 댓글 리스트 조회 -->
-    <select id="findAll" parameterType="long" resultType="comment_res">
+    <select id="findAll" parameterType="commentSearch" resultType="comment_res">
         SELECT
             <include refid="commentColumns" />
         FROM
             qboard_comment
         WHERE
             delete_yn = 0
-            AND qboard_id = #{value}
+            AND qboard_id = #{qboard_id}
         ORDER BY
             comment_id DESC
+    </select> 
+    
+    <select id="count" parameterType="commentSearch" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            qboard_comment
+        WHERE
+            delete_yn = 0
+            AND qboard_id = #{qboard_id}
     </select>
+
+	
 
 </mapper>

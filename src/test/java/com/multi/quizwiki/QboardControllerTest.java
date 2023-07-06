@@ -20,15 +20,5 @@ public class QboardControllerTest {
 	public void test() {
 		log.info("hu");
 	}
-	  @Test
-	    void saveByForeach() {
-	        for (int i = 1; i <= 100; i++) {
-	            QboardDTO qboard = new QboardDTO();
-	            qboard.setTitle(i + "번 게시글 제목");
-	            qboard.setContent(i + "번 게시글 내용");
-	            qboard.setMember_id("member"+i);
-	            qboardservice.save(qboard);
-	        }
-	  }
-
+	
 }

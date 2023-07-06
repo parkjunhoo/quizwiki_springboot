@@ -11,8 +11,7 @@ layout:fragment="content">
 
 <script src="https://kit.fontawesome.com/e92cf22849.js"
 	crossorigin="anonymous"></script>
-<!-- <script src="https://kit.fontawesome.com/e92cf22849.js"
-	crossorigin="anonymous"></script> -->
+
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <!--  css -->
@@ -77,40 +76,30 @@ layout:fragment="content">
 				
 				<input type="hidden" id="qboard_id" name="qboard_id" th:if="${qboard != null}" th:value="${qboard.qboard_id}" />
 <!-- 				<input type="hidden" id="regDate" name="regDate" />
- -->				<select id="inSubject" autocomplete="categoryCode"
+ -->				<label>과목</label>
+ 					<select id="inSubject" autocomplete="categoryCode"
 					class="form-control" name="categoryCode">
 					<option value="" class="">과목을 선택해주세요.</option>
 					<option   th:value="국어" 	class="">국어</option>
 					<option   th:value="영어" class="">영어</option>
-					<option   th:value="수학" class="">수학</option></select> 
+					<option   th:value="수학" cla	ss="">수학</option></select> 
 					<br/>
 					<br/>
+					<label>제목</label>
 					<input type="text"   id="title" name="title"    class="form-control" placeholder="제목" required />
 <!-- 				<textarea name="content" th:value="content" id="se2" placeholder="질문 내용을 입력하세요." required></textarea>
  -->				<br/>
  	
-				  <div class="file_list">
-                <div>
-                    <div class="file_input">
-                        <input type="text" readonly />
-                        <label> 첨부파일
-                            <input type="file" name="files" onchange="selectFile(this);" />
-                        </label>
-                    </div>
-                    <button type="button" onclick="removeFile(this);" class="btns del_btn"><span>삭제</span></button>
-                    <button type="button" onclick="addFile();" class="btns fn_add_btn"><span>파일 추가</span></button>
-                </div>
-            </div>
             <br/>
-            <br/>
+            	<label>본문</label>
 				<textarea class="form-control" id="Content" name="content" style="height: 300px;"
 					placeholder="질문 내용을 입력하세요." required></textarea>
 				
 				<span style='float: right;'> <input type="button"
 					class="btn btn-default" value="취소" onclick="history.back();" /> 
-					<button type="button" id="saveBtn" onclick="saveQboardd();" class="btn btn-success" value="질문등록"  ></button>	
 				</span>
-
+				<button type="button" id="saveBtn" onclick="saveQboardd();" class="btn btn-success" value="질문등록">질문 등록</button>	
+				
 			</form>
 
 		</div>
@@ -124,9 +113,10 @@ layout:fragment="content">
 	      language: 'ko',
 	      menubar: false,	
 	      mode : "textareas",
-	      plugins: 'link lists media image ',
-	      toolbar: 'alignleft aligncenter alignright alignjustify | bold italic |formatselect | bullist numlist | outdent indent | link image ',
+	      plugins: 'link lists media image visual blocks ',
+	      toolbar: 'alignleft aligncenter alignright alignjustify| undo redo| styles | bold italic underline |formatselect | bullist numlist | outdent indent | link image ',
 	      toolbar_mode: 'floating',
+	      content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}',
 	      tinycomments_mode: 'embedded',
 	      tinycomments_author: 'Author name',
 	      mergetags_list: [
@@ -237,7 +227,6 @@ layout:fragment="content">
             	 const qboard = /*[[ ${qboard == null} ]]*/''; 
             	 const formData = new FormData();
             	 
-            	 
             	 sendData = {
             			 qboard:{
 		            		title:form.title.value,
@@ -245,7 +234,9 @@ layout:fragment="content">
 		            		category:inSubject.value,
             			 }
             	 };
-            	 
+            	 document.getElementById('saveBtn').disabled = true;
+
+               
             	 formData.append("sendData", new Blob([JSON.stringify(sendData),{type:"application/json"}]));
             	 
             	 imageList.forEach((e)=>{

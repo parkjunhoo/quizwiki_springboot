@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,13 +32,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.qboard.dto.CommentResponse;
 import com.multi.quizwiki.qboard.dto.FileRequest;
+import com.multi.quizwiki.qboard.dto.LikeDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
+import com.multi.quizwiki.qboard.service.CommentService;
 import com.multi.quizwiki.qboard.service.FileService;
-import com.multi.quizwiki.qboard.service.QboardService;
-
+import com.multi.quizwiki.qboard.service.LikeService;
+import com.multi.quizwiki.qboard.service.QboardService;import antlr.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import util.FileUtils;
@@ -46,15 +50,16 @@ import util.FileUtils;
 @RequestMapping("quizwiki")
 @RequiredArgsConstructor
 public class QboardController {
-	private final String DEFAULT_CATEGORY = "전체보기";
 	
+	private static final String member_id = null;
 	@Autowired
 	QboardService qboardservice;
 	@Autowired  
 	private final FileService fileService;
 	
 	 private final FileUtils fileUtils;
-	 
+	 private final CommentService commentservice;
+	 private final LikeService likeservice;
 	 @Autowired
 	 private FileUploadLogicService fileUploadService;
 	
@@ -81,29 +86,36 @@ public class QboardController {
 		String memberId = loginUser.getMember_id();
 		
 		ObjectMapper mapper = new ObjectMapper();
+		//sendData를 java 객체로 변환?
 		Map<String,String> map = mapper.readValue(sendData, Map.class);
+		
 		QboardDTO qboard = mapper.convertValue(map.get("qboard"), QboardDTO.class);
+		
 		qboard.setMember_id(memberId);
-		
-		System.out.println(qboard);
-		
 		List<FileRequest> fileReqList = new ArrayList<FileRequest>();
-		for(MultipartFile img : imageList) {
-			String origin = img.getOriginalFilename();
-			System.out.println(origin);
-			String uuid = fileUploadService.uploadFile(img, "qboardimage");
+		System.out.println(qboard);	
+		if(imageList != null) {
 			
-			fileReqList.add(new FileRequest(origin, uuid, img.getSize()));
+			for(MultipartFile img : imageList) {
+				String origin = img.getOriginalFilename();
+				System.out.println(origin);
+				String uuid = fileUploadService.uploadFile(img, "qboardimage");
+				
+				fileReqList.add(new FileRequest(origin, uuid, img.getSize()));
+				
+				Document html = Jsoup.parse(qboard.getContent());
+				Elements el = html.select("img[title="+origin+"]");
+				
+				el.attr("src", "/quizwiki/qboard/find/"+uuid);
+				qboard.setContent(html.html());
 			
-			Document html = Jsoup.parse(qboard.getContent());
-			Elements el = html.select("img[title="+origin+"]");
-			el.attr("src", "/quizwiki/qboard/find/"+uuid);
+				
+			}
 			
-			qboard.setContent(html.html());
 		}
-		
 		Long qboard_id = qboardservice.save(qboard);
 		fileService.saveFiles(qboard_id, fileReqList);
+		
 		
 		//Long qboard_id = qboardservice.save(qboard); //게시글 삽입 게시글은 db에 저장되는데 
 		// 파일이 null 이 뜨는 듯
@@ -137,8 +149,12 @@ public class QboardController {
 
 	
 	@RequestMapping("/qboard/write.do")
-	public String QboardWrite(@RequestParam(value="qboard_id", required = false) Long qboard_id, Model model) {
-	
+	public String QboardWrite(@RequestParam(value="qboard_id", required = false) Long qboard_id, Model model, 
+			HttpServletRequest req) {
+		 if(!util.Utils.loginCheck(req)) {
+			 return "redirect:/login.do";
+		 }
+		
 		if(qboard_id != null) {
 			 QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 			 model.addAttribute("qboard",qboard);
@@ -154,18 +170,18 @@ public class QboardController {
 		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
 		  model.addAttribute("category",params.getCategory());
 		  model.addAttribute("qboardlist",qboardlist); 
+		  
 	  	return "thymeleaf/qboard/qboard_list"; 
 	  }
 	  
-	  @GetMapping("/qboard/read.do")
-		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, Model model ) {
-				/*	
-				 * if (qboard_id == null) { return "redirect:/qboard/list"; }
-				 */
-			 QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
+	  @GetMapping("/qboard/read.do" )
+		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, 
+			 Model model, HttpSession session,HttpServletRequest req) {
+		  
+		  QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 			  qboardservice.increaseViewCount(qboard_id);
 			 model.addAttribute("qboard", qboard);
-			
+			 
 			return "thymeleaf/qboard/qboard_read";
 		 }
 		 	
@@ -183,16 +199,10 @@ public class QboardController {
 		
 	}
 	
+
 	
 	
-	@RequestMapping(value = "/board/ajax/list.do",produces = "application/json;charset=utf-8")
-	@ResponseBody
-	public List<QboardDTO> ajaxlist(String category){
-		 List<QboardDTO> data = qboardservice.findByCategory(category);
-		 System.out.println(data+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		return data;
-	}
-	
+		
 	
  	@PostMapping("/qboard/upload/image")
  	@ResponseBody

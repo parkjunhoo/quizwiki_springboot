@@ -1,5 +1,6 @@
 package com.multi.quizwiki.qboard.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 import com.multi.quizwiki.qboard.dao.CommentMapper;
 import com.multi.quizwiki.qboard.dto.CommentRequest;
 import com.multi.quizwiki.qboard.dto.CommentResponse;
+import com.multi.quizwiki.qboard.dto.CommentSearchDTO;
+import com.multi.quizwiki.qboard.paging.Pagination;
+import com.multi.quizwiki.qboard.paging.PagingResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +33,7 @@ public class CommentService {
 		return params.getComment_id();
 	}
 	
-	 public CommentResponse findCommentById(final Long comment_id) {
+	 public CommentResponse findById(final Long comment_id) {
 	        return commentmapper.findById(comment_id);
 	    }
 	
@@ -55,7 +59,19 @@ public class CommentService {
 	     * @param postId - 게시글 번호 (FK)
 	     * @return 특정 게시글에 등록된 댓글 리스트
 	     */
-	    public List<CommentResponse> findAllComment(final Long qboard_id) {
-	        return commentmapper.findAll(qboard_id);
+	    public PagingResponse<CommentResponse> findAllComment(final CommentSearchDTO params) {
+	        
+	    	int count = commentmapper.count(params);
+	    	if (count<1) {
+	    		 return new PagingResponse<>(Collections.emptyList(), null);
+	    	}
+	    	Pagination pagination = new Pagination(count, params);
+	    	List<CommentResponse> list = commentmapper.findAll(params);
+	    	return new PagingResponse<>(list, pagination);
+	    }
+	    @Transactional
+	    public void count(CommentSearchDTO params) {
+	    	commentmapper.count(params);
+	    	
 	    }
 }

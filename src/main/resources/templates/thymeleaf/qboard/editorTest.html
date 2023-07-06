@@ -27,45 +27,44 @@
   </div>
   <p><strong>Note:</strong> The data-toggle="dropdown" attribute is required regardless of whether you call the dropdown() method.</p>
 </div>
- <textarea style="max-height: 200px; max-width: 200px;" placeholder="질문을 작성해보세요">
+ <textarea id="modalContent" name="contentmodel"  style="max-height: 200px; max-width: 200px;" placeholder="질문을 작성해보세요">
 	  </textarea>
+	  	<div class="flex-right bootstrap-components">
+      
+  
+      
+      <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="">
+        <li>
+      <button type="button" class="dropdown-item  post__edit-btn e-edit" false="">
+        <span><i class="fa-regular fa-pen-to-square"></i>수정</span>
+      </button>
+    </li><li>
+      <button type="button" class="dropdown-item  post__remove-btn e-remove" false="">
+        <span><i class="fa-regular fa-trash-can"></i>삭제</span>
+      </button>
+    </li>
+      </ul>
+   
+  
+  </div>		
+ 
   <script>
 	    tinymce.init({
-	      selector: 'textarea',
-	      language: 'ko',
+	      selector: '#modalContent',
 	      menubar: false,	
 	      mode : "textareas",
-	      plugins: 'link lists media image ',
-	      toolbar: 'alignleft aligncenter alignright alignjustify | bold italic |formatselect | bullist numlist | outdent indent | link image ',
+	      plugins: 'link lists media image visual blocks ',
+	      toolbar: 'alignleft aligncenter alignright alignjustify| undo redo| styles | bold italic underline |formatselect | bullist numlist | outdent indent | link image ',
+	      toolbar_mode: 'floating',
+	      content_style: 'body{font-family:Helvetica,Arial,sans-serif; font-size:16px}',
 	      tinycomments_mode: 'embedded',
 	      tinycomments_author: 'Author name',
 	      mergetags_list: [
 	        { value: 'First.Name', title: 'First Name' },
 	        { value: 'Email', title: 'Email' },
 	      ],
-	      images_upload_handler: function (blobInfo, success, failure) {
-	          var xhr, formData;
-	      
-	          xhr = new XMLHttpRequest();
-	          xhr.withCredentials = false;
-	          xhr.open('POST', 'http://localhost:8080/upload/image');
-	
-	          xhr.onload = function () {
-	              var json;
-	
-	              if (xhr.status != 200) {
-	                  failure('HTTP Error: ' + xhr.status);
-	                  return;
-	              }
-	
-	              json = xhr.responseText;
-	              success(json);
-	          };
-	
-	          formData = new FormData();
-	          formData.append('file', blobInfo.blob(), blobInfo.filename());
-	
-	          xhr.send(formData);
+	      images_upload_handler: function (blobInfo) {
+	    	  imageList.push(blobInfo.blob());
 	      },
 	      
 	      /* enable title field in the Image dialog*/

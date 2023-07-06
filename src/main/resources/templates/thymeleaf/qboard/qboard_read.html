@@ -6,10 +6,15 @@ layout:fragment="content"><head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/qboard/qna.css" />
-  
+<link rel="stylesheet" type="text/css" href="/css/qboard/qboard.css" />
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
  
 <script th:src="@{/js/qboard/function.js}"></script>
 <script th:src="@{/js/qboard/jquery-3.6.0.min.js}"></script>
+<script th:inline="javascript" th:src="@{/js/qboard/qboard_read.js}"></script>
+<script th:inline="javascript" th:src="@{/js/tinymce/tinymce.min.js}"></script>
+<script th:inline="javascript" th:src="@{/js/tinymce/tinymceinit.js}"></script>
 
 <script src="https://kit.fontawesome.com/e92cf22849.js"
 	crossorigin="anonymous"></script>
@@ -18,6 +23,7 @@ layout:fragment="content"><head>
 </head>
 <body>
 <section class="content" >
+			
 			
 		<div class="question-detail_header">
 			<div class="question-detail_title">
@@ -42,34 +48,30 @@ layout:fragment="content"><head>
 					</div>
 				
 			</div>
-				<div class="flex-right bootstrap-components">
-      
-  
-      
-      <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="">
+			<ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="">
         <li>
-      <button type="button" class="dropdown-item  post__edit-btn e-edit" false="">
-        <span><i class="fa-regular fa-pen-to-square"></i>수정</span>
+      <button  type="button" class="dropdown-item  post__edit-btn e-edit" onclick="goWritePage()" false="">
+        <span th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}"><i class="fa-regular fa-pen-to-square"></i>수정</span>
       </button>
     </li><li>
-      <button type="button" class="dropdown-item  post__remove-btn e-remove" false="">
+      <button  th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}" type="button" class="dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
         <span><i class="fa-regular fa-trash-can"></i>삭제</span>
       </button>
     </li>
       </ul>
    
   
-  </div>		
+		
 		
 	</div>
 		<div class="post-content">
-			<div class="content_body" th:text="${qboard.content}">
+			<div class="content_body" th:utext="${qboard.content}">
 				<p>
 					</p>
 			</div>
 			<div class="post_features">
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
-					<button>
+					<button id="likeBtn">
 						<img src="/images/qboard/thumbsup.svg" width="16px"; height="16px" >
 						<div class="text freatures_text">0</div>
 						
@@ -110,33 +112,14 @@ layout:fragment="content"><head>
 				<!--  /* 댓글 렌더링 */ -->
 				<div class="content_body_comment-list" >
 					<div class="answer_comment">
-						<ui class="comment-list" 	>
+						<ui class="comment-list">
 					
 						</ui>
-						<div class="comment_re-comment">
-							<div class="re-comment__header flex-row"
-								style="justify-content: space-between;">
-								<h4 class="re-comment__title">답글</h4>
-								<button
-									class="ac-button is-md is-text re-comment__fold-button e-fold "
-									style="float: right;">
-									접기
-									<svg width="16" xmlns="http://www.w3.org/2000/svg" height="16"
-										viewBox="0 0 16 16">
-										<path fill="#212529" fill-rule="evenodd"
-											d="M3.22 9.78c-.293-.293-.293-.767 0-1.06l4.25-4.25c.293-.293.767-.293 1.06 0l4.25 4.25c.293.293.293.767 0 1.06-.293.293-.767.293-1.06 0L8 6.06 4.28 9.78c-.293.293-.767.293-1.06 0z"
-											clip-rule="evenodd"></path></svg>
-								</button>
-							</div>
-							<div class="re-comment_body">
-								<div class="re-comment__open-editor-button-container">
-
-									<button
-										class="ac-button is-md is-text re-comment__open-editor-button e-open-re-comment-editor ">답글
-										달기</button>
-								</div>
-							</div>
+				<!--  페이징 -->		
+						<div class="paging">
+						
 						</div>
+		
 					</div>
 
 
@@ -147,36 +130,102 @@ layout:fragment="content"><head>
 		</div>
 		
 	</section>
+	 <!--/* 댓글 수정 popup */-->
+        <div id="commentUpdatePopup" class="popLayer">
+            <h3>댓글 수정</h3>
+            <div class="pop_container" >
+            
+                  
+             <textarea id="modalContent" name="modalContent"  placeholder="수정할 내용을 입력해 주세요."></textarea>
+                        
+                   
+                <p class="btn_set">
+                    <button type="button" id="commentUpdateBtn" class="btns btn_st2">수정</button>
+                    <button type="button" class="btns btn_bdr2" onclick="closeCommentUpdatePopup();">취소</button>
+                </p>
+            
+            <button type="button" class="btn_close" onclick="closeCommentUpdatePopup();"><span><i class="far fa-times-circle"></i></span></button>
+        </div>
 
-<script>
-    var oEditors = [];
-	nhn.husky.EZCreator.createInIFrame({
-		oAppRef : oEditors,
-		elPlaceHolder : "se2",
-		sSkinURI : "/libs/se2/SmartEditor2Skin.html",
-		fCreator : "createSEditor2",
-		htParams : {
-			// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-			bUseToolbar : true,
 
-			// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-			bUseVerticalResizer : false,
-
-			// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-			bUseModeChanger : false
-		}
-	});
-</script>
 	<th:block layout:fragment="script">
     
   <script th:inline="javascript">
         /*<![CDATA[*/
-
+			
         	 window.onload = () => {
                 findAllComment();
             }
         
-        	 
+        	
+        	// 댓글 수정 팝업 open
+            function openCommentUpdatePopup(comment_id) {
+
+            	 
+        	
+        		const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
+                const uri = `/qboard/${qboard_id}/comments/${comment_id}`;
+                const response = getJson(uri);
+                document.getElementById('modalContent').value = response.content;
+                console.log("content  "+response.content);
+                document.getElementById('commentUpdateBtn').setAttribute('onclick', `updateComment(${comment_id})`);
+                layerPop('commentUpdatePopup');
+            }
+
+
+            // 댓글 수정 팝업 close
+            function closeCommentUpdatePopup() {
+                document.querySelectorAll(' #modalContent').forEach(element => element.value = '');
+                document.getElementById('commentUpdateBtn').removeAttribute('onclick');
+                layerPopClose('commentUpdatePopup');
+            }
+
+
+            // 댓글 수정
+            function updateComment(comment_id) {
+
+                
+            	const content = document.getElementById('modalContent');
+                isValid(content, '수정할 내용');
+
+                const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
+                const member_id = /*[[ ${qboard.member_id} ]]*/'';
+                console.log("qboard_id="+qboard_id)
+                console.log("member_id="+member_id)
+                const uri = `/qboard/${qboard_id}/comments/${comment_id}`;
+                const params = {
+                    comment_id : comment_id,
+                    qboard_id : qboard_id,
+                    content : content.value,
+                    member_id : member_id
+                }
+
+                callApi(uri, 'patch', params);
+                alert('수정되었습니다.');
+                closeCommentUpdatePopup();
+                findAllComment();
+            }
+
+
+            // 댓글 삭제
+            function deleteComment(comment_id) {
+
+                if ( !confirm('선택하신 댓글을 삭제할까요?') ) {
+                    return false;
+                }
+
+                const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
+                console.log("qboard_id="+qboard_id);
+                const uri = `/qboard/${qboard_id}/comments/${comment_id}`;
+                callApi(uri, 'delete');
+                alert('삭제되었습니다.');
+                findAllComment();
+            }
+
+        	
+        	 function goWritePage() {
+                 location.href = '/quizwiki/qboard/write.do' + location.search;
+             }
         	 
             // 게시글 삭제
             function deleteBoard() {
@@ -202,90 +251,160 @@ layout:fragment="content"><head>
 
                 const content = document.getElementById("content");
                 isValid(content, '댓글');
-
                 const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
+                const member_id= /*[[ ${qboard.member_id} ]]*/'';
+                const uri = `/qboard/${qboard_id}/comments`;
+
                 const params = {
                     qboard_id : qboard_id,
                     content : content.value,
-                    member_id : "홍길동"
+                    member_id :  member_id
+                    		
                 }
-
-                $.ajax({
-                    url : `/qboard/${qboard_id}/comments`,
-                    type : 'post',	
-                    contentType : 'application/json; charset=utf-8',
-                    dataType : 'json',
-                    data : JSON.stringify(params),
-                    async : false,
-                    success : function (qboardlist) {
-                        console.log(qboardlist);
-                    },
-                    error : function (request, status, error) {
-                        console.log(error)
-                    }
-                })
-            }
-
+                
+                callApi(uri, 'post', params);
+                alert('저장되었습니다.');
+                content.value = '';
+                findAllComment(1);
+				console.log(member_id);
+               console.log(params);
+            	}
+           
+           
+            
             //전체 댓글 조회
-              function findAllComment() {
+              function findAllComment(page) {
 
                 const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
-
-                $.ajax({
-                    url : `/qboard/${qboard_id}/comments`,
-                    type : 'get',
-                    dataType : 'json',
-                    async : false,
-                    success : function (qboardlist) {
-
-                        // 1. 조회된 데이터가 없는 경우
-                        if ( !qboardlist.length ) {
-                            document.querySelector('.comment-list').innerHTML = '<div class="cm_none"><p>등록된 댓글이 없습니다.</p></div>';
-                            return false;
-                        }
-
-                        // 2. 렌더링 할 HTML을 저장할 변수
-                        let commentHtml = '';
-
-                        // 3. 댓글 HTML 추가
-                        qboardlist.forEach(row => {
-                            commentHtml += `
-                            	<li >
-        						<div class="comment-card">
-        							<div class="comment_header flex-row">
-        								<img class="comment_user-profile" alt="유저프로필" src="/images/qboard/default_profile.png" />
-
-        								<div class="comment_sub-header">
-        									<div class="comment_user-name-container">
-        										<a href="" class="comment_user-name" >${row.member_id}</a>
-        									</div>
-        									<span class="comment_update" >${row.regDate}</span>
-        								</div>
-        							</div>
-        							<div class="comment_body markdown-body">
-        								<p >${row.content}</p>
-        							</div>
-
-
-        						</div>
-        						</li>
-                            `;
-                        })
-
-                        // 4. class가 "comment-list"인 요소를 찾아 HTML을 렌더링
-                        document.querySelector('.comment-list').innerHTML = commentHtml;
-                    },
-                    error : function (request, status, error) {
-                        console.log(error)
+                const uriPage = new URLSearchParams(location.search).get('page');
+                page = (page) ? page : (uriPage ? Number(uriPage) : 1);
+                const uri = `/qboard/${qboard_id}/comments`;
+                const params = {
+                        page : page,
+                        recordSize : 5,
+                        pageSize : 10,
+                        qboard_id : qboard_id,
                     }
-                })
+                
+                const response = getJson(uri, params);
+                const pagination = response.pagination;
+                drawComments(response.list);
+                
+                drawPage(pagination, page);
             }
+            
+       
 			
+            
+              // 댓글 HTML draw
+              function drawComments(list) {
+					
+            	   if ( !list.length ) {
+                       document.querySelector('.comment-list').innerHTML = '<div class="cm_none"><p>등록된 댓글이 없습니다.</p></div>';
+                       return false;
+                   }
+
+                
+
+                  let commentHtml = '';
+
+                  list.forEach(qboard => {
+                      commentHtml += `
+                    	  <li >
+  						<div class="comment-card">
+  							<div class="comment_header flex-row">
+  								
+		
+  								<div class="comment_sub-header">
+  								<img class="comment_user-profile" alt="유저프로필" src="/images/qboard/default_profile.png" />
+  										
+  									<div class="comment_user-name-container">
+  										<a href="" class="comment_user-name" >${qboard.member_id}</a>
+  										
+  									</div>
+  									<span>작성자</span>
+  									<span class="comment_update" >${qboard.regDate}</span>
+  									
+  								</div>
+  								<div class="func_btns">
+  								<span ><button type="button" onclick="openCommentUpdatePopup(${qboard.comment_id});" class="btns"
+  									>수정</span></button>
+		                            <button type="button" onclick="deleteComment(${qboard.comment_id});" class="btns"><span class="icons icon_del">삭제</span></button>
+		                        	</div>
+		                        	
+  							</div>
+  							
+  							<div class="comment_body markdown-body">
+  								<p >${qboard.content}</p>
+  							</div>
+  							
+
+  						</div>
+  						</li>
+                      `;
+                  })
+
+                  document.querySelector('.comment-list').innerHTML = commentHtml;
+              }
+              
+              // 페이지네이션 HTML draw
+              function drawPage(pagination, page) {
+
+                  // 1. 필수 파라미터가 없는 경우, 페이지네이션 HTML을 제거한 후 로직 종료
+                  if ( !pagination || !page ) {
+                      document.querySelector('.paging').innerHTML = '';
+                      throw new Error('Missing required parameters...');
+                  }
+
+                  // 2. 페이지네이션 HTML을 그릴 변수
+                  let html = '';
+
+                  // 3. 첫/이전 페이지 버튼 추가
+                  if (pagination.existPrevPage) {
+                      html += `
+                          <a href="javascript:void(0);" onclick="findAllComment(1)" class="page_bt first">첫 페이지</a>
+                          <a href="javascript:void(0);" onclick="findAllComment(${pagination.startPage - 1})" class="page_bt prev">이전 페이지</a>
+                      `;
+                  }
+
+                  // 4. 페이지 번호 추가
+                  html += '<p>';
+                  for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+                      html += `<a href="javascript:void(0);" onclick="findAllComment(${i});">${i}</a>`
+                  }
+                  html += '</p>';
+
+                  // 5. 다음/끝 페이지 버튼 추가
+                  if (pagination.existNextPage) {
+                      html += `
+                          <a href="javascript:void(0);" onclick="findAllComment(${pagination.endPage + 1});" class="page_bt next">다음 페이지</a>
+                          <a href="javascript:void(0);" onclick="findAllComment(${pagination.totalPageCount});" class="page_bt last">마지막 페이지</a>
+                      `;
+                  }
+
+                  // 6. <div class="paging"></div> 태그에 변수 html에 담긴 내용을 렌더링
+                  const paging = document.querySelector('.paging');
+                  paging.innerHTML = html;
+
+                  // 7. 사용자가 클릭한 페이지 번호(page) 또는 끝 페이지 번호(totalPageCount)에 해당되는 a 태그를 찾아 활성화(active) 처리한 후 클릭 이벤트 제거
+                  const currentPage = Array.from(paging.querySelectorAll('a')).find(a => (Number(a.text) === page || Number(a.text) === pagination.totalPageCount));
+                  currentPage.classList.add('on');
+                  currentPage.removeAttribute('onclick');
+
+                  // 8. 페이지 URI 강제 변경
+                  const qbpard_id = new URLSearchParams(location.search).get('comment_id');
+                  history.replaceState({}, '', location.pathname + `?comment_id=${qboard_id}&page=${currentPage.text}`);
+              }
+              
+			
+              
+              
+           
         /*]]>*/
 
         </script>
 </th:block>
-   
+    
 
 </body>
 </html>

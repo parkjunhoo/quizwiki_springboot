@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.multi.quizwiki.qboard.dao.QboardLikeMapper">
+	<sql id="LikeColumns">
+		id
+		,qboard_id
+		,member_id
+		,like_check
+	</sql>
+	
+	<!-- 좋아요 저장 -->
+	<insert id="saveLike" parameterType="Long">
+		insert into qboard_like (
+		<include refid="LikeColumns"/>
+		) VALUES (
+			#{id}
+			,#{qboard_id}
+			,#{member_id}
+			,0
+		)
+	</insert>
+	<!-- 좋아요 여부 확인 -->
+	<select id="likeCheck" parameterType="like">
+		select count(*)
+		from qboard_like
+		where qboard_id =#{qboard_id}
+		AND member_id =#{member_id}	
+		
+	</select>
+	<!-- 좋아요 삭제 -->
+	<delete id="deleteLike" parameterType="Long">
+		update qboard_like
+		SET 
+			like_check=1
+		WHERE 
+			qboard_id =#{qboard_id}
+		AND 
+			member_id =#{member_id}	
+	</delete>
+ 
+</mapper>
