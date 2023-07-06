@@ -106,7 +106,22 @@
 
 			})
 </script>
-
+	<script type="text/javascript">
+		function popupPreview(no){
+			const url = "/popup/problem/preview?no="+no;
+			
+			let width = Math.floor(screen.width * 0.8);
+			let height = Math.floor(screen.height * 0.8);
+			let left = Math.floor((screen.width - width) / 2);
+			let top = Math.floor((screen.height - height) / 2);
+			
+			let cbt = window.open(
+				url,
+				"문제 보기",
+				"width="+width+", height="+height+", top="+top+", left="+left
+			);
+		}
+	</script>
 </head>
 <body>
 
@@ -270,7 +285,8 @@
 						<tr th:if="${solvs==null or solvs.size==0}">
 								<td colspan="6" class="empty_li">푼 문제가 없습니다.</td>
 						</tr>
-						<tr th:each="solv:${solvs}" th:unless="${solvs==null or solvs.size==0}">
+						<tr th:each="solv:${solvs}" th:unless="${solvs==null or solvs.size==0}"
+						th:attr="onclick=|popupPreview(${solv.problem_id})|" style="cursor:pointer;">
 							<td><span th:text="${solv.solv_id}"></span></td>
 							<td><span th:text="${solv.problem_id}"></span></td>
 							<td><span th:text="${solv.problem.problem_answer}"></span></td>
@@ -318,5 +334,7 @@
 		</div>
 	</section>
 	<footer id="mainfooter"></footer>
+	
+
 </body>
 </html>

@@ -34,6 +34,6 @@ public class PopupController {
 		ProblemEntity problem = problemService.problem_findByProblemId(no);
 		model.addAttribute("problem",problem);
 		
-		return "thymeleaf/pboard/cbt";
+		return "thymeleaf/popup/problem_preview_popup";
 	}
 }

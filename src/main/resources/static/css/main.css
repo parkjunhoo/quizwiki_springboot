@@ -434,3 +434,21 @@ section{
 	font-size: 4em;
 	line-height: 1;
 }
+
+.content-box{
+	width:100%;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-around;
+}
+/*  */
+
+
+.section-card{
+	width: 30%;
+	aspect-ratio: 1 / 1.1;
+	border-radius: 1rem;
+	background-color: red;
+}
+
+
