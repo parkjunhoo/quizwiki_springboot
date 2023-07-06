@@ -134,15 +134,12 @@ layout:fragment="content"><head>
             <h3>댓글 수정</h3>
             <div class="pop_container" >
             
-                  
-             <textarea id="modalContent" name="modalContent"  placeholder="수정할 내용을 입력해 주세요."
-              
-              style="width: 70%; height:70%;"></textarea>
+             <textarea id="modalContent" name="modalContent" cols="80" rows="10" placeholder="수정할 내용을 입력해 주세요."></textarea>
                         
                    
-                <p class="btn_set">
-                    <button type="button" id="commentUpdateBtn" class="btns btn_st2">수정</button>
-                    <button type="button" class="btns btn_bdr2" onclick="closeCommentUpdatePopup();">취소</button>
+                <p class="btn_set flex-row" >
+                   	<span><button type="button" id="commentUpdateBtn" class="btns btn_st2">수정</button></span>
+                    <span><button type="button" class="btns btn_bdr2" onclick="closeCommentUpdatePopup();">취소</button></span>
                 </p>
             
             <button type="button" class="btn_close" onclick="closeCommentUpdatePopup();"><span><i class="far fa-times-circle"></i></span></button>
@@ -165,7 +162,7 @@ layout:fragment="content"><head>
             function openCommentUpdatePopup(comment_id) {
 
             	 
-        	
+        		alert("update 오픈");
         		const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
                 const uri = `/qboard/${qboard_id}/comments/${comment_id}`;
                 const response = getJson(uri);

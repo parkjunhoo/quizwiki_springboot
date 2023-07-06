@@ -68,6 +68,11 @@ public class QboardDAOImpl implements QboardDAO {
 		return template.selectList("com.multi.quizwiki.qboard.findByCategory",category);
 	}
 
+	@Override
+	public List<QboardDTO> findBySubject(String subject) {
+		return template.selectList("com.multi.quizwiki.qboard.findBySubject",subject);
+	}
+
 	
 
 	

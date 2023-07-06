@@ -24,5 +24,6 @@ public interface QboardService {
 	  
 	  List<QboardDTO> findByCategory(String category);
 
+	  List<QboardDTO> findBySubject(String Subject);
 
 } 

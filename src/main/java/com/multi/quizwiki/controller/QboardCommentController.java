@@ -24,7 +24,8 @@ public class QboardCommentController {
 
     // 댓글 상세정보 조회
     @GetMapping("/qboard/{qboard_id}/comments/{comment_id}")
-    public CommentResponse findById(@PathVariable final Long qboard_id, @PathVariable final Long comment_id) {
+    public CommentResponse findById(@PathVariable final Long qboard_id, 
+    		@PathVariable final Long comment_id) {
         log.info("댓글 상세정보 조회 컨트롤러 실행");
     	return commentservice.findById(comment_id);
     }

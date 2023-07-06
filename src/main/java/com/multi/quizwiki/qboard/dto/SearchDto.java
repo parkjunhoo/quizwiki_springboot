@@ -20,12 +20,14 @@ public class SearchDto {
 	    private String searchType;    // 검색 유형
 	    private Pagination pagination;
 	    private String category;
+	    private String subject;
 	    
 	    public SearchDto() {
 	        this.page = 1;
 	        this.recordSize = 10;
 	        this.pageSize = 10;
 	        this.category = null;
+	        this.subject = null;
 	    }
 
 	    public int getOffset() {

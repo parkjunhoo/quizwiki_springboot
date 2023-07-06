@@ -1,5 +1,5 @@
-	<!DOCTYPE html>
-	<html xmlns:th="http://www.thymeleaf.org"
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 layout:decorate="~{/layout/qboard_layout}"
 layout:fragment="content"><head>
@@ -87,9 +87,9 @@ layout:fragment="content"><head>
 
 						
 						<ul class="nav navbar-nav" style='float:left;' id="searchType" name="searchType">
-							<li class="active" th:value="국어"><a href="/quizwiki/qboard/list.do?category=국어">국어</a></li>
-							<li class="active" th:value="수학"><a href="/quizwiki/qboard/list.do?category=수학">수학</a></li>
-							<li class="active" th:value="영어"><a href="/quizwiki/qboard/list.do?category=영어">영어</a></li>
+							<li class="active" th:value="국어"><a href="/quizwiki/qboard/list.do?subject=국어">국어</a></li>
+							<li class="active" th:value="수학"><a href="/quizwiki/qboard/list.do?subject=수학">수학</a></li>
+							<li class="active" th:value="영어"><a href="/quizwiki/qboard/list.do?subject=영어">영어</a></li>
 							
 							<li><a href="/quizwiki/qboard/list.do">전체</a></li>
 						</ul> 
@@ -215,8 +215,9 @@ layout:fragment="content"><head>
                               </h3>
                             </div>
                             </a>
-                            <p class="question__body" th:text="${qboard.content}" />
-                         
+                             <p class="question__body" th:text="${qboard.content} 
+                            
+                         	
                             
                             
                             <div class="question__info-footer">
@@ -308,7 +309,7 @@ layout:fragment="content"><head>
                 // 1. 검색 폼
                 const form = document.getElementById('searchForm');
 				
-                const categoryParam = new URLSearchParams(window.location.search).get('category');
+                const categoryParam = new URLSearchParams(window.location.search).get('subject');
 
                 
                 // 2. drawPage( )의 각 버튼에 선언된 onclick 이벤트를 통해 전달받는 page(페이지 번호)를 기준으로 객체 생성
@@ -321,9 +322,7 @@ layout:fragment="content"><head>
                 if(categoryParam!=null){
                 	queryParams.category= categoryParam;
                 }
-                if(categoryParam!=null){
-                    queryParams.category= categoryParam;
-                 }
+               
 
 
                 /*

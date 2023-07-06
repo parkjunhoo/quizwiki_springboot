@@ -34,7 +34,7 @@
         FROM
             qboard_comment
         WHERE
-            qboard_id = #{value}
+           comment_id =#{value}
     </select>
 
 

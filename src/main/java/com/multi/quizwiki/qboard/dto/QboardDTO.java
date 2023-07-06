@@ -18,6 +18,7 @@ public class QboardDTO {
 	private Long qboard_id;
 	private String member_id;
 	private String category;
+	private String subject;
 	private String title; // //게시물 제목
 	private String content; //게시물내용 text
 	private LocalDateTime regDate; // 게시물등록시간 datetime

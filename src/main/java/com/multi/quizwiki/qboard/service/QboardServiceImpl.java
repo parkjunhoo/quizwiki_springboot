@@ -82,6 +82,12 @@ public class QboardServiceImpl implements QboardService {
 		return qboarddao.findByCategory(category);
 		
 	}
+
+	@Override
+	public List<QboardDTO> findBySubject(String Subject) {
+		
+		return qboarddao.findBySubject(Subject);
+	}
 	
 
 		

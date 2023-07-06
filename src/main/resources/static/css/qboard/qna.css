@@ -256,7 +256,7 @@ question .title-sub__text .course__title {
 .question .question__body {
     height: 24px;
      overflow: hidden;
-     text-overflow: ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
     white-space: normal;
     line-height: 1.5;

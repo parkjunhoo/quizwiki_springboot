@@ -111,6 +111,10 @@
   	select * from qboard where category =#{category}
   </select>
   
+  <select id="findBySubject" parameterType="String" resultType="qboard">
+  	select * from qboard where subject =#{subject}
+  </select>
+  
   
   <!-- 좋아요 체크  -->
  <!--  <select id="checkLike">

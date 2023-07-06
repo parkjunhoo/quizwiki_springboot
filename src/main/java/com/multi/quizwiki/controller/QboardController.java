@@ -165,10 +165,12 @@ public class QboardController {
 	
 	
 	  @GetMapping("/qboard/list.do") 
-	  public String QboardList(@ModelAttribute("params") SearchDto params, Model model ) {
+	  public String QboardList(@ModelAttribute("params") SearchDto params, Model model, String category ) {
 		  log.info("list.do 실행");
 		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
+		  model.addAttribute("category", category);
 		  model.addAttribute("category",params.getCategory());
+		  model.addAttribute("subject",params.getSubject());
 		  model.addAttribute("qboardlist",qboardlist); 
 		  
 	  	return "thymeleaf/qboard/qboard_list"; 

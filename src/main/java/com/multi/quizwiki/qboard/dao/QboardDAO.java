@@ -24,5 +24,5 @@ public interface QboardDAO {
 	 
 	 List<QboardDTO> findByCategory(String category);
 	 	
-	 
+	 List<QboardDTO> findBySubject(String subject);
 }
