@@ -33,7 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.MemberDTO;
 import com.multi.quizwiki.qboard.dto.CommentResponse;
-import com.multi.quizwiki.qboard.dto.CommentSearchDTO;
 import com.multi.quizwiki.qboard.dto.FileRequest;
 import com.multi.quizwiki.qboard.dto.LikeDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
@@ -177,15 +176,12 @@ public class QboardController {
 	  
 	  @GetMapping("/qboard/read.do" )
 		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, 
-			 Model model, CommentSearchDTO params, HttpSession session,HttpServletRequest req) {
+			 Model model, HttpSession session,HttpServletRequest req) {
 		  
 		  QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 			  qboardservice.increaseViewCount(qboard_id);
-			  commentservice.count(params);
-			  log.info("params ="+params);
 			 model.addAttribute("qboard", qboard);
-			 LikeDTO like = new LikeDTO();
-			 model.addAttribute("like",like);
+			 
 			return "thymeleaf/qboard/qboard_read";
 		 }
 		 	

@@ -215,15 +215,14 @@ layout:fragment="content"><head>
                               </h3>
                             </div>
                             </a>
-                            <p class="question__body" >
-                            ${qboard.content}
-                            </p>
+                            <p class="question__body" th:text="${qboard.content}" />
+                         
+                            
                             
                             <div class="question__info-footer">
                               <div class="question__info-detail">
                                 <span class="question__info-user-name" > ${qboard.member_id}</span>
-                                <span>${qboard.regDate}</span>
-                                <div th:utext="${qboard.previewHTML}"></div>
+                                <span>&nbsp;·&nbsp;</span>  <span>${qboard.regDate}</span>
 
                                 	
                               </div>	
