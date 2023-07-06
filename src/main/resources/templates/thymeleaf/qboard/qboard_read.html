@@ -73,10 +73,9 @@ layout:fragment="content"><head>
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
 					<button id="likeBtn">
 						<img src="/images/qboard/thumbsup.svg" width="16px"; height="16px" >
-						<div class="text freatures_text">0</div>
 						
 					</button>
-					
+					<span><div class="text freatures_text">0</div></span>
 				</div>
 			</div>
 
@@ -136,7 +135,9 @@ layout:fragment="content"><head>
             <div class="pop_container" >
             
                   
-             <textarea id="modalContent" name="modalContent"  placeholder="수정할 내용을 입력해 주세요."></textarea>
+             <textarea id="modalContent" name="modalContent"  placeholder="수정할 내용을 입력해 주세요."
+              
+              style="width: 70%; height:70%;"></textarea>
                         
                    
                 <p class="btn_set">
@@ -156,6 +157,12 @@ layout:fragment="content"><head>
         	 window.onload = () => {
                 findAllComment();
             }
+        	 
+        	 function like() {
+        		 const like_check = /*[[ ${like.like_check} ]]*/'';
+        		 c
+        		 
+        	 }
         
         	
         	// 댓글 수정 팝업 open
@@ -312,11 +319,10 @@ layout:fragment="content"><head>
                       commentHtml += `
                     	  <li >
   						<div class="comment-card">
-  							<div class="comment_header flex-row">
+  							<div class="comment_header flex-row justify-content " >
   								
 		
   								<div class="comment_sub-header">
-  								<img class="comment_user-profile" alt="유저프로필" src="/images/qboard/default_profile.png" />
   										
   									<div class="comment_user-name-container">
   										<a href="" class="comment_user-name" >${qboard.member_id}</a>
@@ -328,8 +334,8 @@ layout:fragment="content"><head>
   								</div>
   								<div class="func_btns">
   								<span ><button type="button" onclick="openCommentUpdatePopup(${qboard.comment_id});" class="btns"
-  									>수정</span></button>
-		                            <button type="button" onclick="deleteComment(${qboard.comment_id});" class="btns"><span class="icons icon_del">삭제</span></button>
+  									><i class="fa-regular fa-pen-to-square"></i>수정</span></button>
+		                            <button type="button" onclick="deleteComment(${qboard.comment_id});" class="btns"><span class="icons icon_del"><i class="fa-regular fa-trash-can"></i>삭제</span></button>
 		                        	</div>
 		                        	
   							</div>

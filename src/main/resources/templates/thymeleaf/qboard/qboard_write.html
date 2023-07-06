@@ -98,7 +98,7 @@ layout:fragment="content">
 				<span style='float: right;'> <input type="button"
 					class="btn btn-default" value="취소" onclick="history.back();" /> 
 				</span>
-				<button type="button" id="saveBtn" onclick="saveQboardd();" class="btn btn-success" value="질문등록">질문 등록</button>	
+				<button type="button" id="saveBtn" onclick="saveQboard();" class="btn btn-success" value="질문등록">질문 등록</button>	
 				
 			</form>
 
@@ -147,11 +147,7 @@ layout:fragment="content">
 	              var reader = new FileReader();
 	              
 	              reader.onload = function () {
-	                  /*
-	                  Note: Now we need to register the blob in TinyMCEs image blob
-	                  registry. In the next release this part hopefully won't be
-	                  necessary, as we are looking to handle it internally.
-	                  */
+	                
 	                  var id = 'blobid' + (new Date()).getTime();
 	                  var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
 	                  var base64 = reader.result.split(',')[1];
@@ -159,7 +155,6 @@ layout:fragment="content">
 	                  var blobInfo = blobCache.create(id, file, base64);                                    
 	                  blobCache.add(blobInfo);
 	  
-	                  /* call the callback and populate the Title field with the file name */
 	                  cb(blobInfo.blobUri(), { title: file.name });
 	              };
 	        
@@ -204,25 +199,9 @@ layout:fragment="content">
             }
 
 	
-            // 게시글 저장(수정)
-            function saveQboard() {
-                const form = document.getElementById('saveForm');
-                const fields = [form.title, form.content];
-                const fieldNames = ['제목', '내용'];
-				const qboard = /*[[ ${qboard == null} ]]*/''; 
-				console.log(qboard)
-                for (let i = 0, len = fields.length; i < len; i++) {
-                    isValid(fields[i], fieldNames[i]);
-                }
-                
-              
-                document.getElementById('saveBtn').disabled = true;
-
-                form.action = qboard ? '/quizwiki/qboard/save.do' : '/quizwiki/qboard/update.do';
-                form.submit();
-            }
             
-            function saveQboardd(){
+            
+            function saveQboard(){
             	 const form = document.getElementById('saveForm');
             	 const qboard = /*[[ ${qboard == null} ]]*/''; 
             	 const formData = new FormData();
@@ -235,7 +214,7 @@ layout:fragment="content">
             			 }
             	 };
             	 document.getElementById('saveBtn').disabled = true;
-
+					
                
             	 formData.append("sendData", new Blob([JSON.stringify(sendData),{type:"application/json"}]));
             	 
@@ -269,7 +248,7 @@ layout:fragment="content">
             function goListPage() {
                 const queryString = new URLSearchParams(location.search);
                 queryString.delete('id');
-                location.href = '/post/list.do' + '?' + queryString.toString();
+                location.href = '/qboard/list.do' + '?' + queryString.toString();
             }
             
             // 파일 선택

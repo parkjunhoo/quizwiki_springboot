@@ -635,6 +635,11 @@ a {
 	flex-direction:row;
 }
 
+.justify-content{
+	
+	justify-content : space-between;
+}
+
 .comment_header {
     padding-bottom: 20px;
     align-items: center;
