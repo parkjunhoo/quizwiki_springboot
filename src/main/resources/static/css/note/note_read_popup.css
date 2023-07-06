@@ -1,0 +1,33 @@
+.popup-header{
+	height:100px;
+	display: flex;
+}
+.popup-content{
+	margin-top: 110px;
+	height: calc(100vh - 90px);
+}
+.popup-header h2{
+	align-self: center;
+}
+
+
+.popup-content{
+	margin-top: 100px;
+	height: calc(100vh - 100px);
+}
+
+.title-input-wrap{
+	width:100%;
+	height:100%;
+	display: flex;
+}
+
+#workspace{
+	position: relative;
+}
+.protext-canvas{
+	position: absolute;
+	width:100%;
+	height:100%;
+	z-index:5;
+}

@@ -20,6 +20,7 @@ xmlns:th="http://www.thymeleaf.org">
 	<div class="popup-header">
 		<div class="title-input-wrap">
 			<input maxlength="30" id="titleInput" class="custom-input" type="text" placeholder="제목을 입력해주세요."/>
+			<div onclick="register()" class="custom-mini-btn blue-btn"><p>등록하기</p></div>
 		</div>
 		<div class="tool-bar">
 			<ul class="tool-btn-list">
@@ -38,6 +39,10 @@ xmlns:th="http://www.thymeleaf.org">
 				</li>
 				
 				<li onclick="changeTool(this.id)" id="pencilBtn" title="그리기 모드">
+					<div class="extra-tool">
+							<label class="extra-tool-label" for="lineThickInput">굵기:</label>
+							<input class="extra-tool-input" min="1" max="20" value="3" type="range" id="lineThickInput"/>
+					</div>
 				</li>
 				
 				<li onclick="changeTool(this.id)" id="lineBtn" title="선 그리기">
@@ -81,8 +86,11 @@ xmlns:th="http://www.thymeleaf.org">
 
 <script type="text/javascript">
 	///////////////////////이니셜라이징////////////////
+	$(".extra-tool").on("click",function(e){
+		e.stopPropagation();
+	});
+	
 	let currentIndex = 0;
-	let pageList = [];
 	
 	const c = new fabric.Canvas('c');
 	
@@ -97,22 +105,33 @@ xmlns:th="http://www.thymeleaf.org">
 	
 	resizeCanvas();
 	
-	pageList.push(c.toJSON());
 	
+
 	let doNotSync = false;
+	
+	c.freeDrawingBrush.width = parseInt(lineThickInput.value, 10);
+	
 	////////////////////////////////////////////////
 	let sortable = Sortable.create(pageArea, {
 		handle:".page-item",
 		animation:100,
 		onEnd: (e)=>{
-			console.log(e.newIndex + " == newIndex");
-			console.log(e.oldIndex + " == oldIndex");
-			changeArrObj(pageList,e.oldIndex,e.newIndex);
-			
+			changePage(e.newIndex, true);
 		},
 	})
 	
+	/////////////////////////////////////////////////
+	function getPageItem(n){
+		return pageArea.querySelector(".page-item:nth-child("+(n+1)+")");
+	}
 	
+	function getPageCanvas(n){
+		return pageArea.querySelector(".page-item:nth-child("+(n+1)+")").pageCanvas;
+	}
+	
+	function setPageCanvas(n,obj){
+		pageArea.querySelector(".page-item:nth-child("+(n+1)+")").pageCanvas = obj;
+	}
 	//////////////CANVAS EVENT/////////////////////
 	
     function changeColor(){
@@ -159,14 +178,14 @@ xmlns:th="http://www.thymeleaf.org">
     	
     	if(doNotSync) return;
     	
-	   	const target = document.querySelector(".page-item:nth-child(" + (currentIndex+1) + ")");
-	   	
+	   	const target = getPageItem(currentIndex);
 	   	const imageUrl = c.toDataURL({
 	   		  format: 'png',
 	   		  quality: 0.1,
 	   		  multiplier: 0.1,
 	  		});
 	   	target.style.backgroundImage = "url("+imageUrl+")";
+	   	setPageCanvas(currentIndex , c.toJSON());
     }
     
     
@@ -182,6 +201,13 @@ xmlns:th="http://www.thymeleaf.org">
 	//////////////////////////////////////////////
 	
 	////////////////////이벤트 핸들러///////////////////////
+	lineThickInput.addEventListener("input",()=>{
+		
+		c.freeDrawingBrush.width = parseInt(lineThickInput.value, 10);
+	});
+		
+	
+	
 	addPageBtn.addEventListener("click", ()=>{
 		addPage();
 	});
@@ -480,12 +506,6 @@ xmlns:th="http://www.thymeleaf.org">
     }
     //Delete END================================= 
     	
-   	////////////////////////////////////
-function savePage() {
-  editArrObj(pageList, currentIndex, c.toJSON());
-  doNotSync = true;
-  c.clear();
-}
 
 function addPage() {
   const li = document.createElement('li');
@@ -497,53 +517,36 @@ function addPage() {
 }
 
 function changePage(el, isNum) {
-  let index = null;
-  $(".active-page").removeClass("active-page");
-  if (isNum) {
-    index = el;
-    $("#pageArea li").eq(index).addClass("active-page");
-  } else {
-    index = $(el).index();
-    el.classList.add("active-page");
-  }
-  savePage();
-  currentIndex = index;
-  
-  if (pageList[index] == null) {
-    editArrObj(pageList, index, c.toJSON());
-  } else {
-    c.loadFromJSON(pageList[index], function() {
-      c.renderAll();
-    });
-  }
-  
-  doNotSync = false;
+	let index = null;
+	$(".active-page").removeClass("active-page");
+	if (isNum) {
+	  index = el;
+	  $("#pageArea li").eq(index).addClass("active-page");
+	} else {
+	  index = $(el).index();
+	  el.classList.add("active-page");
+	}
+	
+	doNotSync = true;
+	c.clear();
+	c.loadFromJSON(getPageCanvas(index), ()=>{
+		c.renderAll();
+	});
+	doNotSync = false;
+	currentIndex = index;
 }
 
 function removePage() {
-  if (pageList.length <= 1) {
-    return;
-  }
-  
-  let nextIndex = currentIndex - 1;
-  let cashIndex = currentIndex;
-  
-  if (currentIndex === 0) {
-    nextIndex = 1;
-  }
-  
-  doNotSync = true;
-  changePage(nextIndex, true);
-  
-  // 요소 제거 이후 currentIndex 재설정
-  if (cashIndex < pageList.length - 1) {
-    currentIndex = cashIndex;
-  } else {
-    currentIndex = pageList.length - 2;
-  }
-  
-  pageList.splice(cashIndex, 1);
-  $("#pageArea li").eq(cashIndex).remove();
+	if (pageArea.childElementCount <= 1) {
+	  return;
+	}
+  	
+	$("#pageArea li").eq(currentIndex).remove();
+	let nextIndex = currentIndex -1;
+	if(nextIndex < 0){
+		nextIndex = 0;
+	}
+  	changePage(nextIndex, true);
 }
 
 removePageBtn.addEventListener("click", removePage);
@@ -571,5 +574,72 @@ removePageBtn.addEventListener("click", removePage);
 		[arr[idx]] = [obj];
 	}
 //////////////////////////
+
+function register(){
+	const titleValue = titleInput.value;
+	
+	if(titleValue.trim().length <= 0){
+		Swal.fire({
+			title:'제목을 입력해주세요.',
+			confirmButtonColor: '#3085d6',
+			confirmButtonText:'닫기'
+		});
+		return;
+	}
+	
+	let pageList = [];
+	
+	const liList = Array.from(pageArea.getElementsByTagName('li'));
+	
+	liList.forEach(({pageCanvas})=>{
+		pageList.push({notePageContent:JSON.stringify(pageCanvas)});
+	});
+	
+	const noteData = {
+		noteTitle:	titleValue,
+		notePrivate: false,
+	};
+	
+	const sendData = {
+		note:noteData,
+		notepage:pageList
+	}
+	
+	$.ajax({
+		url:"/note/write",
+		type:"POST",
+		data:JSON.stringify(sendData),
+		contentType: "application/json",
+		success: (res)=>{
+			if(res === "notlogin"){
+				Swal.fire({
+				      icon: 'error',
+				      title: '로그인 이후 가능합니다..',
+				      confirmButtonColor: '#3085d6',
+			    	  confirmButtonText: '닫기',
+				    });
+			}
+				
+			if(res === "false"){
+				Swal.fire({
+				      icon: 'error',
+				      title: '에러가 발생했습니다.',
+				      confirmButtonColor: '#3085d6',
+			    	  confirmButtonText: '닫기',
+				    });
+			}
+			
+			Swal.fire({
+			      icon: 'success',
+			      title: '등록이 되었습니다.',
+			      confirmButtonColor: '#3085d6',
+		    	  confirmButtonText: '닫기',
+			    }).then(()=>{
+			    	window.opener.fromChild("done");
+			    	window.close();
+			    });
+		}
+	});
+}
 </script>
 </html>

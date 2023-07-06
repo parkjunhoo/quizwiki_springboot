@@ -129,6 +129,37 @@
 	border-radius: 15%;
 	cursor:pointer;
 }
+.extra-tool{
+    position: absolute;
+    top: 100%;
+    margin-top: 10px;
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #c9c9c9;
+    cursor: default;
+    display: flex;
+    align-items:center;
+    visibility: hidden;
+}
+.active-tool .extra-tool{
+	visibility: visible;
+}
+
+.extra-tool-label{
+	width:45px;
+	font-size:14px;
+	font-family: "Pretendard";
+	color:black;
+}
+.extra-tool-input{
+	color:black;
+	font-size: 5px;
+	display: flex;
+    width: 100px;
+    height: 25px;
+    top: 0;
+    left: 0;
+}
 #textBtn{
 	background-image:url('/images/note/icons/itext.png');
 }

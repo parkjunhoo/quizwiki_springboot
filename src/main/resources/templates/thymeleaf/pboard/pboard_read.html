@@ -41,6 +41,9 @@ layout:fragment="content"
 		<div class="custom-btn-list">
 			<div id="pboardLikeBtn" class="custom-btn blue-btn"><i class="fa-solid fa-thumbs-up"></i>추천하기</div>
 			<div onclick="openCBT()" class="custom-btn green-btn"><i class="fa-solid fa-pen"></i>문제 풀어보기</div>
+			<th:block th:if="${session.user != null}">
+				<div th:if="${session.user.member_id == pboard.memberId}" onclick="location.href='/pboard/edit?cate='+new URLSearchParams(window.location.search).get('cate')+'&no='+new URLSearchParams(window.location.search).get('no')" class="custom-btn navy-btn"><i class="fa-solid fa-pen"></i>수정하기</div>
+			</th:block>
 		</div>
 		
 		<div class="comment-area" th:with="replyList=${pboard.pboardReplyList}">
