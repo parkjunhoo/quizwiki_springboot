@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-  	<link rel="stylesheet" type="text/css" href="/css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/header.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/footer.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="/css/mypage/mypage_header.css" />
+<link rel="stylesheet" type="text/css" href="/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/css/header.css" />
+<link rel="stylesheet" type="text/css" href="/css/footer.css" />
+<link rel="stylesheet" type="text/css" href="/css/main.css" />
+
+<link rel="stylesheet" type="text/css"
+	href="/css/mypage/mypage_header.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script th:inline="javascript">
+$(document).ready(function() {
+	
+	var id = [[${id}]]
+	$("#mypageCategory>li").each(function(){
+		$("#mypageCategory>li").removeAttr("class");
+		$("#"+id).addClass("on");
+		if(id==null){
+			$("#mycontentroom").addClass("on");
+		}
+		$(this).on("click",function(){
+			clickid=$(this).attr("id");
+			url=$(this).children("a").attr("href")
+			if(clickid=="mycontentroom"|clickid=="myquestion"|clickid=="modify"){
+				location.href=url+"?id="+clickid
+			}else{
+				location.href=url+"&id="+clickid
+			}
+			
+			
+		})
+	});
+});
+</script>
+
 </head>
 <body>
 	<th:block th:replace="/fragment/header :: header"></th:block>
 	<section>
 		<th:block th:replace="/thymeleaf/mypage/mypage_header :: menu"></th:block>
-		<th:block layout:fragment ="content"></th:block>
+		<th:block layout:fragment="content"></th:block>
 	</section>
 	<th:block th:replace="/fragment/footer :: footer"></th:block>
 </body>

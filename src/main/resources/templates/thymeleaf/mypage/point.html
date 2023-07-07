@@ -23,23 +23,27 @@
 <script type="text/javascript">
 	$(document).ready(
 			function() {
-				
-				$("#day1").on("click", function() {
-					var now = new Date()
-					var yesterday = new Date(now.setDate(now.getDate() -1));//하루전 날짜로 셋팅	
-					var yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 로컬 날짜로 변환
-					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
-					$("#startday").attr("value",a)
-					$("#endday").attr("value",a)
-					now = new Date()
 
-				})
+				$("#day1").on(
+						"click",
+						function() {
+							var now = new Date()
+							var yesterday = new Date(now
+									.setDate(now.getDate() ));//하루전 날짜로 셋팅	
+							var yesterday = new Date(now.getFullYear(), now
+									.getMonth(), now.getDate()); // 로컬 날짜로 변환
+							var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
+							$("#startday").attr("value", a)
+							$("#endday").attr("value", a)
+							now = new Date()
+
+						})
 				$("#day3").on("click", function() {
 					var now = new Date()
 					var yesterday = new Date(now.setDate(now.getDate() - 3));//하루전 날짜로 셋팅	
 					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
-					$("#startday").attr("value",a)
-					$("#endday").attr("value",a)
+					$("#startday").attr("value", a)
+					$("#endday").attr("value", a)
 					now = new Date()
 
 				})
@@ -47,8 +51,8 @@
 					var now = new Date()
 					var yesterday = new Date(now.setDate(now.getDate() - 7));//하루전 날짜로 셋팅	
 					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
-					$("#startday").attr("value",a)
-					$("#endday").attr("value",a)
+					$("#startday").attr("value", a)
+					$("#endday").attr("value", a)
 					now = new Date()
 				})
 
@@ -121,83 +125,94 @@
 								포인트</strong>
 						</p>
 					</div>
-					
-						<div class="search_bar flex_wrap">
-							<ul class="multi_line">
-								<li><input type="radio" name="day" id="day1"> <label
-									for="day1">1일</label></li>
-								<li><input type="radio" name="day" id="day3">
-									<label for="day3">3일</label></li>
-								<li><input type="radio" name="day" id="day7">
-									<label for="day7">7일</label></li>
-							</ul>
-							<form action="/mypage/point" method="post">
+
+					<div class="search_bar flex_wrap">
+						<ul class="multi_line">
+							<li><input type="radio" name="day" id="day1"> <label
+								for="day1">1일</label></li>
+							<li><input type="radio" name="day" id="day3"> <label
+								for="day3">3일</label></li>
+							<li><input type="radio" name="day" id="day7"> <label
+								for="day7">7일</label></li>
+						</ul>
+						<form action="/mypage/point" method="post">
 							<div class="calendar_box flex_wrap">
-							<input type="hidden" name="member_id" value="test">
 								<div class="dateBox">
-									<input type="text" name="startday" id="startday" class="calendar"
-										value=""> <img class="ui-datepicker-trigger"
-										src="../images/calendar.png" alt="Select date"
-										title="Select date">
+									<th:block th:if="${startday} == null">
+										<input type="text" name="startday" id="startday"
+											class="calendar" value="">
+									</th:block>
+									<th:block th:unless="${startday} == null">
+										<input type="text" name="startday" id="startday"
+											class="calendar" th:value="${startday}">
+									</th:block>
+									<img class="ui-datepicker-trigger" src="../images/calendar.png"
+										alt="Select date" title="Select date">
 								</div>
 								<div class="dateBox">─</div>
 								<div class="dateBox">
-									<input type="text" name="endday" id="endday" class="calendar"
-										value=""> <img class="ui-datepicker-trigger"
-										src="../images/calendar.png" alt="Select date"
-										title="Select date">
+									<th:block th:if="${endday} == null">
+										<input type="text" name="endday" id="endday" class="calendar"
+											value="">
+									</th:block>
+									<th:block th:unless="${endday} == null">
+										<input type="text" name="endday" id="endday" class="calendar"
+											th:value="${endday}">
+									</th:block>
+									<img class="ui-datepicker-trigger" src="../images/calendar.png"
+										alt="Select date" title="Select date">
 								</div>
 								<button class="search" type="submit">조회</button>
 							</div>
-					</form>
+						</form>
+					</div>
 				</div>
-			</div>
-			<!-- // 캐시내역 검색 -->
+				<!-- // 캐시내역 검색 -->
 
-			<div class="inner_section">
+				<div class="inner_section">
 
 
-				<table class="basic_board">
-					<caption>마일리지 사용내역을 확인 할 수 있습니다.</caption>
+					<table class="basic_board">
+						<caption>마일리지 사용내역을 확인 할 수 있습니다.</caption>
 
-					<colgroup>
-						<col width="5%">
-						<col width="65%">
-						<col width="15%">
-						<col width="15%">
-					</colgroup>
+						<colgroup>
+							<col width="5%">
+							<col width="65%">
+							<col width="15%">
+							<col width="15%">
+						</colgroup>
 
-					<thead>
-						<tr>
-							<th>번호</th>
-							<th>내용</th>
-							<th>포인트</th>
-							<th>적립/차감일자</th>
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th>내용</th>
+								<th>포인트</th>
+								<th>적립/차감일자</th>
 
-						</tr>
-					</thead>
+							</tr>
+						</thead>
 
-					<tbody>
-						<tr th:if="${pointlist.size==0}">
-							<td colspan="4" class="empty_li">포인트가 없습니다.</td>
-						</tr>
-						<tr th:each="point:${pointlist}" th:unless="${pointlist.size==0}">
-							<td><span th:text="${point.mypage_point_id}"></span></td>
-							<td><span th:text="${point.point_content}"></span></td>
-							<td><span th:text="${point.point_amount}"></span></td>
-							<td><span th:text="${point.point_date}"></span></td>
-						</tr>
+						<tbody>
+							<tr th:if="${pointlist.size==0}">
+								<td colspan="4" class="empty_li">포인트가 없습니다.</td>
+							</tr>
+							<tr th:each="point:${pointlist}" th:unless="${pointlist.size==0}">
+								<td><span th:text="${point.mypage_point_id}"></span></td>
+								<td><span th:text="${point.point_content}"></span></td>
+								<td><span th:text="${point.point_amount}"></span></td>
+								<td><span th:text="${point.point_date}"></span></td>
+							</tr>
 
-					</tbody>
-				</table>
+						</tbody>
+					</table>
 
-				<div class="bbs_pagination">
-					<div class="page_num flex_wrap"></div>
+					<div class="bbs_pagination">
+						<div class="page_num flex_wrap"></div>
+					</div>
 				</div>
-			</div>
-			<!-- // 캐시내역 -->
+				<!-- // 캐시내역 -->
 
-		</div>
+			</div>
 		</div>
 	</section>
 	<footer id="mainfooter"></footer>
