@@ -91,15 +91,15 @@ section{
 
 @keyframes breath-title-text {
 	0%{
-		text-shadow: 5px 5px #000000;
+		text-shadow: 5px 5px #70b2ff;
 	}
 
 	50%{
-		text-shadow: 5px 5px #646464;
+		text-shadow: 5px 5px #0066a7;
 	}
 
 	100%{
-		text-shadow: 5px 5px #000000;
+		text-shadow: 5px 5px #70b2ff;
 	}
 }
 
