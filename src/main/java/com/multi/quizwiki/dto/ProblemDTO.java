@@ -1,10 +1,8 @@
 package com.multi.quizwiki.dto;
 
-import java.util.List;
+import java.sql.Timestamp;
 
 import org.apache.ibatis.type.Alias;
-
-import com.multi.quizwiki.mypage.dto.ProblemInquiryDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +24,12 @@ public class ProblemDTO {
 	private String problem_desc;
 	private String problem_status;
 	
+	///
 	private int problemInquiryCount;
 	private int problemLikeCount;
+	
+	private String memberId;
+	private Timestamp regDate;
+	private String cateName;
+	
 }
