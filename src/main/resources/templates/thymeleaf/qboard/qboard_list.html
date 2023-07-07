@@ -58,9 +58,9 @@ layout:fragment="content"><head>
 						<li onclick="location.href='/quizwiki/qboard/list.do?category=chats'">고민있어요</li>
 
 						<li class="side_select"
-							onclick="location.href='../qboard/list.do'">질문있어요</li>
+							onclick="location.href='../qboard/list.do?category=question'">질문있어요</li>
 
-						<li onclick="location.href='../pboard/list'">나만의오답노트</li>
+						<li onclick="location.href='../qboard/list.do?category=free'">나만의오답노트</li>
 					</ul>
 
 				</div>
@@ -82,7 +82,7 @@ layout:fragment="content"><head>
 
 						<span style='float: right;'> <input type="button"
 							class="btn btn-success" value="질문하기"
-							onclick="location.href='../qboard/write.do'" />
+							onclick="location.href='/qboard/write.do?category='+new URLSearchParams(window.location.search).get('category')" />
 						</span>
 
 						
@@ -309,8 +309,8 @@ layout:fragment="content"><head>
                 // 1. 검색 폼
                 const form = document.getElementById('searchForm');
 				
+                const subjectParam = new URLSearchParams(window.location.search).get('subject');
                 const categoryParam = new URLSearchParams(window.location.search).get('subject');
-
                 
                 // 2. drawPage( )의 각 버튼에 선언된 onclick 이벤트를 통해 전달받는 page(페이지 번호)를 기준으로 객체 생성
                 const queryParams = {
@@ -321,6 +321,9 @@ layout:fragment="content"><head>
                 }
                 if(categoryParam!=null){
                 	queryParams.category= categoryParam;
+                }
+                if(subjectParam!=null){
+                	queryParams.subject= subjectParam;
                 }
                
 
