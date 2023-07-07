@@ -166,5 +166,10 @@ public class ProblemDAOImpl implements ProblemDAO {
 		return problemRepo.findById(problemId).get();
 	}
 
+	@Override
+	public List<ProblemDTO> problem_findOrderByLike(int limit) {
+		return ss.selectList("com.multi.quizwiki.problem.selectProblemOrderByLike",limit);
+	}
+
 
 }

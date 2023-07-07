@@ -26,6 +26,9 @@
 		<result property="problem_desc" column="problem_desc"/>
 		<result property="problem_status" column="problem_status"/>
 		<result property="problemLikeCount" column="problemLikeCount"/>
+		<result property="memberId" column="memberId"/>
+		<result property="regDate" column="regDate"/>
+		<result property="cateName" column="cateName"/>
 	</resultMap>
 	
 	
@@ -48,7 +51,10 @@
 	
 	<select id="selectProblemOrderByLike" resultMap="problemWithLikeCount" parameterType="int">
 		select p.* ,
-		(select count(1) from problem_inquiry pl where pl.problem_id = p.problem_id) problemLikeCount
+		(select count(1) from problem_like pl where pl.problem_id = p.problem_id) problemLikeCount,
+		(select pb.member_id from pboard pb where pb.pboard_id = p.pboard_id) memberId,
+		(select pb.pboard_reg_date from pboard pb where pb.pboard_id = p.pboard_id) regDate,
+		(select pc.problem_cate_name from problem_cate pc where pc.problem_cate_id = p.problem_cate_id) cateName
 		from problem p
 		order by problemLikeCount desc
 		limit #{limit}

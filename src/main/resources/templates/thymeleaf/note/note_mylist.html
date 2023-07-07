@@ -47,7 +47,7 @@ layout:fragment="content"
 						<h2><span class="note-title" th:text="${note.noteTitle}"></span></h2>
 						<p>작성자: <span class="note-author" th:text="${note.memberId}">test</span></p>
 						<p th:if="${note.noteRegdate.after(today)}">작성일자: <span th:text="${#dates.format(note.noteRegdate, '오늘 HH시 mm분')}" class="note-regdate">2023-06-23</span></p>
-						<p th:unless="${note.noteRegdate.after(today)}">작성일자: <span th:text="${#dates.format(pboard.pboardRegDate, 'yy-MM-dd')}" class="note-regdate">2023-06-23</span></p>
+						<p th:unless="${note.noteRegdate.after(today)}">작성일자: <span th:text="${#dates.format(note.noteRegdate, 'yy-MM-dd')}" class="note-regdate">2023-06-23</span></p>
 						<p>페이지 수: <span class="note-page">[[${note.pageCount}]] 페이지</span></p>
 						<div style="display: flex; width:100%; margin:0 auto; justify-content: space-around;">
 							<div class="custom-btn blue-btn"><i class="fa-solid fa-pen-to-square"></i> 수정하기</div>

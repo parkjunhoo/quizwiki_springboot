@@ -1,5 +1,7 @@
 package com.multi.quizwiki.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.dto.PboardDTO;
+import com.multi.quizwiki.dto.ProblemDTO;
+import com.multi.quizwiki.main.service.MainService;
 import com.multi.quizwiki.member.service.MemberService;
+import com.multi.quizwiki.qboard.entity.QboardEntity;
 
 import lombok.NoArgsConstructor;
 import util.Utils;
@@ -23,13 +29,25 @@ public class MainPageController {
 	
 	MemberService memberService;
 	
+	MainService mainService;
+	
 	@Autowired
-	public MainPageController(MemberService memberService) {
+	public MainPageController(MemberService memberService , MainService mainService) {
 		this.memberService = memberService;
+		this.mainService = mainService;
 	}
 	
 	@RequestMapping("/main")
 	public String show_mainpage(Model model) {
+		
+		List<PboardDTO> pboardTopList = mainService.pboard_findOrderByLikeCount(10);
+		List<QboardEntity> qboardTopList = mainService.findTop10ByDeleteYnNotOrderByViewCountDesc();
+		List<ProblemDTO> problemTopList = mainService.problem_findOrderByLike(10);
+		
+		model.addAttribute("pboardTopList", pboardTopList);
+		model.addAttribute("qboardTopList", qboardTopList);
+		model.addAttribute("problemTopList", problemTopList);
+		
 		return "thymeleaf/mainpage/mainpage";
 	}
 	
