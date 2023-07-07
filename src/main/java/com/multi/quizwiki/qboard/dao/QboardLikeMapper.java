@@ -11,7 +11,7 @@ public interface QboardLikeMapper {
 	
 	void delelteLike(Long qboard_id);
 	
-	LikeDTO likeCheck(Long qobard_id, String member_id);
+	LikeDTO findHeart(Long qobard_id, String member_id);
 	
 	
 }

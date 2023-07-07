@@ -183,6 +183,8 @@ public class QboardController {
 		  QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 			  qboardservice.increaseViewCount(qboard_id);
 			 model.addAttribute("qboard", qboard);
+			 LikeDTO like = new LikeDTO();
+			 model.addAttribute("like",like);
 			 
 			return "thymeleaf/qboard/qboard_read";
 		 }

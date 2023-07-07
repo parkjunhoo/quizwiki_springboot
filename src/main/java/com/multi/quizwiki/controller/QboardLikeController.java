@@ -18,7 +18,7 @@ public class QboardLikeController {
 	//좋아요 여부 확인
 	@GetMapping("qboard/{qboard_id}/like/{member_id}")
 	public LikeDTO checkLike(@PathVariable Long qboard_id, @PathVariable String member_id) {
-		return likeservice.likeCheck(qboard_id, member_id);
+		return likeservice.findHeart(qboard_id, member_id);
 
 	}
 	//좋아요 저장 

@@ -140,7 +140,15 @@ button, select {
     text-transform: none;
 }
 
-
+#likeBtn {
+	color: #1b1c1d;
+    border-color: #e9ecef;
+    background-color: #fff;
+    padding: 11px;
+    border-radius: 8px;
+        font-weight: 400;
+    
+}
 
 .community-header {
     padding: 24px 0;
@@ -745,7 +753,7 @@ h4{
 }
 
 img {
-	    max-width: 100%;
+	max-width: 100%;
     display: block;
 }
 
@@ -803,6 +811,8 @@ img {
 	display: flex;
     justify-content: flex-end;
     align-items: center;
+    outline: none;
+    border:none;
 }
 
 a:hover {
@@ -815,10 +825,31 @@ a {
   
 }
 
+.btn-success {
+    color: white;
+    background-color: #0090f9;
+    border-color: #0090f9;
+}
 
-button {
-	border: none;
-	 outline: none;
+.btn {
+    margin-top: 5px;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 .fa-ellipsis-h:before, .fa-ellipsis:before {
     content: "\f141";

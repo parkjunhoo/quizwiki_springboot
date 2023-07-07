@@ -48,14 +48,14 @@ layout:fragment="content"><head>
 					</div>
 				
 			</div>
-			<ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="">
+			<ul class="dropdown-menu dropdown-menu-lg-end flex-row" aria-labelledby="" >
         <li>
-      <button  type="button" class="dropdown-item  post__edit-btn e-edit" onclick="goWritePage()" false="">
+      <button  type="button" class="btn dropdown-item  post__edit-btn e-edit" onclick="goWritePage()" false="">
         <span th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}"><i class="fa-regular fa-pen-to-square"></i>수정</span>
       </button>
     </li><li>
-      <button  th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}" type="button" class="dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
-        <span><i class="fa-regular fa-trash-can"></i>삭제</span>
+      <button  th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}" type="button" class=" btn dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
+        <span><i class=" fa-regular fa-trash-can"></i>삭제</span>
       </button>
     </li>
       </ul>
@@ -69,16 +69,17 @@ layout:fragment="content"><head>
 				<p>
 					</p>
 			</div>
+			<th:block th:if="${session.user != null}" >
 			<div class="post_features">
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
 					<button id="likeBtn">
-						<img src="/images/qboard/thumbsup.svg" width="16px"; height="16px" >
-						
+							<i class="fa-regular fa-heart" > 0</i>						
+							<i class="fa-solid fa-heart" style="color: red"></i>
 					</button>
-					<span><div class="text freatures_text">0</div></span>
+					
 				</div>
 			</div>
-
+			</th:block>
 		</div>
 	
 	
@@ -100,7 +101,7 @@ layout:fragment="content"><head>
 					<input type="text"  id="content" placeholder="댓글을 작성해주세요"
 						class="form-control form-control-lg " required="">
 					<div class="btns" style="max-width: 1200px";>
-					<button  type="button" class="btns" onclick="saveComment();" style= "font-size: 16px;">등 록</button >					                   	 
+					<button  type="button" class="btn btn-success" onclick="saveComment();" style= "font-size: 16px;">등 록</button >					                   	 
 					</div>
 			</div>
 				
@@ -153,16 +154,50 @@ layout:fragment="content"><head>
 			
         	 window.onload = () => {
                 findAllComment();
+                findHeart();
             }
         	 
-        	
+        	function findHeart(){
+        		const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
+                const member_id = /*[[ ${qboard.member_id} ]]*/'';
+        		const uri = `/qboard/${qboard_id}/like`;
+                const params = {
+                        
+                        qboard_id : qboard_id,
+                        member_id : member_id
+                        
+                    }
+                const response = getJson(uri,params);
+        	}
         
-        	
+            
+            //전체 댓글 조회
+              function findAllComment(page) {
+
+                const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
+                const uriPage = new URLSearchParams(location.search).get('page');
+                page = (page) ? page : (uriPage ? Number(uriPage) : 1);
+                const uri = `/qboard/${qboard_id}/comments`;
+                const params = {
+                        page : page,
+                        recordSize : 5,
+                        pageSize : 10,
+                        qboard_id : qboard_id,
+                    }
+                
+                const response = getJson(uri, params);
+                const pagination = response.pagination;
+                drawComments(response.list);
+                
+                drawPage(pagination, page);
+            }
+            
+       
+			
         	// 댓글 수정 팝업 open
             function openCommentUpdatePopup(comment_id) {
 
             	 
-        		alert("update 오픈");
         		const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
                 const uri = `/qboard/${qboard_id}/comments/${comment_id}`;
                 const response = getJson(uri);
@@ -271,30 +306,7 @@ layout:fragment="content"><head>
             	}
            
            
-            
-            //전체 댓글 조회
-              function findAllComment(page) {
-
-                const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
-                const uriPage = new URLSearchParams(location.search).get('page');
-                page = (page) ? page : (uriPage ? Number(uriPage) : 1);
-                const uri = `/qboard/${qboard_id}/comments`;
-                const params = {
-                        page : page,
-                        recordSize : 5,
-                        pageSize : 10,
-                        qboard_id : qboard_id,
-                    }
-                
-                const response = getJson(uri, params);
-                const pagination = response.pagination;
-                drawComments(response.list);
-                
-                drawPage(pagination, page);
-            }
-            
-       
-			
+        
             
               // 댓글 HTML draw
               function drawComments(list) {
@@ -325,9 +337,9 @@ layout:fragment="content"><head>
   									<span class="comment_update" >${qboard.regDate}</span>
   									
   								</div>
-  								<div class="func_btns">
-  								<span ><button type="button" onclick="openCommentUpdatePopup(${qboard.comment_id});" class="btns"
-  									><i class="fa-regular fa-pen-to-square"></i>수정</span></button>
+  								<div class="func_btns flex-row ">
+  								<button type="button" onclick="openCommentUpdatePopup(${qboard.comment_id});" class="btns"
+  									><i class="fa-regular fa-pen-to-square"></i>수정</button>
 		                            <button type="button" onclick="deleteComment(${qboard.comment_id});" class="btns"><span class="icons icon_del"><i class="fa-regular fa-trash-can"></i>삭제</span></button>
 		                        	</div>
 		                        	

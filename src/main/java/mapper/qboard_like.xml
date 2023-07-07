@@ -21,8 +21,8 @@
 		)
 	</insert>
 	<!-- 좋아요 여부 확인 -->
-	<select id="likeCheck" parameterType="like">
-		select like_check
+	<select id="findHeart" parameterType="like">
+		select *
 		from qboard_like
 		where qboard_id =#{qboard_id}
 		AND member_id =#{member_id}	

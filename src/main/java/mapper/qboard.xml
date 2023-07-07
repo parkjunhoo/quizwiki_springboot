@@ -35,15 +35,15 @@
                 </otherwise>
             </choose>
         </if>
-        <if test="category != null">
-            and	category =#{category}
+        <if test="subject != null">
+            and	subject =#{subject}
         </if>
     </sql>
   
   <!--게시물 등록  -->
   	<insert id="insert" parameterType="qboard" useGeneratedKeys="true" keyProperty="qboard_id">
     INSERT INTO qboard 
-    VALUES (#{qboard_id}, #{member_id},#{category},#{title}, #{content}, now(),null,0,0,0,0)
+    VALUES (#{qboard_id}, #{member_id},#{category},#{subject},#{title}, #{content}, now(),null,0,0,0,0)
 </insert>
  
  
