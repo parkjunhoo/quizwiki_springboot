@@ -112,7 +112,8 @@ section{
 
 
 #main-desc-section{
-	background-color:#f9f9f9;
+	padding: 2rem 0;
+	background-color:#fff1e2;
 }
 #main-desc-section h2{
 	font-family: "Esamanru";
