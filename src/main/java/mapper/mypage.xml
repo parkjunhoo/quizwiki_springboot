@@ -61,7 +61,7 @@
 		select count(note_id) from note where member_id=#{member_id} 
 	</select>
 	<select id="noteserch" resultType="note" parameterType="String">
-    SELECT * FROM note WHERE solv_reg_date &gt;= #{startday} AND solv_reg_date &lt;= #{endday} AND member_id = #{member_id}
+    SELECT * FROM note WHERE note_regdate &gt;= #{startday} AND note_regdate &lt;= #{endday} AND member_id = #{member_id}
 	</select>
 	<!--첨부파일  -->
 	<insert id="inquryFile" parameterType="inquryFile">
@@ -71,9 +71,10 @@
   		</foreach>
 	</insert>
 	<update id="fileupdate" parameterType="inquryFile">
-		update inqury_file set
+		
   		<foreach collection="list" item="file" separator=",">
-  		inqury_origin=#{file.inqury_origin}, inqury_store=#{file.inqury_store}
+  		update inqury_file 
+  		set inqury_origin=#{file.inqury_origin}, inqury_store=#{file.inqury_store}
   		where inqury_file_id=#{file.inqury_file_id}
   		</foreach>
 	</update>
