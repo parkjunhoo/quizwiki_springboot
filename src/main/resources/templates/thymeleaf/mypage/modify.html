@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" 
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-	  layout:decorate="~{/layout/mypagelayout}">
-
+<html xmlns:th="http//www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/mypagelayout}">
 <head>
 <meta charset="UTF-8">
 <title>QuizWiki 회원 정보 수정</title>
 
 <!-- css -->
 <link rel="stylesheet" type="text/css" href="/css/common.css" />
-<link rel="stylesheet" type="text/css"
-	href="/css/mypage/mycontentroom.css" />
+<link rel="stylesheet" type="text/css" href="/css/mypage/mycontentroom.css" />
 <link rel="stylesheet" type="text/css" href="/css/mypage/modify.css" />
 
 <script
@@ -18,60 +16,57 @@
 
 
 <!-- 우편번호 -->
-<script type="text/javascript"
-	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <!-- js -->
-<script type="text/javascript" src="/js/member/zipcode.js"></script>
-<script type="text/javascript" src="/js/member/signup.js"></script>
-<script type="text/javascript" src="/js/member/modify_mkt_opt.js"></script>
+<script type="text/javascript" src="../js/member/zipcode.js"></script>
+<script type="text/javascript" src="../js/member/signup.js"></script>
 
 <!-- 글꼴 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
 
 
 <script type="text/javascript">
+//비밀번호 일치 불일치
+function passChk(){
 	
-	//비밀번호 일치 불일치
-	function passChk() {
+	// document : 현재 문서를 의미함. 작성되고 있는 문서를 뜻함. 
+	// getElementByID('아이디') : 아이디에 적힌 값을 가진 id의 value를 get을 해서 password 변수 넣기
 
-		// document : 현재 문서를 의미함. 작성되고 있는 문서를 뜻함. 
-		// getElementByID('아이디') : 아이디에 적힌 값을 가진 id의 value를 get을 해서 password 변수 넣기
+	var pass = document.getElementById('pass');				//비밀번호 
+	var pass_check = document.getElementById('pass_check');	//비밀번호 확인
+	var msg = document.getElementById('msg');				//확인 메세지
+	var correctColor = "#5a49e4";	//일치했을 때 출력되는 색깔
+	var wrongColor ="#ff0000";		//틀렸을 때 출력되는 색깔
 
-		var pass = document.getElementById('pass'); //비밀번호 
-		var pass_check = document.getElementById('pass_check'); //비밀번호 확인
-		var msg = document.getElementById('msg'); //확인 메세지
-		var correctColor = "#5a49e4"; //일치했을 때 출력되는 색깔
-		var wrongColor = "#ff0000"; //틀렸을 때 출력되는 색깔
-
-		if (pass.value == pass_check.value) {
-			msg.style.color = correctColor;
-			msg.innerHTML = "비밀번호 일치";
-		} else {
-			msg.style.color = wrongColor;
-			msg.innerHTML = "비밀번호 불일치";
-		}
-
+	if(pass.value == pass_check.value){
+		msg.style.color = correctColor;
+		msg.innerHTML ="비밀번호 일치";
+	}else{
+		msg.style.color = wrongColor;
+		msg.innerHTML ="비밀번호 불일치";
 	}
 
-	$(document).ready(function() {
-		$("#pass, #pass_check").on("input", function() {
-			var inputLength = $(this).val().length;
-			if (inputLength < 4) {
-				$(this).addClass('is-invalid'); // 입력 필드에 에러 스타일 추가
-			} else {
-				$(this).removeClass('is-invalid'); // 입력 필드의 에러 스타일 제거
-			}
-		})
+}
+
+$(document).ready(function(){
+	$("#pass, #pass_check").on("input",function(){
+		var inputLength = $(this).val().length;
+		if (inputLength < 4) {
+		      $(this).addClass('is-invalid'); 			// 입력 필드에 에러 스타일 추가
+		    } else {
+		      $(this).removeClass('is-invalid'); 		// 입력 필드의 에러 스타일 제거
+		    }
 	})
+})
+
+
 </script>
 </head>
 <body>
-	<section layout:fragment="content">
+		<section layout:fragment="content">
 		<div id="myPage_contents">
 			<div class="inner_cont">
 				<div class="myPage_title flex_wrap between">
@@ -80,15 +75,12 @@
 						<p>회원정보를 수정할 수 있습니다.</p>
 					</div>
 
-					<button onclick="location.href='/delete/user'"
-						class="secession_btn" id="call-secession">회원탈퇴</button>
+					<button onclick="location.href='/delete/user'" class="secession_btn" id="call-secession">회원탈퇴</button>
 				</div>
 
-				<form action="/update/pass" name="updatePassForm" method="post"
-					style="margin: 0px;">
-					<input type="hidden" name="member_id"
-						th:value="${session.user.member_id}">
-					<!-- <input type="hidden" th:value="${session.user.member_pass}"> -->
+				<form action="/update/pass" name="updatePassForm" method="post" style="margin: 0px;">
+					<input type="hidden" name="member_id" th:value="${session.user.member_id}"> 
+					<!-- <input type="hidden" th:value="${session.user.member_pass}"> --> 
 					<div class="modify_wrapper">
 						<ul class="modify_list">
 							<li class="fixed-box">
@@ -99,165 +91,117 @@
 
 							<!-- <li>
 								<div class="list_title" style="width: 180px">기존 비밀번호</div> <input
-								type="password" name="currentPassword" 
+								type="password" id="mod_mb_password" name="mb_password"
 								required="" style="width: 100%">
 							</li> -->
+							<!-- id hidden으로 넘겨주기 -->
 							<li>
-								<div class="list_title">새 비밀번호</div> <input type="password"
-								id="pass" name="member_pass" minlength="4" maxlength="15"
-								placeholder="4자리 이상 입력" style="width: 100%"
+								<div class="list_title">새 비밀번호</div> <input
+								type="password" id="pass" name="member_pass" minlength="4" maxlength="15"
+								 placeholder="4자리 이상 입력" style="width: 100%"
 								aria-autocomplete="list">
 							</li>
 							<li>
-								<div class="list_title" style="width: 200px !important;">새
-									비밀번호 확인</div> <input type="password" id="pass_check"
-								onkeyup="passChk()" class="pass text_field" minlength="4"
-								maxlength="15" style="width: 20%" name="member_pass_check">
+								<div class="list_title" style="width: 200px!important;">새 비밀번호 확인</div> 
+								<input type="password" id="pass_check" onkeyup="passChk()" class="pass text_field" 
+								 minlength="4" maxlength="15" style="width: 20%" name="member_pass_check">
 								<span id="msg"></span>
 							</li>
 						</ul>
-						<button type="submit" id="updatePassBtn" class="comm_buttons fill">비밀번호
-							변경</button>
-
-
+						<button type="submit" id="updatePassBtn" class="comm_buttons fill">비밀번호 변경</button>
+							
+						
 						<!-- modify_list END -->
 
 					</div>
 					<!-- modify_wrapper END -->
 				</form>
-				
+
 
 				<div class="inner_section">
-					<form action="/update/member" enctype="multipart/form-data"
-						name="updateMemberForm" method="post" style="margin: 0px;">
-						<input type="hidden" name="member_id"
-							th:value="${session.user.member_id}"> <input
-							type="hidden" name="member_photo"
-							th:value="${session.user.member_photo}">
+					<form action="/update/member" enctype="multipart/form-data" name="updateMemberForm" method="post" style="margin: 0px;">
+						<input type="hidden" name="member_id" th:value="${session.user.member_id}"> 
 						<div class="modify_wrapper">
 							<ul class="modify_list">
-								<!-- <li id="userprofile">
-								<div class="centered" style="width:10%;margin-right: 31%;">
-									<img th:src="|/data/${session.user.member_photo}|" id="userImage">
+							<!-- <li id="userprofile">
+								<div class="centered" style="width:10%;">
+									<img src="/images/myphoto.jpg" id="userImage">
 								</div>
-								
-								<label for="profile_file">
-									<div id="upload_btn" class="code_num_btn comm_btnStyle view study_dwn mr5 preview_btn">프로필 이미지</div>
-								</label>
-								<input type="file" name="member_image" id="profile_file"
+								<div>
+									<input type="file" name="member_photo" id="profile_file"
 										onchange="document.getElementById('userImage').src = window.URL.createObjectURL(this.files[0])"
-										accept="image/*" onError="javascript:this.src='/images/myphoto.jpg'" style="display: none;">
+										accept="image/*">
+								</div>
 							</li> -->
-								<li id="userprofile">
-									<div class="centered" style="width: 10%; margin-right: 31%;">
-										<img th:src="|/data/memberprofile/${session.user.member_photo}|"
-											id="userImage"
-											onError="javascript:this.src='/images/myphoto.jpg'">
-									</div> <label for="profile_file">
-										<div id="upload_btn"
-											class="code_num_btn comm_btnStyle view study_dwn mr5 preview_btn">프로필
-											이미지</div>
-								</label> <input type="file" name="member_image" id="profile_file"
-									onchange="updateProfileImage(event)" accept="image/*"
-									style="display: none;">
-								</li>
+							<li>
+								<div class="list_title">이름</div> <input
+								type="text" id="member_name" name="member_name"
+								class="pass text_field" required="" style="width: 100%">
+							</li>
+							
+							<li id="addr">
+								<label class="list_title" for="sample4_postcode">우편번호</label> 
+								<input type="text" class="form-control pass text_field" id="sample4_postcode" 
+								name="member_zipcode" placeholder="우편번호" style="width: 34%" required>
+								
+								<input type="button" id="zipcode_btn" class="code_num_btn comm_btnStyle view study_dwn mr5 preview_btn"
+								onclick="sample4_execDaumPostcode()" value="우편번호 찾기" style="margin-top: 12px;">
+								
+							</li>
+							<li class="zipcode">
+								<label class="list_title" for="sample4_roadAddress">도로명 주소</label> <input
+								type="text" class="form-control" id="sample4_roadAddress"
+								name="member_road_addr"	placeholder="도로명주소" style="width: 100%" required>
+							</li>
+							
+							<li class="zipcode">
+								<label class="list_title" for="sample4_jibunAddress">지번주소</label> <input type="text"
+								class="form-control" id="sample4_jibunAddress" name="member_jibun_addr"
+								placeholder="지번주소" style="width: 100%" required>
+							</li>
+							
+							<li class="zipcode">
+								<label class="list_title" for="sample4_detailAddress">상세주소</label> <input
+								type="text" class="form-control" id="sample4_detailAddress" name="member_detail_addr"
+								placeholder="상세주소" style="width: 100%" required>
+							</li>
+							
+							<li class="zipcode">
+								<label class="list_title" for="sample4_extraAddress">참고항목</label> <input type="text"
+								class="form-control" id="sample4_extraAddress" name="member_extra_addr"
+								placeholder="참고항목" style="width: 100%">
+							</li>
+							
+							<li>
+								<div class="list_title">휴대전화</div> 
+								<input type="text" class="pass text_field" id="member_telnum" name="member_telnum"
+								placeholder="-제외 입력"> 
+							</li>
+							<li class="fixed-box single">
+								<p>SMS 수신에 동의하시겠습니까?</p>
+								<div class="check_my">
+									&nbsp; <input type="radio" name="mb_sms" value="1"
+										style="vertical-align: -3px; margin-left: 10px;" id="agr_y">
+									<label for="agr_y" style="color: black;">동의합니다</label>&nbsp; <input
+										type="radio" name="mb_sms" value="0"
+										style="vertical-align: -3px; margin-left: 5px;" id="agr_n"
+										checked="checked"> <label for="agr_n">아니오</label>
 
-								<script>
-									function updateProfileImage(event) {
-										var file = event.target.files[0];
-										var reader = new FileReader();
-										reader.onload = function(e) {
-											document
-													.getElementById('userImage').src = e.target.result;
-										};
-										reader.onerror = function(e) {
-											document
-													.getElementById('userImage').src = '/images/myphoto.jpg';
-										};
-										reader.readAsDataURL(file);
-									}
-								</script>
-								<li>
-									<div class="list_title">이름</div> <input type="text"
-									id="member_name" name="member_name" class="pass text_field"
-									required="" style="width: 100%"
-									th:value="${session.user.member_name}">
-								</li>
-
-								<li id="addr"><label class="list_title"
-									for="sample4_postcode">우편번호</label> <input type="text"
-									class="form-control pass text_field" id="sample4_postcode"
-									name="member_zipcode" placeholder="우편번호"
-									th:value="${session.user.member_zipcode}" style="width: 34%"
-									required> <input type="button" id="zipcode_btn"
-									class="code_num_btn comm_btnStyle view study_dwn mr5 preview_btn"
-									onclick="sample4_execDaumPostcode()" value="우편번호 찾기"
-									style="margin-top: 12px;"></li>
-								<li class="zipcode"><label class="list_title"
-									for="sample4_roadAddress">도로명 주소</label> <input type="text"
-									class="form-control" id="sample4_roadAddress"
-									name="member_road_addr" placeholder="도로명주소"
-									th:value="${session.user.member_road_addr}" style="width: 100%"
-									required></li>
-
-								<li class="zipcode"><label class="list_title"
-									for="sample4_jibunAddress">지번주소</label> <input type="text"
-									class="form-control" id="sample4_jibunAddress"
-									name="member_jibun_addr"
-									th:value="${session.user.member_jibun_addr}" placeholder="지번주소"
-									style="width: 100%" required></li>
-
-								<li class="zipcode"><label class="list_title"
-									for="sample4_detailAddress">상세주소</label> <input type="text"
-									class="form-control" id="sample4_detailAddress"
-									name="member_detail_addr" placeholder="상세주소"
-									th:value="${session.user.member_detail_addr}"
-									style="width: 100%" required></li>
-
-								<li class="zipcode"><label class="list_title"
-									for="sample4_extraAddress">참고항목</label> <input type="text"
-									class="form-control" id="sample4_extraAddress"
-									name="member_extra_addr" placeholder="참고항목"
-									th:value="${session.user.member_extra_addr}"
-									style="width: 100%"></li>
-
-								<li>
-									<div class="list_title">휴대전화</div> <input type="text"
-									class="pass text_field" id="member_telnum" name="member_telnum"
-									placeholder="-제외 입력" th:value="${session.user.member_telnum}">
-								</li>
-								<!-- <li class="fixed-box single">
-									<p>SMS 수신에 동의하시겠습니까?</p>
-									<div class="check_my">
-										&nbsp; <input type="radio" name="member_" value="sms"
-											style="vertical-align: -3px; margin-left: 10px;" id="agr_y">
-										<label for="agr_y" style="color: black;">동의합니다</label>&nbsp; 
-										<input type="radio" name="member_sms" value="sms 미동의"
-											style="vertical-align: -3px; margin-left: 5px;" id="agr_n"
-											checked="checked"> 
-										<label for="agr_n">아니오</label>
-
-									</div>
-								</li> -->
+								</div>
+							</li>
 								<li>
 									<div class="list_title">이메일</div> <input type="text"
-									name="email" th:value="${session.user.email}" style="width: 100%" readonly>
+									name="mb_email" value="" style="width: 100%">
 								</li>
 								<li class="fixed-box single">
-									<p>마케팅 수신 동의</p>
+									<p>이메일 수신에 동의하시겠습니까?</p>
 									<div class="check_my">
-										<input type="radio" name="member_mkt_opt" value="마케팅 수신 동의"
-										style="vertical-align: -3px; margin-left: 10px;" id="agreement" checked>
-										<label for="agreement">모두 동의</label> 
-										<input type="radio" name="member_mkt_opt" value="sms"
-										style="vertical-align: -3px; margin-left: 5px;" id="agreement_sms">
-										<label for="agreement_sms">sms만 동의</label>
-										<input type="radio" name="member_mkt_opt" value="email"
-										style="vertical-align: -3px; margin-left: 10px;" id="agreement_email">
-										<label for="agreement_email">email만 동의</label> 
-										<input type="radio" name="member_mkt_opt" value="마케팅 수신 미동의"
-										style="vertical-align: -3px; margin-left: 10px;" id="disagreement">
-										<label for="disagreement">마케팅 수신 미동의</label> 
+										<input type="radio" name="mb_mailling" value="1"
+											style="vertical-align: -3px; margin-left: 10px;" id="agr2_y"><label
+											for="agr2_y">동의합니다</label> <input type="radio"
+											name="mb_mailling" value="0"
+											style="vertical-align: -3px; margin-left: 5px;" id="agr2_n"
+											checked="checked"><label for="agr2_n">아니오</label>
 									</div>
 								</li>
 							</ul>
@@ -266,8 +210,7 @@
 							<p style="font-family: 'Pretendard'">※이메일 수신동의를 하시면 다양한 할인혜택과
 								이벤트/기획전 등의 정보를 받아보실 수 있습니다. 단, 회원가입 및 주요알림사항 메일은 수신동의와 상관없이 자동
 								발송됩니다.</p>
-							<button type="submit" id="updateMemberBtn" onclick="updateMemberMktOpt()"
-								class="comm_buttons fill">회원정보 저장</button>
+							<button type="submit" id="updateMemberBtn" class="comm_buttons fill">회원정보 저장</button>
 						</div>
 						<!-- modify_wrapper END -->
 

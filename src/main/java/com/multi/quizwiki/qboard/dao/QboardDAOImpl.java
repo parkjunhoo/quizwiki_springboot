@@ -6,9 +6,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.multi.quizwiki.pboard.entity.PboardEntity;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
+import com.multi.quizwiki.qboard.entity.QboardEntity;
+import com.multi.quizwiki.qboard.repository.QboardRepository;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +20,17 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class QboardDAOImpl implements QboardDAO {
+	
+	private SqlSession template;
+	private QboardRepository repo;
+	
 	@Autowired
-	SqlSession template;
+	public QboardDAOImpl(SqlSession template , QboardRepository repo) {
+		this.template = template;
+		this.repo = repo;
+	}
+	
+	
 	
 	
 
@@ -71,6 +84,10 @@ public class QboardDAOImpl implements QboardDAO {
 	@Override
 	public List<QboardDTO> findBySubject(String subject) {
 		return template.selectList("com.multi.quizwiki.qboard.findBySubject",subject);
+	}
+		
+		public List<QboardEntity> findTop10ByDeleteYnNotOrderByViewCountDesc() {
+		return repo.findTop10ByDeleteYnNotOrderByViewCountDesc(1);
 	}
 
 	

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
+import com.multi.quizwiki.qboard.entity.QboardEntity;
 public interface QboardDAO {
 	public Long save(QboardDTO qboard);
 	
@@ -23,6 +24,8 @@ public interface QboardDAO {
 	 void increaseViewCount(Long qboard_id);
 	 
 	 List<QboardDTO> findByCategory(String category);
+	 
+	 public List<QboardEntity> findTop10ByDeleteYnNotOrderByViewCountDesc();
 	 	
 	 List<QboardDTO> findBySubject(String subject);
 }

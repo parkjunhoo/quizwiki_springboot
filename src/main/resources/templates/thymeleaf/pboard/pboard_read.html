@@ -27,7 +27,7 @@ layout:fragment="content"
 				<p class="pboard-info-author"><i class="fa-solid fa-person"></i>[[${pboard.memberId}]]</p>
 				<div class="ma-left">
 					<p class="pboard-info-view"><i class="fa-solid fa-eye"></i>[[${pboard.pboardShowCount}]]</p>
-					<p class="pboard-info-like"><i class="fa-solid fa-thumbs-up"></i>[[${pboard.pboardLikeCount}]]</p>
+					<p id="likeCount" class="pboard-info-like"><i class="fa-solid fa-thumbs-up"></i>[[${pboard.pboardLikeCount}]]</p>
 					<p class="pboard-info-regdate"><i class="fa-solid fa-calendar-days"></i>[[${#dates.format(pboard.pboardRegDate, 'yy-MM-dd / hh:mm')}]]</p>
 				</div>
 			</div>
@@ -141,6 +141,8 @@ layout:fragment="content"
 			});//ajax end
 			
 			if(val=="true"){
+				let count = parseInt(likeCount.textContent) + 1;
+				likeCount.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>'+count;
 				Swal.fire({
 				      icon: 'success',
 				      title: "추천 되었습니다.",

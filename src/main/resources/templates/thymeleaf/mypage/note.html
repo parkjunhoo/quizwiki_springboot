@@ -26,7 +26,7 @@
 				
 				$("#day1").on("click", function() {
 					var now = new Date()
-					var yesterday = new Date(now.setDate(now.getDate() -1));//하루전 날짜로 셋팅	
+					var yesterday = new Date(now.setDate(now.getDate() ));//하루전 날짜로 셋팅	
 					var yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 로컬 날짜로 변환
 					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
 					$("#startday").attr("value",a)
@@ -101,6 +101,23 @@
 
 			})
 </script>
+
+	<script type="text/javascript">
+		function popupPreview(no){
+			const url = "/note/read/"+no;
+			
+			let width = Math.floor(screen.width * 0.95);
+			let height = Math.floor(screen.height * 0.95);
+			let left = Math.floor((screen.width - width) / 2);
+			let top = Math.floor((screen.height - height) / 2);
+			
+			let cbt = window.open(
+				url,
+				"문제 보기",
+				"width="+width+", height="+height+", top="+top+", left="+left
+			);
+		}
+	</script>
 </head>
 <body>
 		<section layout:fragment="content">
@@ -132,19 +149,30 @@
 							</ul>
 							<form action="/mypage/note" method="post">
 							<div class="calendar_box flex_wrap">
-							<input type="hidden" name="member_id" value="test">
 								<div class="dateBox">
-									<input type="text" name="startday" id="startday" class="calendar"
-										value=""> <img class="ui-datepicker-trigger"
-										src="../images/calendar.png" alt="Select date"
-										title="Select date">
+									<th:block th:if="${startday} == null">
+										<input type="text" name="startday" id="startday"
+											class="calendar" value="">
+									</th:block>
+									<th:block th:unless="${startday} == null">
+										<input type="text" name="startday" id="startday"
+											class="calendar" th:value="${startday}">
+									</th:block>
+									<img class="ui-datepicker-trigger" src="../images/calendar.png"
+										alt="Select date" title="Select date">
 								</div>
 								<div class="dateBox">─</div>
 								<div class="dateBox">
-									<input type="text" name="endday" id="endday" class="calendar"
-										value=""> <img class="ui-datepicker-trigger"
-										src="../images/calendar.png" alt="Select date"
-										title="Select date">
+									<th:block th:if="${endday} == null">
+										<input type="text" name="endday" id="endday" class="calendar"
+											value="">
+									</th:block>
+									<th:block th:unless="${endday} == null">
+										<input type="text" name="endday" id="endday" class="calendar"
+											th:value="${endday}">
+									</th:block>
+									<img class="ui-datepicker-trigger" src="../images/calendar.png"
+										alt="Select date" title="Select date">
 								</div>
 								<button class="search" type="submit">조회</button>
 							</div>
@@ -181,7 +209,7 @@
 							</tr>
 							<tr th:each="note:${notelist}" th:unless="${notelist.size==0}">
 								<td><span th:text="${note.note_id}"></span></td>
-								<td><span th:text="${note.note_title}"></span></td>
+								<td style="cursor:pointer;" th:attr="onclick=|popupPreview(${note.note_id})|"><span th:text="${note.note_title}"></span></a></td>
 								<td><span th:text="${note.note_regdate}"></span></td>
 								<td><span th:text="${note.note_private}"></span></td>
 							</tr>

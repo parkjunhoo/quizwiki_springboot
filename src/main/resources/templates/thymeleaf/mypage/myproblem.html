@@ -26,7 +26,7 @@
 				
 				$("#day1").on("click", function() {
 					var now = new Date()
-					var yesterday = new Date(now.setDate(now.getDate() -1));//하루전 날짜로 셋팅	
+					var yesterday = new Date(now.setDate(now.getDate() ));//하루전 날짜로 셋팅	
 					var yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 로컬 날짜로 변환
 					var a = yesterday.toISOString().substring(0, 10);//yyyy-mm-dd로 셋팅 
 					$("#startday").attr("value",a)
@@ -184,7 +184,7 @@
 							</tr>
 							<tr th:each="pboard:${pboardlist}" th:unless="${pboardlist.size==0}">
 								<td ><span th:text="${pboard.pboard_id}"></span></td>
-								<td ><span th:text="${pboard.pboard_title}"></span></td>
+								<td ><a th:href="@{/pboard/read(cate=${pboard.pboard_cate_id},no=${pboard.pboard_id})}"><span th:text="${pboard.pboard_title}"></span></a></td>
 								<td ><span th:text="${pboard.pboard_reg_date}"></span></td>
 								<td ><span th:text="${pboard.pboard_show_count}"></span></td>
 								

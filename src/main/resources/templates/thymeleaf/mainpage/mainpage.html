@@ -9,7 +9,9 @@
 <meta charset="UTF-8">
 	<!-- cdn -->
     <script src="https://kit.fontawesome.com/e92cf22849.js" crossorigin="anonymous"></script>
-    
+	<script src="https://cdn.jsdelivr.net/npm/fraction.js@4.0.11/fraction.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"> 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> 
 
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
@@ -21,6 +23,10 @@
 <body>
 
     <!-- main page -->
+    	<div class="elementor-widget-container">
+			<img th:src="@{/images/main/wavetopsmall.png}"/>
+			<img th:src="@{/images/main/wavetopsmall.png}"/>
+		</div>
         <section id="main-banner-section">
             <div class="slide-deco">
                 <svg class="breath-effect" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 -960 960 960" width="48"><path d="M563-58 395-226l60-61 108 108 230-231 60 61L563-58ZM108-312l203-525h88l202 525h-89l-53-139H240l-52 139h-80Zm152-203h180l-88-242h-5l-87 242Z"/></svg>
@@ -57,78 +63,202 @@
                     
                 </div>
     
-                <div class="tabs tabs-style-shape tab-custom">
+                <div data-aos="flip-up" class="tabs tabs-style-shape tab-custom">
                     <nav>
                         <ul>
                             <li>
                                 <a href="#section-shape-1">
-                                    <span class="tab-title">나만의 문제집</span>
+                                    <span class="tab-title">나만의 문제집 BEST</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#section-shape-2">
-                                    <span class="tab-title">질문게시판</span>
+                                    <span class="tab-title">질문게시판 BEST</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#section-shape-3">
-                                    <span class="tab-title">문제</span>
+                                    <span class="tab-title">문제 BEST</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
+                    
                     <div class="content-wrap">
-                        <section id="section-shape-1"><p>나만의 문제집</p></section>
-                        <section id="section-shape-2"><p>질문게시판</p></section>
-                        <section id="section-shape-3"><p>문제</p></section>
-                    </div><!-- /content -->
+                    	<div class="borard-gradient"></div>
+                    	<div class="carousel-btn-wrap">
+		               		<div class="carousel-btn" id="preBtn"><i class="fa-sharp fa-solid fa-arrow-left"></i></div>
+		               		<div class="carousel-btn" id="nextBtn"><i class="fa-sharp fa-solid fa-arrow-right"></i></div>
+		             	</div>
+                    
+                        <section id="section-shape-1">
+                        
+                        	<div class="carousel-outter">
+                        	
+                        		<div class="content-box" style="left:0%;">
+                        		
+			                        <div th:each="pboard : ${pboardTopList}" class="section-card">
+										<div class="paper" th:attr="onclick=|location.href='/pboard/read?cate='+${pboard.pboard_cate_id}+'&no='+${pboard.pboard_id}|">
+											<div class="pin">
+												<div class="shadow"></div>
+												<div class="metal"></div>
+												<div class="bottom-circle"></div>
+											</div>
+											<div class="board-memo-form">
+												<div class="memo-title-area">
+													<h1 class="memo-title"><span class="green-underline">[[${pboard.pboard_title}]]</span></h1>
+												</div>
+												<div class="memo-content-area">
+													<h1 class="memo-desc">작성자:<span class="memo-content blue-underline">[[${pboard.member_id}]]</span></h1>
+													<h1 class="memo-desc">작성일자:<span class="memo-content red-underline">[[${#dates.format(pboard.pboard_reg_date, 'yy년 MM월 dd일')}]]</span></h1>
+													<h1 class="memo-desc">조회수:<span class="memo-content sky-underline">[[${pboard.pboard_show_count}]]</span></h1>
+													<h1 class="memo-desc">추천수:<span class="memo-content yellow-underline">[[${pboard.pboardLikeCount}]]</span></h1>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
+									
+                        		</div>
+								
+								
+								
+                        	</div>
+							
+						</section>
+						
+						
+                        <section id="section-shape-2">
+	                        <div class="carousel-outter">
+	                        
+								<div class="content-box" style="left:0%;">
+	                        		
+				                        <div th:each="qboard : ${qboardTopList}" class="section-card">
+											<div class="paper" th:attr="onclick=|location.href='/quizwiki/qboard/read.do?qboard_id='+${qboard.qboardId}|">
+												<div class="pin">
+													<div class="shadow"></div>
+													<div class="metal"></div>
+													<div class="bottom-circle"></div>
+												</div>
+												<div class="board-memo-form">
+													<div class="memo-title-area">
+														<h1 class="memo-title"><span class="green-underline">[[${qboard.title}]]</span></h1>
+													</div>
+													<div class="memo-content-area">
+														<h1 class="memo-desc">작성자:<span class="memo-content blue-underline">[[${qboard.memberId}]]</span></h1>
+														<h1 class="memo-desc">작성일자:<span class="memo-content red-underline">[[${#dates.format(qboard.regdate, 'yy년 MM월 dd일')}]]</span></h1>
+														<h1 class="memo-desc">조회수:<span class="memo-content sky-underline">[[${qboard.viewCount}]]</span></h1>
+														<h1 class="memo-desc">추천수:<span class="memo-content yellow-underline">[[${qboard.likeCount}]]</span></h1>
+													</div>
+												</div>
+											</div>
+										</div>
+									
+	                        	</div>
+	                        	
+	                       	</div>
+                        	
+						</section>
+						
+						
+                        <section id="section-shape-3">
+                        
+							<div class="carousel-outter">
+                        	
+                        		<div class="content-box" style="left:0%;">
+                        		
+			                        <div th:attr="onclick=|popupPreview(${problem.problem_id})|" th:each="problem : ${problemTopList}" class="section-card">
+										<div class="paper">
+											<div class="pin">
+												<div class="shadow"></div>
+												<div class="metal"></div>
+												<div class="bottom-circle"></div>
+											</div>
+											<div class="board-memo-form">
+												<div class="memo-title-area">
+													<h1 class="memo-title"><span class="green-underline">[[${problem.problem_content}]]</span></h1>
+												</div>
+												<div class="memo-content-area">
+													<h1 class="memo-desc">작성자:<span class="memo-content blue-underline">[[${problem.memberId}]]</span></h1>
+													<h1 class="memo-desc">작성일자:<span class="memo-content red-underline">[[${#dates.format(problem.regDate, 'yy년 MM월 dd일')}]]</span></h1>
+													<h1 class="memo-desc">과목:<span class="memo-content sky-underline">[[${problem.cateName}]]</span></h1>
+													<h1 class="memo-desc">추천수:<span class="memo-content yellow-underline">[[${problem.problemLikeCount}]]</span></h1>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									
+									
+                        		</div>
+								
+								
+								
+                        	</div>
+                        	
+						</section>
+<!--                     </div>/content -->
                 </div><!-- /tabs -->
+           		
             </div>
-            
+            </div>
         </section>
-
+        <div style="background-color:#fff1e2;" class="elementor-widget-container">
+			<img style="background-color:#fff1e2;" th:src="@{/images/main/wavebottomsmall.png}"/>
+			<img style="background-color:#fff1e2;" th:src="@{/images/main/wavebottomsmall.png}"/>
+		</div>
+        
         <section id="main-desc-section">
-            <div class="desc-container">
-                <h2>
-                    <i class="fa-sharp fa-solid fa-feather"></i>
-                    나만의 문제집
-                </h2>
-                <h4>
-                    나만의 문제를 만들고, 다른사람들과 공유 해보세요!
-                </h4>
-                <div class="desc-card">
-                </div>
+        		
+        		<!-- card start -->
+	                <div data-aos="fade-right" class="desc-card">
+	                	<div>
+			                <h2>
+			                    <i class="fa-sharp fa-solid fa-feather"></i>나만의 문제집
+			                </h2>
+			                <h4>나만의 문제를 만들고, 다른사람들도 풀 수 있게 공유해보세요!</h4>
+	                	</div>
+	                	
+	                	<div class="flex-wrap">
+		                	<div data-aos="zoom-in-right" data-aos-delay="250" class="deco-holder-half"> <img width="100%" height="100%" th:src="@{images/main/desc/pboardList.png}"/> </div>
+		                	<div data-aos="zoom-in-left" data-aos-delay="250" class="deco-holder-half"> <img width="100%" height="100%" th:src="@{images/main/desc/cbt.png}"/> </div>
+	                	</div>
+	                </div>
+                <!-- card end -->
 
-                <h2>
-                    <i class="fa-sharp fa-solid fa-feather"></i>
-                    멘토 게시판 (질문 게시판)
-                </h2>
-                <h4>
-                    다른 사람의 멘토가 되어 알려주거나, 멘토를 찾아보세요!
-                </h4>
-                <div class="desc-card">
-                </div>
-
-                <h2>
-                    <i class="fa-sharp fa-solid fa-feather"></i>
-                    오답노트
-                </h2>
-                <h4>
-                    틀린 문제를 다시 복습해보세요.
-                </h4>
-                <div class="desc-card">
-                </div>
-
-                <h2>
-                    <i class="fa-sharp fa-solid fa-feather"></i>
-                    학습관리
-                </h2>
-                <h4>
-                    내 학습 현황을 확인하고, 맞춤형 추천 컨텐츠를 받아보세요.
-                </h4>
-                <div class="desc-card">
-                </div>
-            </div>
+				<!-- card start -->
+	                <div data-aos="fade-left" class="desc-card">
+	                	<div>
+			                <h2>
+			                    <i class="fa-solid fa-people-arrows"></i>커뮤니티
+			                </h2>
+			                <h4>커뮤니티에서 다른 회원들과 이야기를 나눠보세요!</h4>
+	                	</div>
+	                	
+	                	<div class="flex-wrap">
+		                	<div data-aos="zoom-in-right" data-aos-delay="250" class="deco-holder-full"> <img width="100%" height="100%" th:src="@{images/main/desc/community.png}"/> </div>
+	                	</div>
+	                </div>
+                <!-- card end -->
+                
+                <!-- card start -->
+	                <div data-aos="fade-right" class="desc-card">
+	                	<div>
+			                <h2>
+			                    <i class="fa-solid fa-book"></i>오답노트
+			                </h2>
+			                <h4>나만의 오답노트를 손쉽게 만들어봐요!</h4>
+	                	</div>
+	                	
+	                	<div class="flex-wrap">
+		                	<div data-aos="zoom-in-right" data-aos-delay="250" class="deco-holder-half"> <img width="100%" height="100%" th:src="@{images/main/desc/odap1.png}"/> </div>
+		                	<div data-aos="zoom-in-left" data-aos-delay="250" class="deco-holder-half"> <img width="100%" height="100%" th:src="@{images/main/desc/odap2.png}"/> </div>
+	                	</div>
+	                </div>
+                <!-- card end -->
+                
+            
         </section>
     <!-- main page end -->
 
@@ -145,5 +275,61 @@
         })();
     </script>
     <!-- tab js end -->
+    
+    <script type="text/javascript">
+    AOS.init();
+    
+	    function popupPreview(no){
+			const url = "/popup/problem/preview?no="+no;
+			
+			let width = Math.floor(screen.width * 0.8);
+			let height = Math.floor(screen.height * 0.8);
+			let left = Math.floor((screen.width - width) / 2);
+			let top = Math.floor((screen.height - height) / 2);
+			
+			let cbt = window.open(
+				url,
+				"문제 보기",
+				"width="+width+", height="+height+", top="+top+", left="+left
+			);
+		}
+    	
+    	preBtn.addEventListener("click",()=>{
+    		const contentBox = document.querySelector(".content-current .content-box");
+    		const itemCount = contentBox.children.length;
+    		
+    		
+    		const listSize = contentBox.offsetWidth;
+    		const itemSize = contentBox.firstElementChild.offsetWidth;
+    		
+    		const stepSize = (itemSize/listSize)*100;
+    		const currentLeft = parseFloat(contentBox.style.left);
+    		const maxLeft = Math.max(0, (itemCount - 3) * stepSize);
+    		
+    		const nextLeft = currentLeft+stepSize;
+    		if(nextLeft > 0) return;
+    		
+    		contentBox.style.left = `${nextLeft}%`;
+    	});
+    	
+    	nextBtn.addEventListener("click",()=>{
+    		const contentBox = document.querySelector(".content-current .content-box");
+    		const itemCount = contentBox.children.length;
+    		
+    		
+    		const listSize = contentBox.offsetWidth;
+    		const itemSize = contentBox.firstElementChild.offsetWidth;
+    		
+    		const stepSize = (itemSize/listSize)*100;
+    		const currentLeft = parseFloat(contentBox.style.left);
+    		const maxLeft = Math.max(0, (itemCount - 3) * stepSize);
+    		
+    		const nextLeft = currentLeft-stepSize;
+    		if(nextLeft < -maxLeft) return;
+    		
+    		contentBox.style.left = `${nextLeft}%`;
+    	});
+    </script>
+    
 </body>
 </html>
