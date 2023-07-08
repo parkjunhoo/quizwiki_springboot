@@ -54,7 +54,9 @@ public class ManagerController {
 		String memberId = member.getMember_id();
 		
 		List<RecoProblemDTO> problemList = service.recommandProblem(memberId, true, 10);
-		System.out.println(problemList.size());
+		if(problemList.size() == 0) {
+			problemList = service.recommandProblem(memberId, false, 10);
+		}
 		model.addAttribute("problemList",problemList);
 		
 		return "thymeleaf/manager/cbt";

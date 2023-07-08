@@ -8,7 +8,22 @@ th:fragment="header"
 
 <!-- cdn -->
 <script src="https://kit.fontawesome.com/e92cf22849.js" crossorigin="anonymous"></script>
-
+<script type="text/javascript">
+	function openCBT(){
+		const url = "/manager/recommand";
+		
+		let width = Math.floor(screen.width * 0.95);
+		let height = Math.floor(screen.height * 0.95);
+		let left = Math.floor((screen.width - width) / 2);
+		let top = Math.floor((screen.height - height) / 2);
+		
+		let cbt = window.open(
+			url,
+			"추천 문제 보기",
+			"width="+width+", height="+height+", top="+top+", left="+left
+		);
+	}
+</script>
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}" />
 
@@ -98,7 +113,7 @@ th:fragment="header"
 			</ul>
 
 			<div style="z-index:5;" class="icon-menu">
-				 <a th:href="@{/manager/recommand}"> <i class="fas fa-pencil"></i> 추천문제 풀기 <sup
+				 <a style="cursor:pointer;" onclick="openCBT()"> <i class="fas fa-pencil"></i> 추천문제 풀기 <sup
 					style="color: red; font-size: 11px;">Beta</sup>
 				</a>
 

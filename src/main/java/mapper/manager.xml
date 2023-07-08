@@ -5,11 +5,10 @@
 <mapper namespace="com.multi.quizwiki.manager">
 	
 	<select id="findSolvCountBySubjectName" resultType="solvCount" parameterType="String">
-		SELECT s.subject_name subjectName,
-		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) AS wrongCount,
-		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS correctCount,
-		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) +
-		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS totalCount
+		SELECT s.subject_name AS subjectName,
+		       COUNT(CASE WHEN sv.solv_id IS NOT NULL AND sv.solv_right = 0 THEN 1 ELSE NULL END) AS wrongCount,
+		       COUNT(CASE WHEN sv.solv_right = 1 THEN 1 ELSE NULL END) AS correctCount,
+		       COALESCE(COUNT(sv.solv_id), 0) AS totalCount
 		FROM `subject` s
 		JOIN problem_cate pc ON s.subject_id = pc.subject_id
 		LEFT JOIN problem p ON pc.problem_cate_id = p.problem_cate_id
@@ -21,10 +20,9 @@
 	<select id="findSolvCountByProblemCateName" resultType="solvCount" parameterType="String">
 		SELECT pc.problem_cate_name subjectName,
 			   s.subject_id subjectId,
-		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) AS wrongCount,
-		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS correctCount,
-		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) +
-		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS totalCount
+		       COUNT(CASE WHEN sv.solv_id IS NOT NULL AND sv.solv_right = 0 THEN 1 ELSE NULL END) AS wrongCount,
+		       COUNT(CASE WHEN sv.solv_right = 1 THEN 1 ELSE NULL END) AS correctCount,
+		       COALESCE(COUNT(sv.solv_id), 0) AS totalCount
 		FROM `subject` s
 		JOIN problem_cate pc ON s.subject_id = pc.subject_id
 		LEFT JOIN problem p ON pc.problem_cate_id = p.problem_cate_id
