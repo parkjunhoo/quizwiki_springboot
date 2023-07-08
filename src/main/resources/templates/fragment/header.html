@@ -49,10 +49,10 @@ th:fragment="header"
 				<a th:href="@{/mypage/mycontentroom}" class="shift-between"> 마이페이지 </a>
 			</th:block>
 			<!-- 카카오 - 로그인이 되어있는 경우 -->
-			<th:block th:if="${session.kakaoUser!=null}">
+			<!-- <th:block th:if="${session.kakaoUser!=null}">
 				<a th:href="@{/kakao/logout}" class="shift-between"> 카카오 로그아웃 </a>
 				<a th:href="@{/mypage/mycontentroom}" class="shift-between"> 마이페이지 </a>
-			</th:block>
+			</th:block> -->
 			
 			 <a href="/faqt"> 고객센터 </a>
 		</div>

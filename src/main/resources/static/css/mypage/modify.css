@@ -2,6 +2,9 @@
 body{
 	font-family: "Esamanru";
 }
+.back{
+	background-color: #fff;
+}
 .modify_wrapper {
     width: 100%;
 }
@@ -155,6 +158,9 @@ input[type=text], input[type=password], textarea {
 }
 .check_my label{
 	margin-right: 10px;
+}
+.code_num_btn:hover{
+	cursor: pointer;
 }
 /* #addrbtn{
 	margin-top: 10px;

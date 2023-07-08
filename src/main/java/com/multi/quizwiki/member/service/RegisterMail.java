@@ -30,24 +30,25 @@ public class RegisterMail implements MailServiceInter {
 		MimeMessage message = emailsender.createMimeMessage();
 
 		message.addRecipients(RecipientType.TO, to);// 보내는 대상
-		message.setSubject("Quiz Wiki 회원가입 이메일 인증");// 제목
+		message.setSubject("QuizWiki 이메일 인증");// 제목
 
 		String msgg = "";
+		
 		msgg += "<div style='margin:100px;'>";
 		msgg += "<h1> 안녕하세요</h1>";
 		msgg += "<h1> 당신의 꿈을 응원하는 QuizWiki 입니다</h1>";
 		msgg += "<br>";
-		msgg += "<p>아래 코드를 회원가입 창으로 돌아가 입력해주세요<p>";
+		msgg += "<p>아래 코드를 인증번호 입력란에 입력해주세요<p>";
 		msgg += "<br>";
-		msgg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
-		msgg += "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
+		msgg += "<div align='center' style='border:1px solid black; font-family:Esamanru';>";
+		msgg += "<h3 style='color:blue;'>[인증 코드]</h3>";
 		msgg += "<div style='font-size:130%'>";
-		msgg += "CODE : <strong>";
+		msgg += "<strong>";
 		msgg += ePw + "</strong><div><br/> "; // 메일에 인증번호 넣기
 		msgg += "</div>";
 		message.setText(msgg, "utf-8", "html");// 내용, charset 타입, subtype
 		// 보내는 사람의 이메일 주소, 보내는 사람 이름
-		message.setFrom(new InternetAddress("hyen1616@naver.com", "Quiz Wiki"));// 보내는 사람
+		message.setFrom(new InternetAddress("hyen1616@naver.com", "QuizWiki"));// 보내는 사람
 
 		return message;
 	}

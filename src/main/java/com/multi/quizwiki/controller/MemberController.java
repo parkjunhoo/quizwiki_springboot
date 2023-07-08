@@ -98,7 +98,7 @@ public class MemberController {
 		return "thymeleaf/member/login_pass_forgot_find";
 	}
 
-	// 청소년 : 1, 대학생 : 2 - 회원 타입 구분
+	// 청소년 : 1, 일반 : 2 - 회원 타입 구분
 	@RequestMapping("/signupType")
 	public String show_signup_type() {
 		return "thymeleaf/member/signup_student_type";
@@ -110,7 +110,7 @@ public class MemberController {
 		return "thymeleaf/member/signup_agreement1";
 	}
 
-	// 대학생용 약관 동의서
+	// 일반 회원용 약관 동의서
 	@RequestMapping("/signupAgreement2")
 	public String show_signup_agreement2() {
 		return "thymeleaf/member/signup_agreement2";
@@ -122,7 +122,7 @@ public class MemberController {
 		return "thymeleaf/member/signup1";
 	}
 
-	// 회원가입 양식 작성 - 대학생
+	// 회원가입 양식 작성 - 일반
 	@RequestMapping("/signup2")
 	public String show_signup2() {
 		return "thymeleaf/member/signup2";
@@ -185,11 +185,11 @@ public class MemberController {
 		// loginname : 2877651179 -> id값
 
 		MemberEntity loginUser = service.loginKakao(loginname);
-		System.out.println("loginUser : " + loginUser);
+		System.out.println("카카오 로그인 컨트롤러에서 sysout -> loginUser : " + loginUser);
 		// loginUser : null
 
 		if (loginUser != null && loginUser.getKakaoID().equals(loginname)) {
-			session.setAttribute("kakaoUser", MemberDTO.toDTO(loginUser));
+			session.setAttribute("user", MemberDTO.toDTO(loginUser));
 			session.setAttribute("access_Token", access_Token);
 			view = "redirect:/main";
 		} else {
@@ -217,10 +217,10 @@ public class MemberController {
 			ms.kakaoLogout(access_Token);
 			session.removeAttribute("access_Token");
 
-			System.out.println("kakaoUser가 null이 아님 : " + session.getAttribute("kakaoUser"));
+			System.out.println("카카오 -> user가 null이 아님 : " + session.getAttribute("user"));
 
-			session.removeAttribute("kakaoUser");
-			System.out.println("kakaoUser가 null : " + session.getAttribute("kakaoUser"));
+			session.removeAttribute("user");
+			System.out.println("카카오 -> user가 null : " + session.getAttribute("user"));
 
 		} else {
 			System.out.println("access_Token가 null");
@@ -394,7 +394,7 @@ public class MemberController {
 	public String naverCallback() {
 		return "thymeleaf/member/naver_callback";
 	}
-
+	
 	// 대학교 메일 인증
 	/*
 	 * @RequestMapping(value = "https://univcert.com/api/v1/certify", produces =
