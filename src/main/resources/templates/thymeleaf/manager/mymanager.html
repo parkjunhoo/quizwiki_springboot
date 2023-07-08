@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/manager_layout}"
+layout:fragment="content"
+>
+<head>
+<meta charset="UTF-8">
+<title>Quiz Wiki - 학습 관리</title>
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/note/note_list.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/manager/manager.css}" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+
+</head>
+<body>
+	<div id="pboard-list">
+		<div id="pboard-title">
+			<span class="title-subject blue-underline">내 학습 현황</span>
+		</div>
+		
+		<div class="fx">
+			<div class="fx-title">
+				전체 과목 통계
+			</div>
+			<div class="half-card">
+				<h1 class="card-title"><span class="red-underline">과목별 채점비율</span></h1>
+				<canvas id="subjectChart"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="red-underline">과목별 문제 풀이 수</span></h1>
+				<canvas id="subjectChart2"></canvas>
+			</div>
+		</div>
+		
+		<div class="fx">
+			<div class="fx-title">
+				세부 과목별 통계
+			</div>
+			<!-- 국어 3 4 -->
+			<div class="half-card">
+				<h1 class="card-title"><span class="yellow-underline">국어 세부과목 채점비율</span></h1>
+				<canvas id="subjectChart3"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="yellow-underline">국어 세부과목 문제 풀이 수</span></h1>
+				<canvas id="subjectChart4"></canvas>
+			</div>
+			
+			<!-- 영어 5 6 -->
+			<div class="half-card">
+				<h1 class="card-title"><span class="blue-underline">영어 세부과목 채점비율</span></h1>
+				<canvas id="subjectChart5"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="blue-underline">영어 세부과목 문제 풀이 수</span></h1>
+				<canvas id="subjectChart6"></canvas>
+			</div>
+			
+			<!-- 수학 7 8 -->
+			<div class="half-card">
+				<h1 class="card-title"><span class="purple-underline">수학 세부과목 채점비율</span></h1>
+				<canvas id="subjectChart7"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="purple-underline">수학 세부과목 문제 풀이 수</span></h1>
+				<canvas id="subjectChart8"></canvas>
+			</div>
+			
+			<!-- 사회 9 10-->
+			<div class="half-card">
+				<h1 class="card-title"><span class="sky-underline">사회 세부과목 채점비율</span></h1>
+				<canvas id="subjectChart9"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="sky-underline">사회 세부과목 문제 풀이 수</span></h1>
+				<canvas id="subjectChart10"></canvas>
+			</div>
+			
+			<!-- 과학 11 12 -->
+			<div class="half-card">
+				<h1 class="card-title"><span class="green-underline">과학 세부과목 채점비율</span></h1>
+				<canvas id="subjectChart11"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="green-underline">과학 세부과목 문제 풀이 수</span></h1>
+				<canvas id="subjectChart12"></canvas>
+			</div>
+			
+			<!-- 한국사 13 14 -->
+			<div class="half-card">
+				<h1 class="card-title"><span class="black-underline">한국사 세부과목 채점비율</span><br>(세부과목 항목 없음)</h1>
+				<canvas id="subjectChart13"></canvas>
+			</div>
+			
+			<div class="half-card">
+				<h1 class="card-title"><span class="black-underline">한국사 세부과목 문제 풀이 수</span><br>(세부과목 항목 없음)</h1>
+				<canvas id="subjectChart14"></canvas>
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+	const solvCountList = /*[[${solvCountList}]]*/'';
+	const solvCountListByProblemCate = /*[[${solvCountListByProblemCate}]]*/'';
+	
+	const solvCountListByCate = {}
+	for (const subject of solvCountListByProblemCate) {
+	  const { subjectId, ...rest } = subject
+	  if (!solvCountListByCate[subjectId]) {
+		  solvCountListByCate[subjectId] = []
+	  }
+	  solvCountListByCate[subjectId].push(rest)
+	}
+	
+	
+	Chart.defaults.font.family = 'Esamanru';
+	Chart.register(ChartDataLabels);
+	
+	
+	
+	// 과목별 채점비율 ============================================
+	const subjectChart = document.getElementById('subjectChart').getContext('2d');
+	
+	const subjectList = solvCountList.map((i)=> i.subjectName);
+	const correctData = solvCountList.map((i)=> i.correctCount);
+	const wrongData = solvCountList.map((i)=> i.wrongCount);
+	
+	const chartOption1 = {
+		responsive : true,
+		legend:{
+			labels: {
+				fontSize: 15,
+			},
+		},
+		scales: {
+		   y: {
+		     beginAtZero: true,
+		   }
+		},
+	}
+
+	const chart1 = new Chart(subjectChart, {
+	  type: 'bar',
+	  data: {
+	    labels: subjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: correctData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: wrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+		
+		
+		
+	
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart2 = document.getElementById('subjectChart2').getContext('2d');
+	const countData = solvCountList.map((i)=> i.totalCount);
+	
+	const chartOption2 = {
+		responsive : true,
+		
+		legend:{
+			labels: {
+				fontSize: 15,
+			},
+		},
+		
+		plugins: {
+            datalabels: {
+            	align:'top',
+				formatter: function(value, context) {
+					const dataset = context.chart.data.datasets[0];
+					const total = dataset.data.reduce((sum, currentValue) => sum + currentValue, 0);
+					const percentage = Math.round((value / total) * 100);
+					return percentage + '%';
+				},
+				color: '#fff',
+            },
+        },
+	};
+
+	const chart2 = new Chart(subjectChart2, {
+	    type: 'pie',
+	    data: {
+	      labels: subjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:countData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	/////////////////////국어 차트 /////////////////////////////////////////
+	// 과목별 채점비율 ============================================
+	const subjectChart3 = document.getElementById('subjectChart3').getContext('2d');
+	
+	const ksubjectList = solvCountListByCate[1].map((i)=> i.subjectName);
+	const kcorrectData = solvCountListByCate[1].map((i)=> i.correctCount);
+	const kwrongData = solvCountListByCate[1].map((i)=> i.wrongCount);
+
+	const chart3 = new Chart(subjectChart3, {
+	  type: 'bar',
+	  data: {
+	    labels: ksubjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: kcorrectData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: kwrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart4 = document.getElementById('subjectChart4').getContext('2d');
+	const kcountData = solvCountListByCate[1].map((i)=> i.totalCount);
+	
+	const chart4 = new Chart(subjectChart4, {
+	    type: 'pie',
+	    data: {
+	      labels: ksubjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:kcountData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	          'rgba(123, 99, 43,.5)',
+	          'rgba(23, 123, 22,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+	/////////////////////국어 차트 END/////////////////////////////////////////
+	
+	
+	/////////////////////영어 차트 /////////////////////////////////////////
+	// 과목별 채점비율 ============================================
+	const subjectChart5 = document.getElementById('subjectChart5').getContext('2d');
+	
+	const esubjectList = solvCountListByCate[2].map((i)=> i.subjectName);
+	const ecorrectData = solvCountListByCate[2].map((i)=> i.correctCount);
+	const ewrongData = solvCountListByCate[2].map((i)=> i.wrongCount);
+
+	const chart5 = new Chart(subjectChart5, {
+	  type: 'bar',
+	  data: {
+	    labels: esubjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: ecorrectData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: ewrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart6 = document.getElementById('subjectChart6').getContext('2d');
+	const ecountData = solvCountListByCate[2].map((i)=> i.totalCount);
+	
+	const chart6 = new Chart(subjectChart6, {
+	    type: 'pie',
+	    data: {
+	      labels: esubjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:ecountData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	          'rgba(123, 99, 43,.5)',
+	          'rgba(23, 123, 22,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+	/////////////////////영어 차트 END/////////////////////////////////////////
+	
+	
+	
+	/////////////////////수학 차트 /////////////////////////////////////////
+	// 과목별 채점비율 ============================================
+	const subjectChart7 = document.getElementById('subjectChart7').getContext('2d');
+	
+	const msubjectList = solvCountListByCate[3].map((i)=> i.subjectName);
+	const mcorrectData = solvCountListByCate[3].map((i)=> i.correctCount);
+	const mwrongData = solvCountListByCate[3].map((i)=> i.wrongCount);
+
+	const chart7 = new Chart(subjectChart7, {
+	  type: 'bar',
+	  data: {
+	    labels: msubjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: mcorrectData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: mwrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart8 = document.getElementById('subjectChart8').getContext('2d');
+	const mcountData = solvCountListByCate[3].map((i)=> i.totalCount);
+	
+	const chart8 = new Chart(subjectChart8, {
+	    type: 'pie',
+	    data: {
+	      labels: msubjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:mcountData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	          'rgba(123, 99, 43,.5)',
+	          'rgba(23, 123, 22,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+	/////////////////////수학 차트 END/////////////////////////////////////////
+	
+	
+	
+	/////////////////////사회 차트 /////////////////////////////////////////
+	// 과목별 채점비율 ============================================
+	const subjectChart9 = document.getElementById('subjectChart9').getContext('2d');
+	
+	const ssubjectList = solvCountListByCate[4].map((i)=> i.subjectName);
+	const scorrectData = solvCountListByCate[4].map((i)=> i.correctCount);
+	const swrongData = solvCountListByCate[4].map((i)=> i.wrongCount);
+
+	const chart9 = new Chart(subjectChart9, {
+	  type: 'bar',
+	  data: {
+	    labels: ssubjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: scorrectData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: swrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart10 = document.getElementById('subjectChart10').getContext('2d');
+	const scountData = solvCountListByCate[4].map((i)=> i.totalCount);
+	
+	const chart10 = new Chart(subjectChart10, {
+	    type: 'pie',
+	    data: {
+	      labels: ssubjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:scountData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	          'rgba(123, 99, 43,.5)',
+	          'rgba(23, 123, 22,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+	/////////////////////사회 차트 END/////////////////////////////////////////
+	
+	
+	
+	/////////////////////과학 차트 /////////////////////////////////////////
+	// 과목별 채점비율 ============================================
+	const subjectChart11 = document.getElementById('subjectChart11').getContext('2d');
+	
+	const scsubjectList = solvCountListByCate[5].map((i)=> i.subjectName);
+	const sccorrectData = solvCountListByCate[5].map((i)=> i.correctCount);
+	const scwrongData = solvCountListByCate[5].map((i)=> i.wrongCount);
+
+	const chart11 = new Chart(subjectChart11, {
+	  type: 'bar',
+	  data: {
+	    labels: scsubjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: sccorrectData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: scwrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart12 = document.getElementById('subjectChart12').getContext('2d');
+	const sccountData = solvCountListByCate[5].map((i)=> i.totalCount);
+	
+	const chart12 = new Chart(subjectChart12, {
+	    type: 'pie',
+	    data: {
+	      labels: scsubjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:sccountData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	          'rgba(123, 99, 43,.5)',
+	          'rgba(23, 123, 22,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+	/////////////////////과학 차트 END/////////////////////////////////////////
+	
+	
+	
+	/////////////////////한국사 차트 /////////////////////////////////////////
+	// 과목별 채점비율 ============================================
+	const subjectChart13 = document.getElementById('subjectChart13').getContext('2d');
+	
+	const hsubjectList = solvCountListByCate[6].map((i)=> i.subjectName);
+	const hcorrectData = solvCountListByCate[6].map((i)=> i.correctCount);
+	const hwrongData = solvCountListByCate[6].map((i)=> i.wrongCount);
+
+	const chart13 = new Chart(subjectChart13, {
+	  type: 'bar',
+	  data: {
+	    labels: hsubjectList,
+	    datasets: [{
+	      label: '맞은 문제',
+	      data: hcorrectData,
+	      backgroundColor: 'rgba(14, 130, 58, 0.5)',
+	      borderColor: 'rgba(14, 130, 58, 1)',
+	      borderWidth: 1
+	    }, {
+	      label: '틀린 문제',
+	      data: hwrongData,
+	      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+	      borderColor: 'rgba(255, 99, 132, 1)',
+	      borderWidth: 1
+	    }]
+	  },
+	  options: chartOption1
+	});
+	
+	// 과목별 채점비율 END ============================================
+	// 과목별 문제 풀이수 ============================================
+	const subjectChart14 = document.getElementById('subjectChart14').getContext('2d');
+	const hcountData = solvCountListByCate[6].map((i)=> i.totalCount);
+	
+	const chart14 = new Chart(subjectChart14, {
+	    type: 'pie',
+	    data: {
+	      labels: hsubjectList,
+	      datasets: [{
+	        label:"푼 문제 수",
+	        data:hcountData,
+	        backgroundColor:[
+	          'rgba(255, 99, 132,.5)',
+	          'rgba(54, 162, 235,.5)',
+	          'rgba(255, 205, 86,.5)',
+	          'rgba(75, 192, 192,.5)',
+	          'rgba(153, 102, 255,.5)',
+	          'rgba(233, 120, 210,.5)',
+	          'rgba(123, 99, 43,.5)',
+	          'rgba(23, 123, 22,.5)',
+	        ],
+	      }]
+	    },
+	    options: chartOption2,
+	  });
+	// 과목별 문제 풀이수 END ============================================
+	/////////////////////한국사 차트 END/////////////////////////////////////////
+		
+	
+	</script>
+</body>
+</html>

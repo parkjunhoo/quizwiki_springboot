@@ -14,9 +14,18 @@ header .util-bar{
     height: 40px;
     width: 1200px;
     margin: 0 auto;
-    
     font-family: "Pretendard";
     display: flex;
+}
+
+header .nav-bar-bg{
+	background-color:#f9f9f9;
+	left: 0;
+    height: 90px;
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    z-index: 0;
 }
 header .util-bar-bg{
     position: absolute;
@@ -88,7 +97,6 @@ header .util-sub-menu a:active {
 
 header .nav-bar{
     font-family: "Esamanru";
-    position: relative;
     height: 90px;
     width: 1200px;
     margin: 0 auto;

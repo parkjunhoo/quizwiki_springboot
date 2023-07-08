@@ -1,4 +1,6 @@
-
+*::-webkit-scrollbar {
+  display: none;
+}
 /*■■■■■■■■■■■■■ font ■■■■■■■■■■■■■ */
 @font-face {
 	font-family: "Esamanru";

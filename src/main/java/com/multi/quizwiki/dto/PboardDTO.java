@@ -6,9 +6,11 @@ import java.util.List;
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Alias("pboard")
 @Data
 @NoArgsConstructor

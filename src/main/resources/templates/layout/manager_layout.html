@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+<meta charset="UTF-8">
+	<!-- cdn -->
+    <script src="https://kit.fontawesome.com/e92cf22849.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="icon" th:href="@{/images/favicon.ico}" />
+    
+    <!-- css -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/layout/pboard_layout.css}" />
+</head>
+<body>
+	<th:block th:replace="/fragment/header :: header"></th:block>
+	<section id="banner-section">
+		<th:block th:replace="/thymeleaf/manager/manager_banner :: banner"></th:block>
+	</section>
+	<section id="content-section">
+		<div id="content-wrap">
+			<th:block layout:fragment="content"></th:block>
+		</div>
+	</section>
+	<th:block th:replace="/fragment/footer :: footer"></th:block>
+</body>
+</html>

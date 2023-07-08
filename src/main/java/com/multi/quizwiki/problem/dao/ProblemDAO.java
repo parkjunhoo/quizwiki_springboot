@@ -39,4 +39,7 @@ public interface ProblemDAO {
 	public List<ProblemDTO> problem_findLikedByMemberId(String memberId, int size , int page);
 	public List<ProblemDTO> problem_findOrderByInquiry(int limit);
 	public List<ProblemDTO> problem_findOrderByLike(int limit);
+	
+	public List<PrintFileEntity> print_file_findALlByProblemId(int problemId);
+	public List<ProblemChoiseEntity> problem_choise_findAllByProblemId(int problemId);
 }

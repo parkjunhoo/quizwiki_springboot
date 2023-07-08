@@ -18,7 +18,7 @@ th:fragment="header"
 	<div class="util-bar">
 		<div class="util-bar-bg"></div>
 		 <div class="util-bar-notice">
-			<a href="#"> [업로드 공지] 1학기 기말고사 콘텐츠 업로드 </a>
+			<a href="#"> [공지사항] 사이트 운영 공지사항 </a>
 		</div>
 
 		<div class="util-sub-menu">
@@ -40,18 +40,21 @@ th:fragment="header"
 			</th:block>
 			
 			 <a href="/faqt"> 고객센터 </a>
-				 <a href="/dash">대시보드1(임시)</a>
-				<a href="/dash1">대시보드2(임시)</a>
 		</div>
 	</div>
+	
 	<div class="nav-bar">
-		<div class="nav-container">
-			<div class="logo-wrap">
-				<a th:href="@{/main}"><img id="logo-img" width="100%" height="100%"
-					th:src="@{/images/QuizWiki_logo1_trans.png}" /></a>
+	<div class="nav-bar-bg"></div>
+		<div style="z-index:5;" class="nav-container">
+			<div style="z-index:5;" class="logo-wrap">
+				<a th:href="@{/main}">
+					<video style="height: 100%;" id="logo-img" width="100%" height="100%" autoplay loop="loop" muted>
+					    <source th:src="@{/images/main/animlogo.mp4}" type="video/webm">
+				    </video>
+				</a>
 			</div>
 
-			<ul class="menu-list">
+			<ul style="z-index:5;" class="menu-list">
 				 <li><a href="#"> <i style="color: #2b5293"
 						class="fa-solid fa-bars"></i> 전체보기
 				</a></li> 
@@ -83,7 +86,7 @@ th:fragment="header"
                                 </svg>
 					</span>
 				</a></li>
-				 <li><a href="#" class="circle-effect-parent"> <span
+				 <li><a href="/manager/mymanager" class="circle-effect-parent"> <span
 						class="text-area"> 학습관리 <svg class="circle-effect"
 								viewBox="0 0 1024 1024" version="1.1"
 								xmlns="http://www.w3.org/2000/svg"
@@ -94,12 +97,10 @@ th:fragment="header"
 				</a></li> 
 			</ul>
 
-			<div class="icon-menu">
-				 <a href="#"> <i class="fas fa-pencil"></i> 필기문제 <sup
+			<div style="z-index:5;" class="icon-menu">
+				 <a th:href="@{/manager/recommand}"> <i class="fas fa-pencil"></i> 추천문제 풀기 <sup
 					style="color: red; font-size: 11px;">Beta</sup>
-				</a> <a style="margin-left: auto;" href="#"> <i
-					class="fa-sharp fa-solid fa-magnifying-glass"></i> 검색
-				</a> 
+				</a>
 
 			</div>
 		</div>
