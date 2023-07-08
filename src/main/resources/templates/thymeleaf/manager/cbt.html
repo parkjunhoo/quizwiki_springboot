@@ -109,6 +109,18 @@ xmlns:th="http://www.thymeleaf.org"
 		
 		//문제list
 		problemList = /*[[${problemList}]]*/'';
+	
+		if(problemList.length < 1){
+			Swal.fire({
+				icon:"info",
+				title:'추천 문제가 없습니다!',
+				text:"문제를 풀어 데이터를 만들어주세요.",
+				confirmButtonColor: '#3085d6',
+				confirmButtonText:'닫기'
+			}).then(()=>{
+				window.close();
+			});
+		}
 		console.log(problemList);
 		//경과 시간,타이머
 		let time = 0;
