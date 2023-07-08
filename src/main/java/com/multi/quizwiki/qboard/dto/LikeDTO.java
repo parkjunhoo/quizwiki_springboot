@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor	
 public class LikeDTO {
-	private	int id;
-	private	Long qbaord_id;
+	private	Long qboard_id;
 	private	String member_id;
-	private int heart;
+	
+	
 
 }

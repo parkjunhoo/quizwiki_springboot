@@ -1,35 +1,48 @@
 package com.multi.quizwiki.qboard.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.multi.quizwiki.qboard.dao.QboardLikeMapper;
 import com.multi.quizwiki.qboard.dto.LikeDTO;
+import com.multi.quizwiki.qboard.dto.LikeResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LikeService {
 	
 	private final QboardLikeMapper likemapper;
 	
-	public Long saveLike(Long qboard_id) {
+	public void addLike(Long qboard_id, String member_id) {
+		 LikeDTO likedto = new LikeDTO( qboard_id,member_id);
+		likemapper.addLike(likedto);
 		 
-		likemapper.saveLike(qboard_id);
-		 return qboard_id;
 	}
 	
-	public Long deleteLike(Long qboard_id) {
-		likemapper.delelteLike(qboard_id);
-		return qboard_id;
+	
+	public void deleteLike(Long qboard_id, String member_id	) {
+		
+		LikeDTO likedto = new LikeDTO(qboard_id, member_id); 
+		likemapper.delelteLike(likedto);
 	}
 	
-	public LikeDTO findHeart(Long qboard_id, String member_id) {
-		Map<String, Long> id = new HashMap<String,Long>();
-		id.put("qboard_id", qboard_id);
-		return likemapper.findHeart(qboard_id, member_id);
+	public boolean isLike(Long qboard_id, String member_id) {
+		LikeDTO likedto = new LikeDTO(qboard_id, member_id); 
+		int res =likemapper.isLike(likedto);
+		return res == 0? false:true; 
+	}
+	//좋아요 개수
+	public int count(Long qboard_id) {
+		return likemapper.getLike(qboard_id).size();
 	}
 	
 

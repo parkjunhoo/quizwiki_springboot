@@ -1,17 +1,22 @@
 package com.multi.quizwiki.qboard.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.multi.quizwiki.qboard.dto.LikeDTO;
+import com.multi.quizwiki.qboard.dto.LikeResponse;
 
 @Mapper
 public interface QboardLikeMapper {
 	//좋아요 정보 저장
-	void saveLike(Long qboard_id);
+	void addLike(LikeDTO likedto);
 	
-	void delelteLike(Long qboard_id);
+	void delelteLike(LikeDTO likedto);
 	
-	LikeDTO findHeart(Long qobard_id, String member_id);
+	 List<LikeResponse> getLike(Long qboard_id);
+	
+	int isLike(LikeDTO likedto);
 	
 	
 }

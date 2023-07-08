@@ -73,8 +73,16 @@ layout:fragment="content"><head>
 			<div class="post_features">
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
 					<button id="likeBtn">
-							<i class="fa-regular fa-heart" > 0</i>						
-							<i class="fa-solid fa-heart" style="color: red"></i>
+							<i class="fa-solid fa-heart" style="color: red"
+							th:if ="${isLike ==true}" 
+							th:onclick="'location.href=\''+ @{|/like/add/${qbpard.qbpard_id}|} + '\''"></i>
+							
+							<i  class="fa-regular fa-heart" 
+								th:unless="{isLike == true}"
+								th:onclick="'location.href=\''+ @{|/like/delete/${qbpard.qbpard_id}|} + '\''"> 0</i>						
+							
+							
+							
 					</button>
 					
 				</div>
@@ -154,26 +162,14 @@ layout:fragment="content"><head>
 			
         	 window.onload = () => {
                 findAllComment();
-                findHeart();
+             
+               
             }
-        	 
-        	function findHeart(){
-        		const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
-                const member_id = /*[[ ${qboard.member_id} ]]*/'';
-        		const uri = `/qboard/${qboard_id}/like`;
-                const params = {
-                        
-                        qboard_id : qboard_id,
-                        member_id : member_id
-                        
-                    }
-                const response = getJson(uri,params);
-        	}
-        
+        	
+        	
             
             //전체 댓글 조회
               function findAllComment(page) {
-
                 const qboard_id = /*[[ ${qboard.qboard_id} ]]*/'';
                 const uriPage = new URLSearchParams(location.search).get('page');
                 page = (page) ? page : (uriPage ? Number(uriPage) : 1);
@@ -403,8 +399,8 @@ layout:fragment="content"><head>
                   currentPage.removeAttribute('onclick');
 
                   // 8. 페이지 URI 강제 변경
-                  const qbpard_id = new URLSearchParams(location.search).get('comment_id');
-                  history.replaceState({}, '', location.pathname + `?comment_id=${qboard_id}&page=${currentPage.text}`);
+                  const qbpard_id = new URLSearchParams(location.search).get('qboard_id');
+                  history.replaceState({}, '', location.pathname + `?qboard_id=${qboard_id}&page=${currentPage.text}`);
               }
               
 			

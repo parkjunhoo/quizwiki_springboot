@@ -185,8 +185,9 @@ public class QboardController {
 			 model.addAttribute("qboard", qboard);
 			 model.addAttribute("category", qboard.getCategory());
 			 LikeDTO like = new LikeDTO();
-			 model.addAttribute("like",like);
-			 
+			 model.addAttribute("isLike", likeservice.isLike(qboard_id, like.getMember_id()));
+			
+			 model.addAttribute("likelist",likeservice.count(qboard_id));
 			return "thymeleaf/qboard/qboard_read";
 		 }
 		 	

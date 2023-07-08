@@ -6,23 +6,28 @@
 		id
 		,qboard_id
 		,member_id
-		,like_check
 	</sql>
 	
 	<!-- 좋아요 저장 -->
-	<insert id="saveLike" parameterType="Long">
+	<insert id="addLike" parameterType="like">
 		insert into qboard_like (
 		<include refid="LikeColumns"/>
 		) VALUES (
 			#{id}
 			,#{qboard_id}
 			,#{member_id}
-			,1
+			
 		)
 	</insert>
+	<!-- 좋아요 개수 -->
+	<select id="getLike" parameterType="Long" resultType="like">
+		SELECT *
+		FROM qboard_like
+		WHERE qboard_id =#{qboard_id}
+	</select>
 	<!-- 좋아요 여부 확인 -->
-	<select id="findHeart" parameterType="like">
-		select *
+	<select id="isLike" parameterType="like" resultType="int">
+		select count(*)
 		from qboard_like
 		where qboard_id =#{qboard_id}
 		AND member_id =#{member_id}	
@@ -30,9 +35,9 @@
 	</select>
 	<!-- 좋아요 삭제 -->
 	<delete id="deleteLike" parameterType="Long">
-		update qboard_like
-		SET 
-			like_check=0
+		
+		DELETE  
+		FROM qboard_like	
 		WHERE 
 			qboard_id =#{qboard_id}
 		AND 
