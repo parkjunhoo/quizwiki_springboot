@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.quizwiki.manager">
+	
+	<select id="findSolvCountBySubjectName" resultType="solvCount" parameterType="String">
+		SELECT s.subject_name subjectName,
+		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) AS wrongCount,
+		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS correctCount,
+		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) +
+		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS totalCount
+		FROM `subject` s
+		JOIN problem_cate pc ON s.subject_id = pc.subject_id
+		LEFT JOIN problem p ON pc.problem_cate_id = p.problem_cate_id
+		LEFT JOIN solv sv ON p.problem_id = sv.problem_id AND sv.member_id = #{memberId}
+		GROUP BY s.subject_name
+		ORDER BY s.subject_id;
+	</select>
+	
+	<select id="findSolvCountByProblemCateName" resultType="solvCount" parameterType="String">
+		SELECT pc.problem_cate_name subjectName,
+			   s.subject_id subjectId,
+		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) AS wrongCount,
+		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS correctCount,
+		       SUM(CASE WHEN sv.solv_right = 0 OR sv.solv_right IS NULL THEN 1 ELSE 0 END) +
+		       SUM(CASE WHEN sv.solv_right = 1 THEN 1 ELSE 0 END) AS totalCount
+		FROM `subject` s
+		JOIN problem_cate pc ON s.subject_id = pc.subject_id
+		LEFT JOIN problem p ON pc.problem_cate_id = p.problem_cate_id
+		LEFT JOIN solv sv ON p.problem_id = sv.problem_id AND sv.member_id = #{memberId}
+		GROUP BY pc.problem_cate_name
+		ORDER BY pc.problem_cate_id;
+	</select>
+	
+	<resultMap type="recoproblem" id="problemCamel">
+		<id property="problemId" column="problem_id" />
+		<result property="problemCateId" column="problem_cate_id" />
+		<result property="pboardId" column="pboard_id" />
+		<result property="problemType" column="problem_type" />
+		<result property="problemContent" column="problem_content" />
+		<result property="problemIndex" column="problem_index" />
+		<result property="problemAnswer" column="problem_answer" />
+		<result property="problemPrint" column="problem_print" />
+		<result property="problemDesc" column="problem_desc" />
+		<result property="problemStatus" column="problem_status" />
+	</resultMap>
+	<select id="recommandProblem" resultMap="problemCamel" parameterType="Map">
+		SELECT p.*
+		FROM (
+			SELECT pc.problem_cate_id, COUNT(*) AS wrong_count
+			FROM solv s
+			JOIN problem p ON s.problem_id = p.problem_id
+			JOIN problem_cate pc ON p.problem_cate_id = pc.problem_cate_id
+			WHERE s.member_id = #{memberId}
+				AND s.solv_right = 0
+			GROUP BY pc.problem_cate_id
+			ORDER BY wrong_count DESC
+			LIMIT 1
+		) AS t
+		JOIN problem p ON t.problem_cate_id = p.problem_cate_id
+		LEFT JOIN problem_like pl ON p.problem_id = pl.problem_id
+		<if test="distinct == true">
+			WHERE p.problem_id NOT IN (
+				SELECT problem_id
+				FROM solv
+				WHERE member_id = #{memberId}
+			)
+		</if>
+		GROUP BY p.problem_id
+		ORDER BY COUNT(pl.problem_id) DESC
+		LIMIT #{limit};
+	</select>
+</mapper>

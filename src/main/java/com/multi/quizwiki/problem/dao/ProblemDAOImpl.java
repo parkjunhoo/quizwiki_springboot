@@ -171,5 +171,15 @@ public class ProblemDAOImpl implements ProblemDAO {
 		return ss.selectList("com.multi.quizwiki.problem.selectProblemOrderByLike",limit);
 	}
 
+	@Override
+	public List<PrintFileEntity> print_file_findALlByProblemId(int problemId) {
+		return printFileRepo.findALlByProblemId(problemId);
+	}
+
+	@Override
+	public List<ProblemChoiseEntity> problem_choise_findAllByProblemId(int problemId) {
+		return problemChoiseRepo.findAllByProblemId(problemId);
+	}
+
 
 }
