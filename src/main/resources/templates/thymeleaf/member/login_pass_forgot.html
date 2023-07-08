@@ -38,35 +38,34 @@ $(document).ready(function(){
 			url : "/findpw",
 			type : "POST",
 			data : {
+				member_name : $("#member_name").val(),
 				member_id : $("#member_id").val(),
 				email : $("#memail").val()
 			},
 			success : function(data) {
-				alert($("#memail").val()+"로 인증번호 발송이 완료되었습니다. \n확인 후 인증해주세요.")
-				console.log("data -> "+data);
+				if($("#member_name").val()==null || $("#member_name").val()==""){
+					alert("이름을 입력하세요");
+				} else{
+					//alert("이름 입력 완료");
+					if($("#member_id").val()==null || $("#member_id").val()==""){
+						alert("아이디를 입력하세요");
+					} else{
+						//alert("아이디 입력함!");
+						if($("#memail").val()!=null && $("#memail").val()!=""){
+							alert($("#memail").val()+"로 임시 비밀번호가 발송되었습니다. \n비밀번호는 로그인 후 마이페이지에서 변경이 가능합니다.");
+							console.log("data -> "+data);
+						}else{
+							alert("이메일을 입력하세요");
+						}
+					}
+				}
+				
 			},
 			error : function(){
-				alert('error')
+				alert('error');
 			}
 		})
 	});
-	
-	// 이메일 인증번호
-	/*  $("#checkEmail").on("click",function(){
-	    $.ajax({
-	       type : "POST",
-	       url : "/login/mailConfirm",
-	       data : {
-	          "email" : $("#memail").val()
-	       },
-	       success : function(data){
-	          alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인 후 인증해주세요.")
-	          console.log("data : "+data);
-	         
-	       }
-	    })
-	 })
-	  */
 	
 });
 
@@ -104,26 +103,11 @@ $(document).ready(function(){
 							<input type="email" placeholder="quizwiki@naver.com" name="email"
 							id="memail" class="login__input" required>
 						</div>
-				<!-- 	<div class="row">
-						<div class="login__box login_tel">
-							이메일 주소
-							<input type="email" placeholder="quizwiki@naver.com" name="email"
-							id="memail" class="login__input" required>
-						</div>
-
-						<div class="div__check__button">
-							<a type="button" id="checkEmail" class="login__button check__button"
-							onclick="">인증번호 발송</a>
-						</div>
-					</div>
-					
-					<div class="login__box login_num">
-					인증번호 <input type="text" placeholder="6자리 인증번호 입력" id="memailconfirm" 
-					class="login__input" required>
-					</div> -->
+				
 					<label for="memailconfirm" id="memailconfirmTxt" style="float: left;padding-top: 10px;"></label>
 					
-					<a onclick="" class="login__button" id="findBtn">비밀번호 찾기</a>
+					<a onclick="" class="login__button" id="findBtn" style="margin-bottom: 0.5rem;">임시 비밀번호 발송</a>
+					<a href="/login.do" class="login__button" style="margin-bottom: 0; margin-top: 0">로그인하기</a>
 				</form>	
 			</div>
 		</div>

@@ -177,6 +177,14 @@ hr{
   background-color: black;
   cursor: pointer;
 }
+#findBtn{
+	background-color:#fff;
+	color: black;
+}
+#findBtn:hover{
+	background-color:black;
+	color: #fff;
+}
 .login__account, .login__signin, .login__signup {
   font-weight: 600;
   font-size: 0.813rem;

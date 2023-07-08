@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Wiki 아이디 찾기</title>
+<title>QuizWiki 아이디 찾기</title>
 
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
@@ -16,8 +16,8 @@
 
 <script type="text/javascript">
 
-function chk_form() {
-	if(document.getElementById("member_name").value==''){
+function chk_form2() {
+	/* if(document.getElementById("member_name").value==''){
 		alert("이름을 입력하세요.");
 		return false;
 	}
@@ -25,10 +25,35 @@ function chk_form() {
 		alert("이메일을 입력하세요.");
 		return false;
 	}
+	if(document.getElementById("memailconfirm").value==''){
+		alert("인증번호를 입력하세요.");
+		return false;
+	} */
 	document.getElementById('login-id').submit();
-	}
+}
 
 $(document).ready(function(){
+	
+	$("#findIdBtn").on("click",function(){
+		if($("#member_name").val()==null || $("#member_name").val()==""){
+			alert("이름을 입력하세요");
+		} else{
+			//alert("이름 입력 완료");
+			if($("#memail").val()==null || $("#memail").val()==""){
+				alert("이메일을 입력하세요");
+			}else{
+				//alert("이메일을 입력 완료");
+				
+				if($("#memailconfirm").val()==null || $("#memailconfirm").val()==""){
+					alert("인증번호를 입력하세요");
+						
+				}else{
+					//alert("인증번호 입력 완료");
+				}
+			}
+		}
+	})
+	
 		// 이메일 인증번호
 	 $("#checkEmail").on("click",function(){
 	    $.ajax({
@@ -38,31 +63,60 @@ $(document).ready(function(){
 	          "email" : $("#memail").val()
 	       },
 	       success : function(data){
-	          alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인 후 인증해주세요.")
+	          alert($("#memail").val()+"로 인증번호 발송이 완료되었습니다. \n인증번호를 입력해주세요.")
 	          console.log("data : "+data);
 	          chkEmailConfirm(data, $("#memailconfirm"), $("#memailconfirmTxt"));
+	    //   alert($("#memailconfirm").val())
+	    //   alert($("#memailconfirmTxt").text())
 	       }
 	    })
 	 })
 	 
 	// 이메일 인증번호 체크 함수
-	function chkEmailConfirm(data, $memailconfirm, $memailconfirmTxt){
-		$memailconfirm.on("keyup", function(){
-			if (data != $memailconfirm.val()) { //
+	function chkEmailConfirm(data, memailconfirm, memailconfirmTxt){
+		//alert($memailconfirm)
+		//alert($memailconfirm.val())
+		$(memailconfirm).on("keyup", function(){
+			if (data != memailconfirm.val()) { //
+				//alert(memailconfirm.val())
 				emconfirmchk = false;
-				$memailconfirmTxt.html("<span id='emconfirmchk'>인증번호 오류</span>")
+				$(memailconfirmTxt).html("<span id='emconfirmchk'>인증번호 오류</span>")
 				$("#emconfirmchk").css({
 					"color" : "#ff0000",
 					})
+				/* $("#findIdBtn").on("click",function(){
+					alert("인증번호 오류");
+				})
+				$("#findIdBtn").on("click",function(event){
+					event.preventDefault(); // 이벤트 삭제
+				}) */
+				//alert("인증번호 오류")
 				//console.log("중복아이디");
 			} else { // 아니면 중복아님
 				emconfirmchk = true;
-				$memailconfirmTxt.html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
+				$(memailconfirmTxt).html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
 					$("#emconfirmchk").css({
 					"color" : "#5a49e4",
 					})
+					/* $("#findIdBtn").on("click",function(){
+						chk_form2();
+					}) */
+		
+					
 			}
 		})
+		
+		$("#findIdBtn").on("click", function(){
+        if (emconfirmchk === false) {
+            alert("인증번호 오류");
+            event.preventDefault(); // 이벤트 삭제
+        } else {
+            chk_form2();
+        }
+    })
+		
+		
+		
 	}
 });
 
@@ -94,21 +148,20 @@ $(document).ready(function(){
 						</div>
 
 						<div class="div__check__button">
-						<a type="button" id="checkEmail" class="login__button check__button"
-								onclick="">인증번호 발송</a>
+						<a type="button" id="checkEmail" class="login__button check__button">인증번호 발송</a>
 							<!-- <a href="#" class="login__button check__button" >인증번호 받기</a> -->
 						
 						</div>
 					</div>
 					
 					<div class="login__box login_num">
-					인증번호 <input type="text" placeholder="6자리 인증번호 입력" id="memailconfirm" 
+					인증번호 <input type="text" placeholder="8자리 인증번호 입력" id="memailconfirm" 
 					class="login__input" required>
 					</div>
-					<label for="memailconfirm" id="memailconfirmTxt" style="float: left;padding-top: 10px;"></label>
+					<div id="memailconfirmTxt" style="float: left;padding-top: 10px;"></div>
 					
 					
-					<a onclick="chk_form()" class="login__button">아이디 찾기</a>
+					<a class="login__button" id="findIdBtn">아이디 찾기</a>
 					<!-- href="/findId"  -->
 				</form>
 

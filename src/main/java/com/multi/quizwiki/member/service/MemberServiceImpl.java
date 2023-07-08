@@ -110,7 +110,6 @@ public class MemberServiceImpl implements MemberService {
 	// 비밀번호 찾기
 	@Override
 	public void find_pass( MemberDTO dto) throws Exception {
-		//PrintWriter out = response.getWriter();
 		// 임시 비밀번호 생성
 		String pw = "";
 		for (int i = 0; i < 12; i++) {
@@ -127,8 +126,6 @@ public class MemberServiceImpl implements MemberService {
 		sendEmail(dto, "findpw");
 		//System.out.println("******메일 발송 완료******");
 
-	//	out.print("이메일로 임시 비밀번호를 발송하였습니다.");
-		//out.close();
 	}
 
 	// 비번 이멜

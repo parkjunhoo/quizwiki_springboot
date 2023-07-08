@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Quiz Wiki 로그인</title>
 
-<!-- <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.2.0/kakao.min.js"
-  integrity="sha384-x+WG2i7pOR+oWb6O5GV5f1KN2Ko6N7PTGPS7UlasYWNxZMKQA63Cj/B2lbUmUfuC" crossorigin="anonymous"></script>
-<script>
-  Kakao.init('d1c549bb120ac47bddff8f33df3de387'); // 사용하려는 앱의 JavaScript 키 입력
-</script> -->
+<!-- 네이버 로그인 -->
+<!-- <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script> -->
+
+<!-- css -->
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
 <link rel="stylesheet" type="text/css" href="./css/common.css" />
@@ -31,29 +30,7 @@ function chk_form() {
 
 </head>
 <body>
-<!-- <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-	<script type="text/javascript" src="./js/member/login.js"></script>
-	<script type="text/javascript">
-	
-	window.Kakao.init("d1c549bb120ac47bddff8f33df3de387");
-	
-	function kakaoLogin(){
-		window.Kakao.Auth.login({
-			scope:'profile_nickname, account_email, gender',
-			success: function(authObj){
-				console.log(authObj);
-				window.Kakao.API.request({
-					url:'/v2/user/me',
-					success: res => {
-						const kakao_account = res.kakao_account;
-						console.log(kakao_account);
-					}
-				})
-			}
-		});
-	}
-	
-	</script> -->
+
 	<div class="login">
 		<div class="login__content">
 			<div class="login__forms">
@@ -79,70 +56,57 @@ function chk_form() {
 							href="/findPass.do" class="login__forgot">비밀번호 찾기</a>
 					</div>
 					
-					<div style="margin-top: 10px;">
-						<div class="logo_wrap">
+					<a class="login__button" onclick="chk_form()"
+						style="margin-bottom: 0">로그인</a>
+					
+					<div style="margin-bottom: 10px;margin-top: 0;">
+						<div><!-- <div class="logo_wrap"> -->
 							<!-- 카카오 간편 로그인 -->
 							<a href="https://kauth.kakao.com/oauth/authorize
 									?client_id=e2758d85befb75965fd0776467743592
 									&redirect_uri=http://localhost:8087/kakao/login
-									&response_type=code">
+									&response_type=code" class="login__button" id="loginBtn">
 							<!-- <a href="javascript:kakaoLogin();"> -->
 							<!-- <a th:href="@{|${kakaoUrl}|}"> -->
 							<!-- <a id="kakao-login-btn" href="javascript:loginWithKakao()"> -->
-								<img src="/images/icon_kakao.png" id="login_title_img"
-								width="100%" height="100%">
-								<!-- <img src="/images/icon_kakao_login_large_wide.png" id="login_title_img"> -->
+								<!-- <img src="/images/icon_kakao.png" id="kakao_img"
+								width="100%" height="100%"> -->
+								<!-- <img src="/images/icon_kakao_login_large_wide.png" id="kakao_img"
+								style="height: 3rem!important;width: 100%!important"> -->
+								<img src="/images/kakao_msg.png" id="kakao_img">
+								카카오 로그인
 							</a>
-							<!-- <p id="token-result"></p>
-						
-							<script>
-							  function loginWithKakao() {
-							    Kakao.Auth.authorize({
-							      redirectUri: 'http://localhost:8087/main',
-							    });
-							  }
 							
-							  // 아래는 데모를 위한 UI 코드입니다.
-							  displayToken()
-							  function displayToken() {
-							    var token = getCookie('authorize-access-token');
-							
-							    if(token) {
-							      Kakao.Auth.setAccessToken(token);
-							      Kakao.Auth.getStatusInfo()
-							        .then(function(res) {
-							          if (res.status === 'connected') {
-							            document.getElementById('token-result').innerText
-							              = 'login success, token: ' + Kakao.Auth.getAccessToken();
-							          }
-							        })
-							        .catch(function(err) {
-							          Kakao.Auth.setAccessToken(null);
-							        });
-							    }
-							  }
-							
-							  function getCookie(name) {
-							    var parts = document.cookie.split(name + '=');
-							    if (parts.length === 2) { return parts[1].split(';')[0]; }
-							  }
-							</script> -->
 						</div>
-						<div class="logo_wrap">
-							<!-- 네이버 간편 로그인 -->
-							<!-- state는 임의의 값을 넣으라고 해서 test로 잡았습니닷,,  -->
+						<!-- <div class="logo_wrap">
+							네이버 간편 로그인
+							state는 임의의 값을 넣으라고 해서 test로 잡았습니닷,, 
 							<a href="https://nid.naver.com/oauth2.0/authorize
 									?response_type=code
-									&client_id=gBxYnoFcMgYMzb75UjU4
+									&client_id=cxcb9w9XfPoA7smc2VrM
 									&state=test
 									&redirect_uri=http://localhost:8087/main"> 
-								<img src="/images/icon_naver.png"
-								id="login_title_img" width="100%" height="100%">
+								<img src="/images/icon_naver.png" width="100%" height="100%">
 							</a>
-						</div>
-						<div class="logo_wrap">
+						</div> -->
+							<!-- <div class="logo_wrap">
+							네이버 로긴
+							<div id="naverIdLogin"> -->
+								<!-- <img src="/images/icon_naver.png" width="100%" height="100%"> -->
+							<!-- </div>
+							<script type="text/javascript">
+								var naverLogin = new naver.LoginWithNaverId({
+									clientId:"cxcb9w9XfPoA7smc2VrM",
+									callbackUrl:"http://localhost:8087/main",
+									isPopup:false,
+									loginButton:{color:"green",type:1,height:60}
+								});
+								naverLogin.init();
+							</script>
+							</div> -->
+						<!-- <div class="logo_wrap"> -->
 							<!-- 구글 간편 로그인 -->
-							<a href="https://accounts.google.com/o/oauth2/v2/auth
+							<!-- <a href="https://accounts.google.com/o/oauth2/v2/auth
 							?client_id=242302757713-sf1j2s5ngrc6k6p339mviputd0uq6qdq.apps.googleusercontent.com
 							&response_type=token
 							&redirect_uri=http://localhost:8087/main
@@ -150,9 +114,9 @@ function chk_form() {
 							<img src="/images/icon_google.png"
 								id="login_title_img" width="100%" height="100%">
 							</a>
-						</div>
+						</div> -->
 					</div>
-						<a class="login__button" onclick="chk_form()">로그인</a>
+						
 					<div>
 						<span class="login__account login__account--account">계정이 없으신가요?</span> 
 						<span class="login__signin login__signin--signup" id="sign-up">
