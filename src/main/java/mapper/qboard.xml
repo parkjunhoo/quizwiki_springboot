@@ -38,6 +38,9 @@
         <if test="subject != null">
             and	subject =#{subject}
         </if>
+        <if test="category != null">
+        	and category =#{category}
+        </if>
     </sql>
   
   <!--게시물 등록  -->

@@ -82,16 +82,16 @@ layout:fragment="content"><head>
 
 						<span style='float: right;'> <input type="button"
 							class="btn btn-success" value="질문하기"
-							onclick="location.href='/qboard/write.do?category='+new URLSearchParams(window.location.search).get('category')" />
+							onclick="location.href='/quizwiki/qboard/write.do?category='+new URLSearchParams(window.location.search).get('category')" />
 						</span>
 
 						
 						<ul class="nav navbar-nav" style='float:left;' id="searchType" name="searchType">
-							<li class="active" th:value="국어"><a href="/quizwiki/qboard/list.do?subject=국어">국어</a></li>
-							<li class="active" th:value="수학"><a href="/quizwiki/qboard/list.do?subject=수학">수학</a></li>
-							<li class="active" th:value="영어"><a href="/quizwiki/qboard/list.do?subject=영어">영어</a></li>
+							<li class="active" th:value="국어"><a th:href="@{/quizwiki/qboard/list.do(category=${param.category}, subject=국어)}">국어 </a></li>
+							<li class="active" th:value="수학"><a th:href="@{/quizwiki/qboard/list.do(category=${param.category}, subject=수학)}">수학</a></li>
+							<li class="active" th:value="영어"><a th:href="@{/quizwiki/qboard/list.do(category=${param.category}, subject=영어)}">영어</a></li>
 							
-							<li><a href="/quizwiki/qboard/list.do">전체</a></li>
+							<li><a th:href="@{/quizwiki/qboard/list.do(category=${param.category})}">전체</a></li>
 						</ul> 
 					
 			<form class="navbar-form navbar-left" action="/" id="searchForm" onsubmit="return false;" >
@@ -215,7 +215,7 @@ layout:fragment="content"><head>
                               </h3>
                             </div>
                             </a>
-                             <p class="question__body" th:text="${qboard.content} 
+                             <p class="question__body" >${qboard.content}</p> 
                             
                          	
                             

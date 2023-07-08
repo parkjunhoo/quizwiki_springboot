@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.jsoup.select.Evaluator.IsEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
@@ -93,12 +94,10 @@ public class QboardController {
 		
 		qboard.setMember_id(memberId);
 		List<FileRequest> fileReqList = new ArrayList<FileRequest>();
-		System.out.println(qboard);	
 		if(imageList != null) {
 			
 			for(MultipartFile img : imageList) {
 				String origin = img.getOriginalFilename();
-				System.out.println(origin);
 				String uuid = fileUploadService.uploadFile(img, "qboardimage");
 				
 				fileReqList.add(new FileRequest(origin, uuid, img.getSize()));
@@ -167,9 +166,10 @@ public class QboardController {
 	  @GetMapping("/qboard/list.do") 
 	  public String QboardList(@ModelAttribute("params") SearchDto params, Model model, String category ) {
 		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
-		  model.addAttribute("category", category);
+		  List<QboardDTO> qboard =  qboardservice.findByCategory(category);
+	;		
+		  model.addAttribute("qbaord",qboard);
 		  model.addAttribute("category",params.getCategory());
-		  log.info(params.getCategory());
 		  model.addAttribute("subject",params.getSubject());
 		  model.addAttribute("qboardlist",qboardlist); 
 		  
@@ -183,6 +183,7 @@ public class QboardController {
 		  QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
 			  qboardservice.increaseViewCount(qboard_id);
 			 model.addAttribute("qboard", qboard);
+			 model.addAttribute("category", qboard.getCategory());
 			 LikeDTO like = new LikeDTO();
 			 model.addAttribute("like",like);
 			 
@@ -202,7 +203,6 @@ public class QboardController {
 			return "redirect:/quizwiki/qboard/list.do";
 		
 	}
-	
 
 	
 	
