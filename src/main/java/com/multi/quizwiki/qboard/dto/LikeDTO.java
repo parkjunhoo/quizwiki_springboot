@@ -11,9 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor	
 public class LikeDTO {
+	private Long id;
 	private	Long qboard_id;
 	private	String member_id;
 	
-	
-
+	public LikeDTO(Long qboard_id , String member_id) {
+		this.qboard_id = qboard_id;
+		this.member_id = member_id;
+	}
 }

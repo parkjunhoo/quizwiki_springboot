@@ -1,5 +1,8 @@
 package com.multi.quizwiki.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 public class QboardLikeController {
+	
 	private final LikeService likeservice;
 	/*
 	 * //좋아요 여부 확인
@@ -43,18 +47,28 @@ public class QboardLikeController {
 	 * }
 	 */
 	
-	@GetMapping("/like/add")
-	public int addLike(@PathVariable(value ="qboard_id") Long qboard_id, Model model
-			                  ,MemberDTO member) {
-		likeservice.addLike(qboard_id, member.getMember_id());
+	@GetMapping("/qboard/like/add/{qboardId}")
+	@ResponseBody
+	public int addLike(@PathVariable Long qboardId , HttpServletRequest req) {
+		MemberDTO member = util.Utils.getSessionUser(req);
+		if(member == null) {
+			return -1;
+		}
+		likeservice.addLike(qboardId, member.getMember_id());
 		
-		return likeservice.count(qboard_id);
+		return likeservice.count(qboardId);
 	}
 	
-	@GetMapping("/like/delete")
-	public int deletelike(@PathVariable(value="qboard_id") Long qboard_id,MemberDTO member) {
-		likeservice.deleteLike(qboard_id, member.getMember_id());
-		return likeservice.count(qboard_id);
+	@GetMapping("/qboard/like/delete/{qboardId}")
+	public int deletelike(@PathVariable(value="qboardId") Long qboardId, HttpServletRequest req) {
+		
+		MemberDTO member = util.Utils.getSessionUser(req);
+		if(member == null) {
+			return -1;
+		}
+		
+		likeservice.deleteLike(qboardId, member.getMember_id());
+		return likeservice.count(qboardId);
 	}
 
 }

@@ -55,7 +55,7 @@ layout:fragment="content"><head>
 
 				<div id="side_menu">
 					<ul>
-						<li onclick="location.href='/quizwiki/qboard/list.do?category=chats'">고민있어요</li>
+						<li onclick="location.href='/qboard/list.do?category=chats'">고민있어요</li>
 
 						<li class="side_select"
 							onclick="location.href='../qboard/list.do?category=question'">질문있어요</li>
@@ -82,16 +82,16 @@ layout:fragment="content"><head>
 
 						<span style='float: right;'> <input type="button"
 							class="btn btn-success" value="질문하기"
-							onclick="location.href='/quizwiki/qboard/write.do?category='+new URLSearchParams(window.location.search).get('category')" />
+							onclick="location.href='/qboard/write.do?category='+new URLSearchParams(window.location.search).get('category')" />
 						</span>
 
 						
 						<ul class="nav navbar-nav" style='float:left;' id="searchType" name="searchType">
-							<li class="active" th:value="국어"><a th:href="@{/quizwiki/qboard/list.do(category=${param.category}, subject=국어)}">국어 </a></li>
-							<li class="active" th:value="수학"><a th:href="@{/quizwiki/qboard/list.do(category=${param.category}, subject=수학)}">수학</a></li>
-							<li class="active" th:value="영어"><a th:href="@{/quizwiki/qboard/list.do(category=${param.category}, subject=영어)}">영어</a></li>
+							<li class="active" th:value="국어"><a th:href="@{/qboard/list.do(category=${param.category}, subject=국어)}">국어 </a></li>
+							<li class="active" th:value="수학"><a th:href="@{/qboard/list.do(category=${param.category}, subject=수학)}">수학</a></li>
+							<li class="active" th:value="영어"><a th:href="@{/qboard/list.do(category=${param.category}, subject=영어)}">영어</a></li>
 							
-							<li><a th:href="@{/quizwiki/qboard/list.do(category=${param.category})}">전체</a></li>
+							<li><a th:href="@{/qboard/list.do(category=${param.category})}">전체</a></li>
 						</ul> 
 					
 			<form class="navbar-form navbar-left" action="/" id="searchForm" onsubmit="return false;" >
@@ -340,7 +340,7 @@ layout:fragment="content"><head>
             // 게시글 상세 페이지로 이동
             function goViewPage(qboard_id) {
                 const queryString = (location.search) ? location.search + `&qboard_id=${qboard_id}` : `?qboard_id=${qboard_id}`;
-                location.href = '/quizwiki/qboard/read.do' + queryString;
+                location.href = '/qboard/read.do' + queryString;
             }
 
         /*]]>*/

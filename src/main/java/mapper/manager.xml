@@ -5,16 +5,16 @@
 <mapper namespace="com.multi.quizwiki.manager">
 	
 	<select id="findSolvCountBySubjectName" resultType="solvCount" parameterType="String">
-		SELECT s.subject_name AS subjectName,
-		       COUNT(CASE WHEN sv.solv_id IS NOT NULL AND sv.solv_right = 0 THEN 1 ELSE NULL END) AS wrongCount,
-		       COUNT(CASE WHEN sv.solv_right = 1 THEN 1 ELSE NULL END) AS correctCount,
-		       COALESCE(COUNT(sv.solv_id), 0) AS totalCount
+		SELECT s.subject_id, s.subject_name AS subjectName,
+		COUNT(CASE WHEN sv.solv_id IS NOT NULL AND sv.solv_right = 0 THEN 1 ELSE NULL END) AS wrongCount,
+		COUNT(CASE WHEN sv.solv_right = 1 THEN 1 ELSE NULL END) AS correctCount,
+		COALESCE(COUNT(sv.solv_id), 0) AS totalCount
 		FROM `subject` s
 		JOIN problem_cate pc ON s.subject_id = pc.subject_id
 		LEFT JOIN problem p ON pc.problem_cate_id = p.problem_cate_id
 		LEFT JOIN solv sv ON p.problem_id = sv.problem_id AND sv.member_id = #{memberId}
-		GROUP BY s.subject_name
-		ORDER BY s.subject_id;
+		GROUP BY s.subject_id
+		ORDER BY s.subject_id
 	</select>
 	
 	<select id="findSolvCountByProblemCateName" resultType="solvCount" parameterType="String">
@@ -27,7 +27,7 @@
 		JOIN problem_cate pc ON s.subject_id = pc.subject_id
 		LEFT JOIN problem p ON pc.problem_cate_id = p.problem_cate_id
 		LEFT JOIN solv sv ON p.problem_id = sv.problem_id AND sv.member_id = #{memberId}
-		GROUP BY pc.problem_cate_name
+		GROUP BY pc.problem_cate_name, s.subject_id, pc.problem_cate_id
 		ORDER BY pc.problem_cate_id;
 	</select>
 	

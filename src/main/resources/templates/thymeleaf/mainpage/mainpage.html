@@ -17,11 +17,17 @@
 
     <!-- js -->
     <script th:src="@{/js/tab_style/modernizr.custom.js}"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+	
 <title>Quiz Wiki</title>
 </head>
 <body>
 
     <!-- main page -->
+    <div class="main-page-wrap">
+    
     	<div class="elementor-widget-container">
 			<img th:src="@{/images/main/wavetopsmall.png}"/>
 			<img th:src="@{/images/main/wavetopsmall.png}"/>
@@ -134,7 +140,7 @@
 								<div class="content-box" style="left:0%;">
 	                        		
 				                        <div th:each="qboard : ${qboardTopList}" class="section-card">
-											<div class="paper" th:attr="onclick=|location.href='/quizwiki/qboard/read.do?qboard_id='+${qboard.qboardId}|">
+											<div class="paper" th:attr="onclick=|location.href='/qboard/read.do?qboard_id='+${qboard.qboardId}|">
 												<div class="pin">
 													<div class="shadow"></div>
 													<div class="metal"></div>
@@ -260,6 +266,7 @@
             
         </section>
     <!-- main page end -->
+    </div>
 
 
     <!-- tab js -->
