@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.quizwiki.search">
+
+	<select id="findProblem" resultType="problemsearch" parameterType="problemsearchparam">
+		select 
+		p.problem_id problemId,
+		(select s.subject_name from `subject` s where s.subject_id = pc.subject_id) subjectName,
+		pc.problem_cate_name AS cateName,
+		(select pb.pboard_reg_date from pboard pb where pb.pboard_id = p.pboard_id) regDate,
+		(select count(pl.problem_like_id) from problem_like pl where pl.problem_id = p.problem_id) likeCount,
+		(select pb.member_id from pboard pb where p.pboard_id = pb.pboard_id) memberId,
+		p.problem_content content,
+		IF(p.problem_type ='m', '객관식', '주관식') type
+		from problem p
+		join problem_cate pc on pc.problem_cate_id = p.problem_cate_id
+        
+		where
+	    pc.subject_id in
+	    <foreach collection="subjectList" item="subjectId" open="(" close=")" separator=",">
+	      #{subjectId}
+	    </foreach>
+	    <if test="keyword != null and keyword != ''">
+	    	and p.problem_content like concat('%',#{keyword},'%')
+	    </if>
+	    
+	    <if test="sort != null and sort.equals('recent')">
+	    	order by regDate desc
+	    </if>
+	    <if test="sort != null and sort.equals('like')">
+	    	order by likeCount desc
+	    </if>
+	    
+        limit #{startLimit} , #{sizeLimit}
+	</select>
+	
+	<select id="findProblemCount" resultType="int" parameterType="problemsearchparam">
+		select count(*) as count
+		from problem p
+		join problem_cate pc on pc.problem_cate_id = p.problem_cate_id
+		where pc.subject_id in
+		<foreach collection="subjectList" item="subjectId" open="(" close=")" separator=",">
+		  #{subjectId}
+		</foreach>
+		<if test="keyword != null and keyword != ''">
+		  and p.problem_content like concat('%', #{keyword}, '%')
+		</if>
+	</select>
+
+</mapper>

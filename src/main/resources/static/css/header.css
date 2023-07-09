@@ -182,7 +182,7 @@ header .icon-menu{
     display: flex;
 }
 header .icon-menu a{
-    font-size: 16px;
+    font-size: 14px;
     color: #2f2f2f;
     align-self: center;
     margin-right: 30px;
