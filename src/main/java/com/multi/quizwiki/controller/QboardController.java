@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.jsoup.select.Evaluator.IsEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
@@ -33,22 +32,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.multi.quizwiki.common.FileUploadLogicService;
 import com.multi.quizwiki.dto.MemberDTO;
-import com.multi.quizwiki.qboard.dto.CommentResponse;
 import com.multi.quizwiki.qboard.dto.FileRequest;
-import com.multi.quizwiki.qboard.dto.LikeDTO;
 import com.multi.quizwiki.qboard.dto.QboardDTO;
 import com.multi.quizwiki.qboard.dto.SearchDto;
 import com.multi.quizwiki.qboard.paging.PagingResponse;
 import com.multi.quizwiki.qboard.service.CommentService;
 import com.multi.quizwiki.qboard.service.FileService;
 import com.multi.quizwiki.qboard.service.LikeService;
-import com.multi.quizwiki.qboard.service.QboardService;import antlr.Utils;
+import com.multi.quizwiki.qboard.service.QboardService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import util.FileUtils;
 @Controller
 @Slf4j
-@RequestMapping("quizwiki")
 @RequiredArgsConstructor
 public class QboardController {
 	
@@ -105,7 +102,7 @@ public class QboardController {
 				Document html = Jsoup.parse(qboard.getContent());
 				Elements el = html.select("img[title="+origin+"]");
 				
-				el.attr("src", "/quizwiki/qboard/find/"+uuid);
+				el.attr("src", "/qboard/find/"+uuid);
 				qboard.setContent(html.html());
 			
 				
@@ -180,14 +177,22 @@ public class QboardController {
 		 public String QboardDetail(@RequestParam(value="qboard_id",required = false) Long qboard_id, 
 			 Model model, HttpSession session,HttpServletRequest req) {
 		  
-		  QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
-			  qboardservice.increaseViewCount(qboard_id);
+		  	QboardDTO qboard = qboardservice.getQboardDetail(qboard_id);
+		  	qboardservice.increaseViewCount(qboard_id);
+			 
+			 
+			 boolean isLike = false;
+			 
+			 MemberDTO member = util.Utils.getSessionUser(req);
+			 if(member!= null) {
+				 isLike = likeservice.isLike(qboard_id, member.getMember_id());
+			 }
+			 
 			 model.addAttribute("qboard", qboard);
 			 model.addAttribute("category", qboard.getCategory());
-			 LikeDTO like = new LikeDTO();
-			 model.addAttribute("isLike", likeservice.isLike(qboard_id, like.getMember_id()));
-			
-			 model.addAttribute("likelist",likeservice.count(qboard_id));
+			 model.addAttribute("isLike", isLike);
+			 model.addAttribute("likecount",likeservice.count(qboard_id));
+			 
 			return "thymeleaf/qboard/qboard_read";
 		 }
 		 	
@@ -195,13 +200,13 @@ public class QboardController {
 	public String deleteBoard(@RequestParam Long qboard_id) {
 		qboardservice.deleteQboard(qboard_id);
 		
-		return "redirect:/quizwiki/qboard/list.do";
+		return "redirect:/qboard/list.do";
 	}
 	
 	@PostMapping("qboard/update.do")
 	public String updateQboard(QboardDTO qboard) {
 			qboardservice.update(qboard);
-			return "redirect:/quizwiki/qboard/list.do";
+			return "redirect:/qboard/list.do";
 		
 	}
 

@@ -224,7 +224,7 @@ layout:fragment="content">
             	 });
             	 
             	 $.ajax({
-            		url:qboard ? '/quizwiki/qboard/save.do' : '/quizwiki/qboard/update.do',
+            		url:qboard ? 'i/qboard/save.do' : '/qboard/update.do',
             		type:"POST",
             		data:formData,
             		contentType: false,
@@ -233,7 +233,7 @@ layout:fragment="content">
             		success:(res)=>{
             			const msg = res
             			if(msg == "success"){
-            				window.location.href = "/quizwiki/qboard/list.do";
+            				window.location.href = "/qboard/list.do";
             			}else if(msg == "notlogin"){
             				window.location.href = "/login.do";
             			}

@@ -14,6 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quizwiki</name>
 	<description>Demo project for Spring Boot</description>
+	<packaging>war</packaging>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -126,11 +127,8 @@
 
 		<!-- https://mvnrepository.com/artifact/net.nurigo/sdk -->
 		<!-- sms 서비스 이용을 위한 추가 -->
-		<!-- <dependency>
-			<groupId>net.nurigo</groupId>
-			<artifactId>sdk</artifactId>
-			<version>4.2.7</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>net.nurigo</groupId> <artifactId>sdk</artifactId> 
+			<version>4.2.7</version> </dependency> -->
 		<dependency>
 			<groupId>net.nurigo</groupId>
 			<artifactId>javaSDK</artifactId>
@@ -170,18 +168,24 @@
 			<artifactId>commons-email</artifactId>
 			<version>1.5</version>
 		</dependency>
-		
+
 		<!-- JSOUP -->
 		<dependency>
-		    <groupId>org.jsoup</groupId>
-		    <artifactId>jsoup</artifactId>
-		    <version>1.16.1</version>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.16.1</version>
 		</dependency>
 
 		<!-- 카카오 로그인을 위한 추가 -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
+		</dependency>
+		
+		<!-- spring TOMCAT 배포 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
 		</dependency>
 
 	</dependencies>

@@ -16,7 +16,7 @@ import com.multi.quizwiki.manager.dto.SolvCountDTO;
 import com.multi.quizwiki.manager.service.ManagerService;
 
 @Controller
-@RequestMapping("manager")
+@RequestMapping("studymanager")
 public class ManagerController {
 	
 	private ManagerService service;

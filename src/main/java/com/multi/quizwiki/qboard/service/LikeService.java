@@ -1,16 +1,11 @@
 package com.multi.quizwiki.qboard.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.multi.quizwiki.qboard.dao.QboardLikeMapper;
 import com.multi.quizwiki.qboard.dto.LikeDTO;
-import com.multi.quizwiki.qboard.dto.LikeResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +18,7 @@ public class LikeService {
 	private final QboardLikeMapper likemapper;
 	
 	public void addLike(Long qboard_id, String member_id) {
-		 LikeDTO likedto = new LikeDTO( qboard_id,member_id);
+		 LikeDTO likedto = new LikeDTO(qboard_id,member_id);
 		likemapper.addLike(likedto);
 		 
 	}
@@ -32,7 +27,7 @@ public class LikeService {
 	public void deleteLike(Long qboard_id, String member_id	) {
 		
 		LikeDTO likedto = new LikeDTO(qboard_id, member_id); 
-		likemapper.delelteLike(likedto);
+		likemapper.deleteLike(likedto);
 	}
 	
 	public boolean isLike(Long qboard_id, String member_id) {

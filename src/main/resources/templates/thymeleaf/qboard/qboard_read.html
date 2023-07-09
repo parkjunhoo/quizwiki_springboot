@@ -72,14 +72,12 @@ layout:fragment="content"><head>
 			<th:block th:if="${session.user != null}" >
 			<div class="post_features">
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
-					<button id="likeBtn">
+					<button type="button" th:attr="onclick=|onLikeBtnClick(${isLike})|" id="likeBtn">
 							<i class="fa-solid fa-heart" style="color: red"
-							th:if ="${isLike ==true}" 
-							th:onclick="'location.href=\''+ @{|/like/add/${qbpard.qbpard_id}|} + '\''"></i>
+							th:if ="${isLike}" th:text="${likecount}"></i>
 							
 							<i  class="fa-regular fa-heart" 
-								th:unless="{isLike == true}"
-								th:onclick="'location.href=\''+ @{|/like/delete/${qbpard.qbpard_id}|} + '\''"> 0</i>						
+								th:unless="${isLike}" th:text="${likecount}"></i>						
 							
 							
 							
@@ -255,7 +253,7 @@ layout:fragment="content"><head>
 
         	
         	 function goWritePage() {
-                 location.href = '/quizwiki/qboard/write.do' + location.search;
+                 location.href = '/qboard/write.do' + location.search;
              }
         	 
             // 게시글 삭제
@@ -266,7 +264,7 @@ layout:fragment="content"><head>
                     return false;
                 }
                 const formHtml = `
-                    <form id="deleteForm" action="/quizwiki/qboard/delete" method="get">
+                    <form id="deleteForm" action="/qboard/delete" method="get">
                         <input type="hidden" id="qboard_id" name="qboard_id" value="${qboard_id}" />
                     </form>
                 `;
@@ -405,9 +403,23 @@ layout:fragment="content"><head>
               
 			
               
-              
+              function onLikeBtnClick(con){
+				const qboardId = new URLSearchParams(window.location.search).get('qboard_id');
+      			const url = con ? "/qboard/like/delete/" : "/qboard/like/add/";
+      			const alertText = !con ? "추천 되었습니다." : "추천이 취소 되었습니다.";
+      			$.ajax({
+      				url:url+qboardId,
+      				type:"GET",
+      				success:(res)=>{
+      					alert(alertText);
+      					window.location.reload();
+      				}
+      			});		
+              }
            
         /*]]>*/
+        
+        
 
         </script>
 </th:block>

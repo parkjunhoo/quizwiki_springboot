@@ -12,7 +12,7 @@ public interface QboardLikeMapper {
 	//좋아요 정보 저장
 	void addLike(LikeDTO likedto);
 	
-	void delelteLike(LikeDTO likedto);
+	void deleteLike(LikeDTO likedto);
 	
 	 List<LikeResponse> getLike(Long qboard_id);
 	
