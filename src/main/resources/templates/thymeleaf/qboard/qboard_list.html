@@ -55,12 +55,12 @@ layout:fragment="content"><head>
 
 				<div id="side_menu">
 					<ul>
-						<li onclick="location.href='/qboard/list.do?category=chats'">고민있어요</li>
+						<li catevalue="chats" onclick="location.href='/qboard/list.do?category=chats'">고민있어요</li>
 
-						<li class="side_select"
+						<li catevalue="question" class="side_select"
 							onclick="location.href='../qboard/list.do?category=question'">질문있어요</li>
 
-						<li onclick="location.href='../qboard/list.do?category=free'">나만의오답노트</li>
+						<li catevalue="free" onclick="location.href='../qboard/list.do?category=free'">자유 게시판</li>
 					</ul>
 
 				</div>
@@ -133,6 +133,18 @@ layout:fragment="content"><head>
 
 	<th:block layout:fragment="script">
         <script th:inline="javascript">
+        
+        $(document).ready(()=>{
+     	   function syncCate(){
+       			const categoryName = new URLSearchParams(window.location.search).get('category');
+       			console.log(categoryName);
+       			$(".side_select").removeClass('side_select');
+       			$('[catevalue="' + categoryName + '"]').addClass('side_select');
+       			$("#content_title").text($('[catevalue="' + categoryName + '"]').text());
+       		}
+       		syncCate();
+        });
+        
         /*<![CDATA[*/
 
             // 페이지가 로드되었을 때, 딱 한 번만 함수를 실행
