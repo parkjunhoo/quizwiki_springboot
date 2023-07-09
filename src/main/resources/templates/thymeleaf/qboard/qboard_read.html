@@ -51,10 +51,10 @@ layout:fragment="content"><head>
 			<ul class="dropdown-menu dropdown-menu-lg-end flex-row" aria-labelledby="" >
         <li>
       <button  type="button" class="btn dropdown-item  post__edit-btn e-edit" onclick="goWritePage()" false="">
-        <span th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}"><i class="fa-regular fa-pen-to-square"></i>수정</span>
+        <span th:if="${isLogin && session.user.member_id == qboard.member_id}"><i class="fa-regular fa-pen-to-square"></i>수정</span>
       </button>
     </li><li>
-      <button  th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}" type="button" class=" btn dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
+      <button  th:if="${isLogin && session.user.member_id == qboard.member_id}" type="button" class=" btn dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
         <span><i class=" fa-regular fa-trash-can"></i>삭제</span>
       </button>
     </li>

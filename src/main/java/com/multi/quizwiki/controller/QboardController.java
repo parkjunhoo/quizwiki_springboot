@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -163,8 +164,31 @@ public class QboardController {
 	  @GetMapping("/qboard/list.do") 
 	  public String QboardList(@ModelAttribute("params") SearchDto params, Model model, String category ) {
 		  PagingResponse<QboardDTO> qboardlist = qboardservice.getBoardList(params);
-		  List<QboardDTO> qboard =  qboardservice.findByCategory(category);
-	;		
+		  List<QboardDTO> qboard =  qboardservice.findByCategory(category);	
+		  
+		  List<QboardDTO> qboardLists = qboardlist.getList();
+			//PreviewHTML을 만드는 과정 (썸네일)
+		  
+		  qboardLists.forEach((q)->{
+				String previewText = "";
+				boolean isOverflow = false;
+				Document html = Jsoup.parse(q.getContent());
+				
+				for(Element e : html.getAllElements()) {
+					previewText += e.text();
+					if(previewText.length() > 49) {
+						isOverflow = true;
+						break;
+					}
+				}
+				previewText = previewText.substring(0, Math.min(previewText.length(), 50));
+				if(isOverflow) {
+					previewText += "···";
+				}
+				q.setPreviewText(previewText);
+			});
+		  qboardlist.setList(qboardLists);
+		  
 		  model.addAttribute("qbaord",qboard);
 		  model.addAttribute("category",params.getCategory());
 		  model.addAttribute("subject",params.getSubject());
@@ -182,12 +206,15 @@ public class QboardController {
 			 
 			 
 			 boolean isLike = false;
+			 boolean isLogin = false;
 			 
 			 MemberDTO member = util.Utils.getSessionUser(req);
 			 if(member!= null) {
+				 isLogin = true;
 				 isLike = likeservice.isLike(qboard_id, member.getMember_id());
 			 }
 			 
+			 model.addAttribute("isLogin", isLogin);
 			 model.addAttribute("qboard", qboard);
 			 model.addAttribute("category", qboard.getCategory());
 			 model.addAttribute("isLike", isLike);

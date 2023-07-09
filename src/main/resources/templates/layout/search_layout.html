@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<head>
+<meta charset="UTF-8">
+	<!-- cdn -->
+    <script src="https://kit.fontawesome.com/e92cf22849.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="icon" th:href="@{/images/favicon.ico}" />
+    
+    <!-- css -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/layout/search_layout.css}" />
+	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</head>
+<body>
+	<th:block th:replace="/fragment/header :: header"></th:block>
+	<section id="banner-section">
+		<th:block th:replace="/thymeleaf/search/search_banner :: banner"></th:block>
+	</section>
+	<section id="content-section">
+		<div id="content-wrap">
+			<th:block th:replace="/thymeleaf/search/search_aside :: aside"></th:block>
+			<th:block layout:fragment="content"></th:block>
+		</div>
+	</section>
+	<th:block th:replace="/fragment/footer :: footer"></th:block>
+</body>
+</html>

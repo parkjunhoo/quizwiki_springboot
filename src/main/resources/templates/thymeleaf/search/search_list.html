@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{/layout/search_layout}"
+layout:fragment="content"
+>
+<head>
+<meta charset="UTF-8">
+<title>Quiz Wiki - 나만의 문제집</title>
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/search/search_list.css" />
+
+
+</head>
+<body>
+	<!-- pboard_list -->
+	<div id="pboard-list">
+		<div id="pboard-title">
+			<span class="title-subject">다양한 문제들을 검색해보세요.</span>
+			
+			<div class="search-input">
+					<input id="keywordInput" type="text" name="keyword" value=""
+						placeholder="검색어를 입력해 주세요." class="custom">
+					<button type="button" onclick="searchProblem(1)">검색</button>
+			</div>
+		</div>
+
+		<div id="resultArea" class="pboard">
+			<div id="noResult" style="display:none;" class="no-result-warp">
+				검색 된 문제가 없습니다.
+			</div>
+			
+			<ul id="resultList" class="result-area">
+			</ul>
+			
+			
+			<div class="paging-wrap">
+	        	<ul id="pagingBtnList">
+		            
+	        	</ul>
+			</div>
+		</div>
+		
+		
+	</div>
+	<!-- pboard_list end -->
+	
+	<script type="text/javascript">
+	let currentFilter = {};
+	let pageInfo = {};
+	
+	searchProblem(1);
+	
+		//CARD FILP 
+		function cardInit(){
+			var front = document.getElementsByClassName("front");
+			  var back = document.getElementsByClassName("back");
+
+			  var highest = 0;
+			  var absoluteSide = "";
+
+			  for (var i = 0; i < front.length; i++) {
+			    if (front[i].offsetHeight > back[i].offsetHeight) {
+			      if (front[i].offsetHeight > highest) {
+			        absoluteSide = ".front";
+			      }
+			    } else if (back[i].offsetHeight > highest) {
+			      absoluteSide = ".back";
+			    }
+			  }
+			  $(".front").css("height", "100%");
+			  $(".back").css("height", "100%");
+			  $(absoluteSide).css("position", "absolute");
+		}
+		//CARD FILP END
+		
+		function movePage(page){
+			
+		}
+		
+		function searchProblem(page){
+			
+			const subjectValueList = [];
+			const subjectCheckList = document.querySelectorAll('input[name="subject"]:checked');
+			subjectCheckList.forEach((e)=>{
+				subjectValueList.push(e.value);
+			});
+			
+			if(subjectValueList.length < 1){
+				$(resultList).empty();
+				noResult.style.display = "block";
+				$(pagingBtnList).empty();
+				return;
+			}else{
+				noResult.style.display = "none";
+			}
+			
+			const keywordValue = keywordInput.value;
+			
+			const sortValue = document.querySelector('input[name="sort"]:checked').value;
+			
+			currentFilter = {
+					sort:sortValue,
+					subjectList:subjectValueList,
+					keyword:keywordValue,
+					page:page,
+			};
+
+			$.ajax({
+				url:"/search/problem/list",
+				type:"POST",
+				data:currentFilter,
+				success:(res)=>{
+					$(resultList).empty();
+					let plist = res.problemList;
+					
+					pageInfo.currentPage = res.currentPage;
+					pageInfo.totalPage = res.totalPage;
+					pageInfo.pages = res.pages;
+					
+					if(plist.length < 1){
+						noResult.style.display = "block";
+						$(pagingBtnList).empty();
+						return;
+					}
+					
+					plist.forEach((e)=>{
+						createResultCard(e);
+					})
+					cardInit();
+					
+					makePageBtn();
+				}
+				
+			});
+
+		}
+		
+		function makePageBtn(){
+			$(pagingBtnList).empty();
+			if(pageInfo.totalPage <= 1){
+				return;
+			}
+		
+			const preLi = document.createElement("li");
+			const preBtn = document.createElement("a");
+			preBtn.classList.add("page-btn");
+			if(pageInfo.currentPage == 1){
+				preBtn.classList.add("disabled");
+			}else{
+				preBtn.addEventListener("click",()=>{
+					searchProblem(pageInfo.currentPage-1);
+				})
+			}
+			preBtn.innerHTML = '<i class="fa-solid fa-square-caret-left"></i>';
+			preLi.appendChild(preBtn);
+			
+			const pageLi = document.createElement("li");
+			pageInfo.pages.forEach((e)=>{
+				
+				const pageBtn = document.createElement("a");
+				pageBtn.classList.add("page-btn");
+				pageBtn.textContent = e;
+				if(pageInfo.currentPage == e){
+					pageLi.classList.add("current-page-btn");
+					pageBtn.classList.add("disabled");
+				}else{
+					pageBtn.addEventListener("click", ()=>{
+						searchProblem(e);
+					});
+				}
+				pageLi.appendChild(pageBtn);
+			});
+			
+			const nextLi = document.createElement("li");
+			const nextBtn = document.createElement("a");
+			nextBtn.classList.add("page-btn");
+			if(pageInfo.currentPage >= pageInfo.totalPage){
+				nextBtn.classList.add("disabled");
+			}else{
+				nextBtn.addEventListener("click", ()=>{
+					searchProblem(pageInfo.currentPage+1);
+				});
+			}
+			nextBtn.innerHTML = '<i class="fa-solid fa-square-caret-right"></i>';
+			nextLi.appendChild(nextBtn);
+			
+			pagingBtnList.appendChild(preLi);
+			pagingBtnList.appendChild(pageLi);
+			pagingBtnList.appendChild(nextLi);
+		}
+		
+		function openPopup(id){
+			const url = "/popup/problem/preview?no="+id;
+			
+			let width = Math.floor(screen.width * 0.9);
+			let height = Math.floor(screen.height * 0.9);
+			let left = Math.floor((screen.width - width) / 2);
+			let top = Math.floor((screen.height - height) / 2);
+			
+			let cbt = window.open(
+				url,
+				"문제 보기",
+				"width="+width+", height="+height+", top="+top+", left="+left
+			);
+		}
+		
+		function createResultCard(problem){
+			
+			
+				/* <li class="card-warp">
+				<div style="width:100%; height:100%;" class="row text-center">
+					<div class="card-container">
+							<div class="card card-flip">
+							
+								<div class="front card-block">
+										<h1 class="card-title"><span class="red-underline">국어</span></h1>
+										<h2 class="card-subtitle text-muted"><span class="yellow-underline">화법과 작문</span></h2>
+										<h2 class="card-text"><span class="sky-underline">23-06-24</span></h2>
+										<h2 class="card-text"><span class=""><i class="fa-solid fa-thumbs-up"></i>: 55</span></h2>
+										<h2 class="card-text"><span class=""><i class="fa-solid fa-person"></i> test</span></h2>
+										<h3 class="card-text"> 객관식 </h3>
+								</div>
+							
+								<div class="back card-block" style="height: 100%; position: absolute;">
+									  <p class="card-text">문제 내용</p>
+									  <div class="search-custom-btn blue-btn">문제 보기</div>
+								</div>
+							
+						</div>
+				</div>
+				</div>
+			</li> */
+			const cardWrap = document.createElement("li");
+			cardWrap.classList.add('card-warp');
+			
+			const row = document.createElement("div");
+			row.style.width = "100%";
+			row.style.height = "100%";
+			row.classList.add("row");
+			row.classList.add("text-center");
+			cardWrap.appendChild(row);
+			
+			const cardContainer = document.createElement("div");
+			cardContainer.classList.add("card-container");
+			row.appendChild(cardContainer);
+			
+			const cardFlip = document.createElement("div");
+			cardFlip.classList.add("card");
+			cardFlip.classList.add("card-flip");
+			cardContainer.appendChild(cardFlip)
+			
+			const front = document.createElement("div");
+			front.classList.add("front");
+			front.classList.add("card-block");
+			cardFlip.appendChild(front);
+			
+			const title = document.createElement("h1");
+			title.classList.add("card-title");
+			front.appendChild(title);
+			
+			const titleSpan = document.createElement("span");
+			titleSpan.classList.add("red-underline");
+			titleSpan.textContent = problem.subjectName;
+			title.appendChild(titleSpan);
+			
+			const subTitle = document.createElement("h2");
+			subTitle.classList.add("card-subtitle");
+			subTitle.classList.add("text-muted");
+			front.appendChild(subTitle);
+			
+			const subTitleSpan = document.createElement("span");
+			subTitleSpan.classList.add("yellow-underline");
+			subTitleSpan.textContent = problem.cateName;
+			subTitle.appendChild(subTitleSpan);
+			
+			const date = document.createElement("h2");
+			subTitle.classList.add("card-text");
+			front.appendChild(date);
+			
+			const dateSpan = document.createElement("span");
+			dateSpan.classList.add("sky-underline");
+			
+			const datePart = problem.regDate.split("T")[0];
+			const formattedDate = datePart;
+			
+			dateSpan.textContent = formattedDate;
+			date.appendChild(dateSpan);
+			
+			const like = document.createElement("h2");
+			like.classList.add("card-text");
+			front.appendChild(like);
+			
+			const likeSpan = document.createElement("span");
+			likeSpan.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>: ' + problem.likeCount;
+			like.appendChild(likeSpan);
+			
+			const author = document.createElement("h2");
+			author.classList.add("card-text");
+			front.appendChild(author);
+			
+			const authorSpan = document.createElement("span");
+			authorSpan.innerHTML = '<i class="fa-solid fa-person"></i>: ' + problem.memberId;
+			author.appendChild(authorSpan);
+			
+			const type = document.createElement("h3");
+			type.classList.add("card-text");
+			type.textContent = problem.type;
+			front.appendChild(type);
+			
+			
+			const back = document.createElement("div");
+			back.classList.add("back");
+			back.classList.add("card-block");
+			back.style.height = "100%";
+			back.style.position = "absolute";
+			cardFlip.appendChild(back);
+			
+			const pcontent = document.createElement("p");
+			pcontent.classList.add("card-text");
+			pcontent.textContent = problem.content;
+			back.appendChild(pcontent);
+			
+			const showBtn = document.createElement("div");
+			showBtn.classList.add("search-custom-btn");
+			showBtn.classList.add("blue-btn");
+			showBtn.textContent = "문제 보기";
+			showBtn.addEventListener("click",()=>{
+				openPopup(problem.problemId);
+			});
+			back.appendChild(showBtn);
+		
+			resultList.appendChild(cardWrap);
+		}
+	</script>
+</body>
+</html>

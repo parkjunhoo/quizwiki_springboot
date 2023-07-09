@@ -224,7 +224,7 @@ layout:fragment="content">
             	 });
             	 
             	 $.ajax({
-            		url:qboard ? 'i/qboard/save.do' : '/qboard/update.do',
+            		url:qboard ? '/qboard/save.do' : '/qboard/update.do',
             		type:"POST",
             		data:formData,
             		contentType: false,
