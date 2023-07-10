@@ -17,9 +17,11 @@ xmlns:th="http://www.thymeleaf.org">
 <title>Quiz Wiki - 오답노트 읽기</title>
 </head>
 <body>
+	
+
 	<div class="popup-header">
 		<div class="title-input-wrap">
-			<h2>5월 모의고사 오답노트</h2>
+			<h2 id="titleHTag"></h2>
 		</div>
 	</div>
 	
@@ -36,13 +38,19 @@ xmlns:th="http://www.thymeleaf.org">
 		</div>
 	</div>
 	
+	
+	<div id="loadingWrap">
+		<div class="loading-container">
+		    <div id="render" class="loading"></div>
+		    <div id="loading-text">loading</div>
+		</div>
+	</div>
 </body>
 
 <script th:inline="javascript">
 	///////////////////////이니셜라이징////////////////
 	const noteId = /*[[${noteId}]]*/'';
 	let doNotSync = false;
-	
 	let currentIndex = 0;
 	
 	const c = new fabric.Canvas('c');
@@ -50,22 +58,27 @@ xmlns:th="http://www.thymeleaf.org">
 	c.isDrawingMode = false;
 	resizeCanvas();
 	
+	document.addEventListener("DOMContentLoaded", ()=>{
+		let note = null;
+	    $.ajax({
+	    	url:"/note/read/"+noteId,
+	    	type:"POST",
+	    	async:false,
+	    	success:(res)=>{
+	    		note = res;
+	    		titleHTag.textContent = note.noteTitle;
+	    		$(loadingWrap).remove();
+	    	},
+	    });
+	    
+	    let pageList = note.notePageList;
+	    
+	    pageList.forEach((p,idx)=>{
+	    	addPageWithData(p.notePageContent);
+	    });
+	})
 	///////////////post로 note 정보 가져오기 ㅋㅋ 정보가 크다보니  get은 글자제한이../////////////////////
-    let note = null;
-    $.ajax({
-    	url:"/note/read/"+noteId,
-    	type:"POST",
-    	async:false,
-    	success:(res)=>{
-    		note = res;
-    	},
-    });
     
-    let pageList = note.notePageList;
-    
-    pageList.forEach((p,idx)=>{
-    	addPageWithData(p.notePageContent);
-    });
     /////////////////////////////////////////////////////
 	
 	

@@ -52,7 +52,10 @@
  
   <!-- 게시글 상세정보조회 -->
   <select id="findById" parameterType="Long" resultType="qboard">
-  	select * from qboard where qboard_id =#{qboard_id}
+  	select p.*,
+  	(select count(ql.id) from qboard_like ql where ql.qboard_id = p.qboard_id) likeCount,
+ 	(select count(qr.comment_id) from qboard_comment qr where qr.qboard_id = p.qboard_id) commentCount
+  	from qboard p where qboard_id =#{qboard_id}
   	
   </select> 
  
@@ -60,9 +63,11 @@
  <!-- 게시글 리스트 -->
   <select id="selectqboardlist" resultType="qboard" parameterType="Search">
   		 SELECT
-  		 	*
+  		 	p.*,
+  		 	(select count(ql.id) from qboard_like ql where ql.qboard_id = p.qboard_id) likeCount,
+  		 	(select count(qr.comment_id) from qboard_comment qr where qr.qboard_id = p.qboard_id) commentCount
         FROM
-            qboard
+            qboard p
        	where 
        		 delete_yn = 0
        		 <include refid="search" /> 

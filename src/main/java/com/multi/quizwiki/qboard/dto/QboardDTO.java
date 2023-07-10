@@ -23,8 +23,8 @@ public class QboardDTO {
 	private String content; //게시물내용 text
 	private LocalDateTime regDate; // 게시물등록시간 datetime
 	private LocalDateTime editDate;
-	int comment_Count;
-	int like_Count;
+	int commentCount;
+	int likeCount;
 	int view_Count;
 	private Boolean delete_Yn;              // 삭제 여부
     private List<MultipartFile> files = new ArrayList<>();    // 첨부파일 List

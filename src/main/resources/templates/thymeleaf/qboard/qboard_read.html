@@ -74,10 +74,10 @@ layout:fragment="content"><head>
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
 					<button type="button" th:attr="onclick=|onLikeBtnClick(${isLike})|" id="likeBtn">
 							<i class="fa-solid fa-heart" style="color: red"
-							th:if ="${isLike}" th:text="${likecount}"></i>
+							th:if ="${isLike}" th:text="${qboard.likeCount}"></i>
 							
 							<i  class="fa-regular fa-heart" 
-								th:unless="${isLike}" th:text="${likecount}"></i>						
+								th:unless="${isLike}" th:text="${qboard.likeCount}"></i>						
 							
 							
 							
@@ -95,7 +95,7 @@ layout:fragment="content"><head>
 		<div class="section_content">
 			<div class="answer-info_header">
 				<div class="answer-info_title" >
-					댓글 <span class="answer-info_title--count" th:text="${qboard.comment_Count}">1</span>
+					댓글 <span class="answer-info_title--count" th:text="${qboard.commentCount}">1</span>
 				</div>
 			</div>
 
