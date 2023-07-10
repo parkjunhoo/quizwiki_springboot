@@ -314,7 +314,7 @@ xmlns:th="http://www.thymeleaf.org"
 				problem.problemChoiseList.forEach((e, idx)=>{
 					let li = document.createElement("li");
 					li.textContent = e.problemChoiseContent;
-					if((problem.solv != "") && (problem.solv == idx)){
+					if((problem.solv != "") && (problem.solv == idx+1)){
 						li.classList.add("selected");
 					}
 					

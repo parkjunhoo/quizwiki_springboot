@@ -53,6 +53,8 @@ layout:fragment="content"
 	
 	searchProblem(1);
 	
+	
+	
 		//CARD FILP 
 		function cardInit(){
 			var front = document.getElementsByClassName("front");
@@ -76,9 +78,11 @@ layout:fragment="content"
 		}
 		//CARD FILP END
 		
-		function movePage(page){
-			
-		}
+		keywordInput.addEventListener("keyup", (e)=>{
+			if(e.key === "Enter"){
+				searchProblem(1);
+			}
+		});
 		
 		function searchProblem(page){
 			
@@ -97,8 +101,8 @@ layout:fragment="content"
 				noResult.style.display = "none";
 			}
 			
-			const keywordValue = keywordInput.value;
-			
+			let keywordValue = keywordInput.value;
+			keywordValue = keywordValue.trim();
 			const sortValue = document.querySelector('input[name="sort"]:checked').value;
 			
 			currentFilter = {

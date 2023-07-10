@@ -24,6 +24,7 @@
 	    </foreach>
 	    <if test="keyword != null and keyword != ''">
 	    	and p.problem_content like concat('%',#{keyword},'%')
+	    	or pc.problem_cate_name like concat('%',#{keyword},'%')
 	    </if>
 	    
 	    <if test="sort != null and sort.equals('recent')">
@@ -46,6 +47,7 @@
 		</foreach>
 		<if test="keyword != null and keyword != ''">
 		  and p.problem_content like concat('%', #{keyword}, '%')
+		  or pc.problem_cate_name like concat('%',#{keyword},'%')
 		</if>
 	</select>
 

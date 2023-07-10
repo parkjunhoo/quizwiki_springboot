@@ -212,7 +212,7 @@ xmlns:th="http://www.thymeleaf.org"
 			const problem = problemList[idx];
 			
 			if(problem.problemType == "m"){
-				problem.solv = (v+1).toString();
+				problem.solv = (v).toString();
 				let choiseList = $(omrList).children().eq(idx).children(".omr-choise");
 				choiseList.children("li").removeClass("selected");
 				choiseList.children("li").eq(v).addClass("selected");

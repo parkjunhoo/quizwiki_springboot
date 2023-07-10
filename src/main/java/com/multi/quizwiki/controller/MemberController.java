@@ -352,7 +352,7 @@ public class MemberController {
 		String input_pass = dto.getMember_pass();
 
 		if (!(session_pass.equals(input_pass))) {
-			rttr.addFlashAttribute("msg", false);
+			//rttr.addFlashAttribute("msg", false);
 			return "redirect:/delete/user";
 		}
 
