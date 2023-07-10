@@ -50,8 +50,8 @@
 							<td><a th:text="${qboard.title}" th:href="@{/qboard/read.do(qboard_id=${qboard.qboard_id})}"></a></td>
 							<td><span th:text="${qboard.regDate}"></span></td>
 							<td><span th:text="${qboard.view_Count}"></span></td>
-							<td><span th:text="${qboard.like_Count}"></span></td>
-							<td><span th:text="${qboard.comment_Count}"></span></td>
+							<td><span th:text="${qboard.likeCount}"></span></td>
+							<td><span th:text="${qboard.commentCount}"></span></td>
 						</tr>
 					</tbody>
 				</table>

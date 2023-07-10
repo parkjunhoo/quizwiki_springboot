@@ -131,7 +131,7 @@
 				<div class="inner_section">
 					<div class="section_title flex_wrap">
 						<p class="title">
-							<span class="bl02">이하나님의 현재 오답노트</span>
+							<span class="bl02" th:text="${session.user.member_name}+'님의 현재 오답노트'"></span>
 						</p>
 						<p>
 							<strong><em th:text="${notecount}">0</em> 개</strong>
