@@ -51,10 +51,10 @@ layout:fragment="content"><head>
 			<ul class="dropdown-menu dropdown-menu-lg-end flex-row" aria-labelledby="" >
         <li>
       <button  type="button" class="btn dropdown-item  post__edit-btn e-edit" onclick="goWritePage()" false="">
-        <span th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}"><i class="fa-regular fa-pen-to-square"></i>수정</span>
+        <span th:if="${isLogin && session.user.member_id == qboard.member_id}"><i class="fa-regular fa-pen-to-square"></i>수정</span>
       </button>
     </li><li>
-      <button  th:if="${session.user.member_id != null and session.user.member_id == qboard.member_id}" type="button" class=" btn dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
+      <button  th:if="${isLogin && session.user.member_id == qboard.member_id}" type="button" class=" btn dropdown-item  post__remove-btn e-remove"  onclick="deleteBoard();" false="">
         <span><i class=" fa-regular fa-trash-can"></i>삭제</span>
       </button>
     </li>
@@ -74,10 +74,10 @@ layout:fragment="content"><head>
 				<div class="flex-row feature__recommend e-post-like e-hover-toggle">
 					<button type="button" th:attr="onclick=|onLikeBtnClick(${isLike})|" id="likeBtn">
 							<i class="fa-solid fa-heart" style="color: red"
-							th:if ="${isLike}" th:text="${likecount}"></i>
+							th:if ="${isLike}" th:text="${qboard.likeCount}"></i>
 							
 							<i  class="fa-regular fa-heart" 
-								th:unless="${isLike}" th:text="${likecount}"></i>						
+								th:unless="${isLike}" th:text="${qboard.likeCount}"></i>						
 							
 							
 							
@@ -95,7 +95,7 @@ layout:fragment="content"><head>
 		<div class="section_content">
 			<div class="answer-info_header">
 				<div class="answer-info_title" >
-					댓글 <span class="answer-info_title--count" th:text="${qboard.comment_Count}">1</span>
+					댓글 <span class="answer-info_title--count" th:text="${qboard.commentCount}">1</span>
 				</div>
 			</div>
 

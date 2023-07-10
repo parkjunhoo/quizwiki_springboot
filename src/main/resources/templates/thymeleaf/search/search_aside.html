@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://www.thymeleaf.org"
+th:fragment="aside"
+>
+<head>
+<meta charset="UTF-8">
+
+</head>
+
+	<aside id="double-aside">
+		<div class="aside-cate">
+			<div id="aside-title">
+				<h2>
+					<i class="fa-solid fa-filter"></i> 검색 조건
+				</h2>
+			</div>
+			
+			<div class="aside-shifter"></div>
+			
+			<div class="search-filter-list">
+				
+				<div class="accordion" >
+				
+						<!-- 정렬 -->
+					  <div class="accordion-item">
+					    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+					      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+					        	정렬
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+					      <div class="accordion-body">
+						      <label class="custom-label">
+					      			<input checked name="sort" class="filter-input" type="radio" value="recent"/>
+					      			<span>최신순</span>
+						      </label>
+						      
+				      		  <label class="custom-label">
+					      			<input name="sort" class="filter-input" type="radio" value="like"/>
+					      			<span>좋아요 순</span>
+						      </label>
+					      </div>
+					    </div>
+					  </div>
+					  
+					  <!-- 조건 -->
+					  <div style="border-top: 1px solid #cfcfcf;" class="accordion-item">
+					    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+					      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+					       		과목선택
+					      </button>
+					    </h2>
+					    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+					      <div class="accordion-body">
+					      		<div class="cbox-item">
+									<input name="subject" id="subjectCbox0" type="checkbox" value="1" checked />
+									<label for="subjectCbox0"> <span class="round"></span>
+										국어
+									</label>
+								</div>
+						        
+						        <div class="cbox-item">
+									<input name="subject" id="subjectCbox1" type="checkbox" value="2" checked />
+									<label for="subjectCbox1"> <span class="round"></span>
+										영어
+									</label>
+								</div>
+						        
+						        <div class="cbox-item">
+									<input name="subject" id="subjectCbox2" type="checkbox" value="3" checked />
+									<label for="subjectCbox2"> <span class="round"></span>
+										수학
+									</label>
+								</div>
+						        
+						        <div class="cbox-item">
+									<input name="subject" id="subjectCbox3" type="checkbox" value="4" checked />
+									<label for="subjectCbox3"> <span class="round"></span>
+										사회
+									</label>
+								</div>
+						        
+						        <div class="cbox-item">
+									<input name="subject" id="subjectCbox4" type="checkbox" value="5" checked />
+									<label for="subjectCbox4"> <span class="round"></span>
+										과학
+									</label>
+								</div>
+						        
+						        
+				      			<div class="cbox-item">
+									<input name="subject" id="subjectCbox5" type="checkbox" value="6"checked />
+									<label for="subjectCbox5"> <span class="round"></span>
+										한국사
+									</label>
+								</div>
+					      			
+						        
+					      </div>
+					    </div>
+					  </div>
+				</div>
+				
+
+			</div>
+		</div>
+	</aside>
+</html>

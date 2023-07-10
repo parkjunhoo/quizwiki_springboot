@@ -601,7 +601,7 @@ async function onStateEdit() {
 		
         let printfile = null;
 	    if(e.problemFileList.length>0){
-	    	printfile = await convertURLtoFile("/printfile/find/"+e.problemId, e.problemFileList[0].printfileOrigin);
+	    	printfile = await convertURLtoFile("/pboard/printfile/find/"+e.problemId, e.problemFileList[0].printfileOrigin);
 	    }
 			
 	        return {
