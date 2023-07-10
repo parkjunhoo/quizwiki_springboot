@@ -235,6 +235,7 @@ public class QboardController {
 	}
 	
 	@PostMapping("/qboard/update.do")
+	@ResponseBody
 	public String updateQboard(HttpServletRequest req,
 			@RequestPart(name= "sendData") String sendData,
 			@RequestPart(name = "imageList", required = false) List<MultipartFile> imageList
@@ -276,7 +277,7 @@ public class QboardController {
 		
 		qboardservice.update(qboard);
 		
-		return "true";
+		return "success";
 		
 	}
 
