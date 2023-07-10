@@ -118,7 +118,7 @@
 				<div class="inner_section">
 					<div class="section_title flex_wrap">
 						<p class="title">
-							<span class="bl02">이하나님의 현재 포인트</span>
+							<span class="bl02" th:text="${session.user.member_name}+'님의 현재 포인트'"></span>
 						</p>
 						<p>
 							<strong><em><span th:text=${pointtotal}></span>0</em>
