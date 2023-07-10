@@ -47,7 +47,8 @@
 		<result property="problemStatus" column="problem_status" />
 	</resultMap>
 	<select id="recommandProblem" resultMap="problemCamel" parameterType="Map">
-		SELECT p.*
+		SELECT p.*,
+		t.problemCateName
 		FROM (
 			SELECT pc.problem_cate_id,
 			pc.problem_cate_name problemCateName,
@@ -76,7 +77,7 @@
 			where p.problem_status = 'r'
 		</if>
 		GROUP BY p.problem_id
-		ORDER BY t.problemCateName ASC , COUNT(pl.problem_id) DESC
+		ORDER BY t.wrong_count DESC, COUNT(pl.problem_id) DESC
 		LIMIT #{limit};
 	</select>
 	
