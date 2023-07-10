@@ -41,7 +41,6 @@ public class KakaoService {
 		String access_Token = "";
 		String refresh_Token = "";
 		String reqURL = "https://kauth.kakao.com/oauth/token";
-
 		
 		BufferedReader br = null;
 		BufferedWriter bw = null;
@@ -63,8 +62,9 @@ public class KakaoService {
 			sb.append("grant_type=authorization_code"); // 인증 코드 값 전달
             
 			sb.append("&client_id=e2758d85befb75965fd0776467743592"); //본인이 발급받은 key
-			sb.append("&redirect_uri=http://localhost:8087/kakao/login"); // 본인이  리다이렉트 주소 설정한
-            
+			//sb.append("&redirect_uri=http://localhost:8087/kakao/login"); // 본인이  리다이렉트 주소 설정한
+			sb.append("&redirect_uri=http://101.101.216.171:8087/kakao/login");
+			
 			sb.append("&code=" + authorize_code); // 사용자 인증 코드
 			bw.write(sb.toString());
 			bw.flush();
@@ -110,6 +110,7 @@ public class KakaoService {
 		// 요청하는 클라이언트마다 가진 정보가 다를 수 있기에 HashMap타입으로 선언
 		HashMap<String, Object> userInfo = new HashMap<String, Object>(); // 사용자 정보 저장을 위한 HashMap
 		String reqURL = "https://kapi.kakao.com/v2/user/me";
+		
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
