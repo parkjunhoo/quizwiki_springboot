@@ -16,8 +16,8 @@
 		IF(p.problem_type ='m', '객관식', '주관식') type
 		from problem p
 		join problem_cate pc on pc.problem_cate_id = p.problem_cate_id
-        
-		where
+		where p.problem_status = 'p'
+		and
 	    pc.subject_id in
 	    <foreach collection="subjectList" item="subjectId" open="(" close=")" separator=",">
 	      #{subjectId}
@@ -45,6 +45,7 @@
 		<foreach collection="subjectList" item="subjectId" open="(" close=")" separator=",">
 		  #{subjectId}
 		</foreach>
+		and p.problem_status = 'r'
 		<if test="keyword != null and keyword != ''">
 		  and p.problem_content like concat('%', #{keyword}, '%')
 		  or pc.problem_cate_name like concat('%',#{keyword},'%')

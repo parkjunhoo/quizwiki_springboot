@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.multi.quizwiki.manager.dto.RecoCategoryDTO;
 import com.multi.quizwiki.manager.dto.RecoProblemDTO;
 import com.multi.quizwiki.manager.dto.SolvCountDTO;
 
@@ -39,6 +40,17 @@ public class ManagerDAOImpl implements ManagerDAO{
 		params.put("distinct", distinct);
 		params.put("limit", limit);
 		return ss.selectList("com.multi.quizwiki.manager.recommandProblem",params);
+	}
+
+
+	@Override
+	public List<RecoCategoryDTO> bestCate(String memberId) {
+		return ss.selectList("com.multi.quizwiki.manager.findBestCate",memberId);
+	}
+
+	@Override
+	public List<RecoCategoryDTO> worstCate(String memberId) {
+		return ss.selectList("com.multi.quizwiki.manager.findWorstCate",memberId);
 	}
 
 }

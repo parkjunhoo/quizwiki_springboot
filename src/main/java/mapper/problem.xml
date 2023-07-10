@@ -38,6 +38,7 @@
 		join problem_like pl
 		on p.problem_id = pl.problem_id
 		where pl.member_id = #{memberId}
+		and p.problem_status = 'p'
 		limit #{startLimit},#{sizeLimit}
 	</select>
 	
@@ -45,6 +46,7 @@
 		select p.* ,
 		(select count(1) from problem_inquiry pi where pi.problem_id = p.problem_id) problemInquiryCount
 		from problem p
+		where p.problem_status = 'p'
 		order by problemInquiryCount desc
 		limit #{limit}
 	</select>
@@ -56,6 +58,7 @@
 		(select pb.pboard_reg_date from pboard pb where pb.pboard_id = p.pboard_id) regDate,
 		(select pc.problem_cate_name from problem_cate pc where pc.problem_cate_id = p.problem_cate_id) cateName
 		from problem p
+		where p.problem_status = 'p'
 		order by problemLikeCount desc
 		limit #{limit}
 	</select>

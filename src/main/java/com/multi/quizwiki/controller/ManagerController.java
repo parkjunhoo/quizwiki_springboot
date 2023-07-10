@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.multi.quizwiki.dto.MemberDTO;
+import com.multi.quizwiki.manager.dto.RecoCategoryDTO;
 import com.multi.quizwiki.manager.dto.RecoProblemDTO;
 import com.multi.quizwiki.manager.dto.SolvCountDTO;
 import com.multi.quizwiki.manager.service.ManagerService;
@@ -36,10 +37,16 @@ public class ManagerController {
 		
 		String memberId = member.getMember_id();
 		
+		
+		List<RecoCategoryDTO> bestList = service.bestCate(memberId);
+		List<RecoCategoryDTO> worstList = service.worstCate(memberId);
+		
 		List<SolvCountDTO> solvCountList = service.findSolvCountBySubjectName(memberId);
 		List<SolvCountDTO> solvCountListByProblemCate = service.findSolvCountByProblemCateName(memberId);
 		model.addAttribute("solvCountList", solvCountList);
 		model.addAttribute("solvCountListByProblemCate", solvCountListByProblemCate);
+		model.addAttribute("bestList", bestList);
+		model.addAttribute("worstList", worstList);
 		return "thymeleaf/manager/mymanager";
 	}
 	
@@ -54,9 +61,6 @@ public class ManagerController {
 		String memberId = member.getMember_id();
 		
 		List<RecoProblemDTO> problemList = service.recommandProblem(memberId, true, 10);
-		if(problemList.size() == 0) {
-			problemList = service.recommandProblem(memberId, false, 10);
-		}
 		model.addAttribute("problemList",problemList);
 		
 		return "thymeleaf/manager/cbt";

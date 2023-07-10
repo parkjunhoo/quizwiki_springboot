@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class RecoProblemDTO {
 	private int problemId;
 	private int problemCateId;
+	private String problemCateName;
 	private int pboardId;
 	private String problemType;
 	private String problemContent;

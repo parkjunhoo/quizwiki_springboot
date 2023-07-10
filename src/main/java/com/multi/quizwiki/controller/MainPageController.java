@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -73,7 +74,13 @@ public class MainPageController {
 		
 		String msg = "false";
 		
+		String inputId = member.getMember_id().trim();
+		String inputPass = member.getMember_pass().trim();
+		member.setMember_id(inputId);
+		member.setMember_pass(inputPass);
+		
 		MemberDTO user = memberService.login(member);
+		
 		
 		if(user != null){
 			request.getSession().setAttribute("user", user);

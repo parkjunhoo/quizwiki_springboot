@@ -31,9 +31,12 @@
 		ORDER BY pc.problem_cate_id;
 	</select>
 	
+	
+	
 	<resultMap type="recoproblem" id="problemCamel">
 		<id property="problemId" column="problem_id" />
 		<result property="problemCateId" column="problem_cate_id" />
+		<result property="problemCateName" column="problemCateName" />
 		<result property="pboardId" column="pboard_id" />
 		<result property="problemType" column="problem_type" />
 		<result property="problemContent" column="problem_content" />
@@ -46,12 +49,16 @@
 	<select id="recommandProblem" resultMap="problemCamel" parameterType="Map">
 		SELECT p.*
 		FROM (
-			SELECT pc.problem_cate_id, COUNT(*) AS wrong_count
+			SELECT pc.problem_cate_id,
+			pc.problem_cate_name problemCateName,
+			COUNT(*) AS wrong_count
 			FROM solv s
 			JOIN problem p ON s.problem_id = p.problem_id
 			JOIN problem_cate pc ON p.problem_cate_id = pc.problem_cate_id
 			WHERE s.member_id = #{memberId}
 				AND s.solv_right = 0
+				AND p.problem_status = 'r'
+				AND p.problem_cate_id != 0
 			GROUP BY pc.problem_cate_id
 			ORDER BY wrong_count DESC
 		) AS t
@@ -63,9 +70,52 @@
 				FROM solv
 				WHERE member_id = #{memberId}
 			)
+			and p.problem_status = 'r'
+		</if>
+		<if test="distinct == false">
+			where p.problem_status = 'r'
 		</if>
 		GROUP BY p.problem_id
-		ORDER BY COUNT(pl.problem_id) DESC
+		ORDER BY t.problemCateName ASC , COUNT(pl.problem_id) DESC
 		LIMIT #{limit};
+	</select>
+	
+	
+	<select id="findWorstCate" resultType="recocate" parameterType="String">
+		SELECT
+			pc.problem_cate_name AS cateName,
+			COUNT(*) AS totalCount,
+			(CAST(SUM(CASE WHEN s.solv_right = 1 THEN 1 ELSE 0 END) AS DECIMAL) / COUNT(*)) * 100 AS rate
+		FROM
+			solv s
+			JOIN problem p ON s.problem_id = p.problem_id
+			JOIN problem_cate pc ON p.problem_cate_id = pc.problem_cate_id
+		WHERE
+			s.member_id = #{memberId}
+			AND pc.problem_cate_id != 0
+		GROUP BY
+			pc.problem_cate_id
+		ORDER BY
+			rate
+		limit 5
+	</select>
+	
+	<select id="findBestCate" resultType="recocate" parameterType="String">
+		SELECT
+			pc.problem_cate_name AS cateName,
+			COUNT(*) AS totalCount,
+			(CAST(SUM(CASE WHEN s.solv_right = 1 THEN 1 ELSE 0 END) AS DECIMAL) / COUNT(*)) * 100 AS rate
+		FROM
+			solv s
+			JOIN problem p ON s.problem_id = p.problem_id
+			JOIN problem_cate pc ON p.problem_cate_id = pc.problem_cate_id
+		WHERE
+			s.member_id = #{memberId}
+			AND pc.problem_cate_id != 0
+		GROUP BY
+			pc.problem_cate_id
+		ORDER BY
+			rate desc
+		limit 5
 	</select>
 </mapper>

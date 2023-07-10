@@ -42,6 +42,23 @@ layout:fragment="content"
 			<div class="fx-title">
 				세부 과목별 통계
 			</div>
+			
+			<!-- overall 16-->
+			<div style="width:100%; margin: 5rem 0; display:flex; border-width:2px 0; border-style:dashed; border-color:#c5c5c5;">
+				<div class="half-card">
+					<h1 class="card-title"><span class="green-underline">과목별 정답률 BEST 5</span></h1>
+					<canvas id="subjectChart15"></canvas>
+				</div>
+				
+				<div class="half-card">
+					<h1 class="card-title"><span class="green-underline">과목별 정답률 WORST 5</span></h1>
+					<canvas id="subjectChart16"></canvas>
+				</div>
+			</div>
+			
+			
+			
+			
 			<!-- 국어 3 4 -->
 			<div class="half-card">
 				<h1 class="card-title"><span class="yellow-underline">국어 세부과목 채점비율</span></h1>
@@ -115,6 +132,9 @@ layout:fragment="content"
 	<script type="text/javascript" th:inline="javascript">
 	const solvCountList = /*[[${solvCountList}]]*/'';
 	const solvCountListByProblemCate = /*[[${solvCountListByProblemCate}]]*/'';
+	
+	const bestList = /*[[${bestList}]]*/'';
+	const worstList = /*[[${worstList}]]*/'';
 	
 	const solvCountListByCate = {}
 	for (const subject of solvCountListByProblemCate) {
@@ -204,6 +224,29 @@ layout:fragment="content"
             },
         },
 	};
+	
+	const chartOption3 = {
+			responsive : true,
+			
+			legend:{
+				labels: {
+					fontSize: 15,
+				},
+			},
+			
+			plugins: {
+	            datalabels: {
+	            	align:'top',
+					formatter: function(value, context) {
+						if(context.dataset.label === "푼 문제 수"){
+							return value + "개";
+						}
+						return value + '%';
+					},
+					color: '#222',
+	            },
+	        },
+		};
 
 	const chart2 = new Chart(subjectChart2, {
 	    type: 'pie',
@@ -591,6 +634,79 @@ layout:fragment="content"
 	  });
 	// 과목별 문제 풀이수 END ============================================
 	/////////////////////한국사 차트 END/////////////////////////////////////////
+	
+	//////////OVERALL 세부 과목별 정답률 높은순 BEST 5//////////////
+	const subjectChart15 = document.getElementById('subjectChart15').getContext('2d');
+	const bestCate = bestList.map((i, idx) => {
+		  if (idx < 3) {
+		    return (idx + 1) + "위 ★" + i.cateName; // 문제가 있는 부분
+		  }
+		  return i.cateName;
+	});
+
+	
+	const bestCount = bestList.map((i)=> i.totalCount);
+	const bestRate = bestList.map((i)=> i.rate.toFixed(1));
+	
+	const chart15 = new Chart(subjectChart15, {
+	    type: 'bar',
+	    data: {
+	      labels: bestCate,
+	      datasets: [
+	    	  {
+	        label:"푼 문제 수",
+	        data:bestCount,
+	        backgroundColor:[
+	        	'rgba(55, 99, 132,.5)',
+	        ],
+	      },
+	      {
+		        label:"정답률",
+		        data:bestRate,
+		        backgroundColor:[
+		        	'rgba(54, 162, 235,.5)',
+		        ],
+		      }
+	    	  ]
+	    },
+	    options: chartOption3,
+	  });
+	
+	//////////OVERALL 세부 과목별 정답률 WORST 5//////////////
+	const subjectChart16 = document.getElementById('subjectChart16').getContext('2d');
+	const worstCate = worstList.map((i, idx) => {
+		  if (idx < 3) {
+		    return (idx + 1) + "위" + i.cateName; // 문제가 있는 부분
+		  }
+		  return i.cateName;
+	});
+
+	const worstCount = worstList.map((i)=> i.totalCount);
+	const worstRate = worstList.map((i)=> i.rate.toFixed(1));
+	
+	const chart16 = new Chart(subjectChart16, {
+	    type: 'bar',
+	    data: {
+	      labels: worstCate,
+	      datasets: [
+	    	  {
+	        label:"푼 문제 수",
+	        data:worstCount,
+	        backgroundColor:[
+	          'rgba(55, 99, 132,.5)',
+	        ],
+	      },
+	      {
+		        label:"정답률",
+		        data:worstRate,
+		        backgroundColor:[
+		          'rgba(54, 162, 235,.5)',
+		        ],
+		      }
+	    	  ]
+	    },
+	    options: chartOption3,
+	  });
 		
 	
 	</script>

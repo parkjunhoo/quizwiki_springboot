@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.multi.quizwiki.dto.ProblemDTO;
 import com.multi.quizwiki.manager.dao.ManagerDAO;
+import com.multi.quizwiki.manager.dto.RecoCategoryDTO;
 import com.multi.quizwiki.manager.dto.RecoProblemDTO;
 import com.multi.quizwiki.manager.dto.SolvCountDTO;
 import com.multi.quizwiki.problem.dao.ProblemDAO;
@@ -58,6 +59,17 @@ public class ManagerServiceImpl implements ManagerService{
 	@Override
 	public List<ProblemChoiseEntity> problem_choise_findAllByProblemId(int problemId) {
 		return problemDAO.problem_choise_findAllByProblemId(problemId);
+	}
+
+
+	@Override
+	public List<RecoCategoryDTO> bestCate(String memberId) {
+		return dao.bestCate(memberId);
+	}
+
+	@Override
+	public List<RecoCategoryDTO> worstCate(String memberId) {
+		return dao.worstCate(memberId);
 	}
 
 }

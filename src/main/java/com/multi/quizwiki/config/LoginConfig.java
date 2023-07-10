@@ -18,6 +18,6 @@ public class LoginConfig implements WebMvcConfigurer{
 				"/findId","/findPass","/signupAgreement1","/signup1","/signup2","/signupAgreement2",
 				"/faqt","/images/**","/css/**","/font/**","/js/**","/libs/**","/pboard/**","/qboard/**","/kakao/**",
 				"/idChk","/login/mailConfirm","/signup","/note/**","/popup/**", "/check/sendSMS", "/sms", "/memberPhoneCheck",
-				"note/**","/get/logincheck","/search/problem/**");
+				"note/**","/get/logincheck","/search/problem/**","/post/login");
 	}
 }

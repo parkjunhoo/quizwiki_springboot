@@ -113,6 +113,8 @@ xmlns:th="http://www.thymeleaf.org"
 			return {...o, solv: ""};
 		});
 		
+		console.log(problemList);
+		
 	
 		if(problemList.length < 1){
 			Swal.fire({
@@ -125,7 +127,7 @@ xmlns:th="http://www.thymeleaf.org"
 				window.close();
 			});
 		}
-		console.log(problemList);
+		
 		//경과 시간,타이머
 		let time = 0;
 		const cbtTimer = document.getElementById("cbt-timer-time");
@@ -386,7 +388,7 @@ xmlns:th="http://www.thymeleaf.org"
 			}
 			noSolvText= noSolvText.slice(0, -1);
 			if(noSolvArr.length>0){
-				alertText = "풀지않은 문제는 오답처리됩니다.";
+				alertText = "풀지 않은 문제는 미기록됩니다.";
 				noSolvText += "번 문제";
 			}
 			
@@ -425,7 +427,7 @@ xmlns:th="http://www.thymeleaf.org"
 				};
 			});
 			
-			
+			solvList = solvList.filter(item => item.solvAnswer !== "");
 			
 			$.ajax({
 				url:"/pboard/post/solv",
@@ -462,7 +464,11 @@ xmlns:th="http://www.thymeleaf.org"
 					noTd.style.color = "white";
 					
 					let inTd = document.createElement("td");
-					inTd.textContent = p.solv;
+					if(p.solv === ""){
+						inTd.textContent = "풀지 않음";
+					}else{
+						inTd.textContent = p.solv;
+					}
 					
 					let asTd = document.createElement("td");
 					asTd.textContent = p.problemAnswer;
