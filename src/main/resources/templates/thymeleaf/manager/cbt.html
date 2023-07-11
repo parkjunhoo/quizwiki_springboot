@@ -113,6 +113,24 @@ xmlns:th="http://www.thymeleaf.org"
 			return {...o, solv: ""};
 		});
 		
+		console.log(problemList.length);
+		
+		if(problemList.length < 1){
+			
+			Swal.fire({
+				icon:"info",
+				title:'추천 문제가 없습니다!',
+				text:"문제를 풀어 데이터를 만들어주세요.",
+				confirmButtonColor: '#3085d6',
+				confirmButtonText:'닫기'
+			}).then(()=>{
+				window.close();
+			});
+			alert("추천 문제가 없습니다.");
+			window.close();
+		}
+		
+		
 		const recoCateList = [];
 		problemList.forEach((p)=>{
 			const cateName = p.problemCateName;
@@ -131,17 +149,6 @@ xmlns:th="http://www.thymeleaf.org"
 		});
 		
 		
-		if(problemList.length < 1){
-			Swal.fire({
-				icon:"info",
-				title:'추천 문제가 없습니다!',
-				text:"문제를 풀어 데이터를 만들어주세요.",
-				confirmButtonColor: '#3085d6',
-				confirmButtonText:'닫기'
-			}).then(()=>{
-				window.close();
-			});
-		}
 		
 		Swal.fire({
 			icon:"info",
@@ -237,7 +244,7 @@ xmlns:th="http://www.thymeleaf.org"
 			const problem = problemList[idx];
 			
 			if(problem.problemType == "m"){
-				problem.solv = (v).toString();
+				problem.solv = (v+1).toString();
 				let choiseList = $(omrList).children().eq(idx).children(".omr-choise");
 				choiseList.children("li").removeClass("selected");
 				choiseList.children("li").eq(v).addClass("selected");
