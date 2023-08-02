@@ -25,8 +25,11 @@
 
 ## **📌 주요 기능**
 
--
+### 메인페이지
+
+- 좋아요, 조회수 순으로 게시물 Top 10 조회
 <img src="https://blog.kakaocdn.net/dn/cSPlEg/btspxaysOfZ/cpr5645T0GF6cZBkYU2BP0/img.webp">
 
+- 사이트 기능 간략소개
 <img src="https://blog.kakaocdn.net/dn/l6CHL/btspRK5jK2u/Ucq4IkZm7f335Nounn2dg1/img.webp">
 
