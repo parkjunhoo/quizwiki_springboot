@@ -18,10 +18,14 @@
 
 - Front-End
     - html js css(vanila)
+    - AOS , Fabric(오답노트 부분 canvas) , sweetalert2 , 네이버 스마트에디터
 - Back-End
-    - Spring
+    - Spring(boot)
+    - Thymeleaf
 - Database
     - MySQL
+    - JPA
+    - MyBatis
 
 ## **📌 주요 기능**
 
